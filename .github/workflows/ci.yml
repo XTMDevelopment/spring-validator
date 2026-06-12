@@ -9,13 +9,14 @@ on:
 
 jobs:
   test-matrix:
-    name: Test Java ${{ matrix.java }}
+    name: Test Java ${{ matrix.java }} / Boot ${{ matrix.spring-boot }}
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         java: [ 17, 21, 25 ]
-      fail-fast: false
+        spring-boot: [ '3.5.14', '4.0.5' ]
 
     steps:
       - name: Checkout code
@@ -32,19 +33,19 @@ jobs:
         run: java -version
 
       - name: Run tests
-        run: mvn clean test "-Dspring-boot.version=3.5.14"
+        run: mvn clean test "-Dspring-boot.version=${{ matrix.spring-boot }}" "-Dgpg.skip=true"
 
       - name: Upload Surefire reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: surefire-reports-java-${{ matrix.java }}
-          path: target/surefire-reports/
+          name: surefire-reports-java-${{ matrix.java }}-boot-${{ matrix.spring-boot }}
+          path: "**/target/surefire-reports/"
           retention-days: 7
           if-no-files-found: ignore
 
   quality:
-    name: Quality gates (Java 17)
+    name: Quality gates (Java 17, Boot 3.5.14)
     runs-on: ubuntu-latest
 
     steps:
@@ -61,11 +62,20 @@ jobs:
       - name: Build and verify
         run: mvn clean verify "-Dspring-boot.version=3.5.14" "-Dgpg.skip=true"
 
+      - name: Install artifacts for sample consumer
+        run: mvn install -DskipTests "-Dspring-boot.version=3.5.14" "-Dgpg.skip=true"
+
+      - name: Sample consumer smoke (Boot 3.5.14)
+        run: mvn -f examples/spring-boot-starter-sample/pom.xml clean test "-Dspring-boot.version=3.5.14"
+
+      - name: Sample consumer smoke (Boot 4.0.5)
+        run: mvn -f examples/spring-boot-starter-sample/pom.xml clean test "-Dspring-boot.version=4.0.5"
+
       - name: Upload JaCoCo report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-java-17
-          path: target/site/jacoco/
+          path: target/site/jacoco-aggregate/
           retention-days: 7
           if-no-files-found: ignore
