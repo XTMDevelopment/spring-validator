@@ -1,4 +1,4 @@
-name: CI - Test Multiple Java Versions
+name: CI
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        java: [ 11, 17, 21, 25 ]
+        java: [ 17, 21, 25 ]
       fail-fast: false
 
     steps:
@@ -25,29 +25,20 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.java }}
-          distribution: 'temurin'
+          distribution: temurin
           cache: maven
 
       - name: Verify Java version
         run: java -version
 
-      - name: Run tests
-        run: mvn clean test
+      - name: Build and verify
+        run: mvn clean verify -Dspring-boot.version=3.5.14 -Dgpg.skip=true
 
-      - name: Check test results
+      - name: Upload Surefire reports
         if: always()
-        continue-on-error: true
-        run: |
-          if [ -d "target/surefire-reports" ]; then
-            echo "Test reports directory found"
-            REPORT_COUNT=$(find target/surefire-reports -name "*.txt" -o -name "*.xml" 2>/dev/null | wc -l)
-            if [ "$REPORT_COUNT" -gt 0 ]; then
-              echo "Found $REPORT_COUNT test result file(s)"
-              ls -la target/surefire-reports/ || true
-            else
-              echo "Warning: Test reports directory exists but contains no result files"
-            fi
-          else
-            echo "Info: Test reports directory not found (this is normal if tests failed before completion)"
-          fi
-
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports-java-${{ matrix.java }}
+          path: target/surefire-reports/
+          retention-days: 7
+          if-no-files-found: ignore
