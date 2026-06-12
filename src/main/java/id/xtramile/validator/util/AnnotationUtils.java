@@ -73,7 +73,7 @@ public class AnnotationUtils {
         return null;
     }
 
-    private static Map<String, Object> extractAnnotationDefaults(Class<?> annotationType) {
+    public static Map<String, Object> extractAnnotationDefaults(Class<?> annotationType) {
         Map<String, Object> map = new HashMap<>();
         if (annotationType == null || !annotationType.isAnnotation()) {
             return map;

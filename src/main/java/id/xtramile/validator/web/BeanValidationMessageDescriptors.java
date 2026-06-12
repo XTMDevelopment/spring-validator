@@ -76,7 +76,7 @@ public final class BeanValidationMessageDescriptors {
         return usesConstraintDefaultOrFriendlyMessageKey((String) messageAttr);
     }
 
-    private static boolean usesConstraintDefaultOrFriendlyMessageKey(String messageTemplate) {
+    public static boolean usesConstraintDefaultOrFriendlyMessageKey(String messageTemplate) {
         if (!StringUtils.hasText(messageTemplate)) {
             return true;
         }
