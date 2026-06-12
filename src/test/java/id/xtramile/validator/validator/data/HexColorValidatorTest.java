@@ -11,17 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HexColorValidatorTest {
 
-    private static class HexColorDummy {
-        @ValidHexColor
-        String defaultHexColor;
-
-        @ValidHexColor()
-        String shortFormAllowed;
-
-        @ValidHexColor(shortFormAllowed = false)
-        String shortFormNotAllowed;
-    }
-
     private HexColorValidator validator;
 
     private static ValidHexColor getAnnotation(String fieldName) {
@@ -138,5 +127,16 @@ public class HexColorValidatorTest {
         assertTrue(validator.isValid("#FFFFFF", null)); // maximum valid long form
         assertTrue(validator.isValid("#000", null)); // minimum valid short form
         assertTrue(validator.isValid("#FFF", null)); // maximum valid short form
+    }
+
+    private static class HexColorDummy {
+        @ValidHexColor
+        String defaultHexColor;
+
+        @ValidHexColor()
+        String shortFormAllowed;
+
+        @ValidHexColor(shortFormAllowed = false)
+        String shortFormNotAllowed;
     }
 }

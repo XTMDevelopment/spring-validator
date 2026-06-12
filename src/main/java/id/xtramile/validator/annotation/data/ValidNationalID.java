@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Currently supported: ID (Indonesia) NIK = exactly 16 digits.
  * Null/blank values are considered valid.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidNationalID // defaults to ID (Indonesia)
  * private String nik; // 16 digits
- * 
+ *
  * @ValidNationalID(country = "ID")
  * private String nationalId; // Indonesian NIK
  * }</pre>
- * 
+ *
  * @see NationalIdValidator
  */
 @Documented
@@ -29,7 +29,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = NationalIdValidator.class)
 public @interface ValidNationalID {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**

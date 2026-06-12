@@ -12,7 +12,8 @@ import java.util.Map;
 public class AnnotationUtils {
     private static final Logger log = LoggerFactory.getLogger(AnnotationUtils.class);
 
-    private AnnotationUtils() {}
+    private AnnotationUtils() {
+    }
 
     public static Map<String, Object> getAnnotationAttributes(Class<?> dtoClass, String fieldName, Class<?> annotationType) {
         if (dtoClass == null || fieldName == null || annotationType == null) {

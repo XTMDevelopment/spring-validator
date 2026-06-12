@@ -12,7 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static id.xtramile.validator.integration.ValidationMessageAssertions.assertNoRawValidationKey;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Ensures stock Jakarta Bean Validation constraints resolve to {@code messages_*.properties} entries
@@ -23,126 +24,11 @@ class SpringBuiltinAndFieldNameMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    public record NotBlankDto(@FieldName("Borrower ID") @NotBlank String borrowerId) {
-            public NotBlankDto(String borrowerId) {
-                this.borrowerId = borrowerId;
-            }
-
-            @Override
-            public String borrowerId() {
-                return borrowerId;
-            }
-        }
-
-    public record NotNullDto(@FieldName("Account ID") @NotNull Integer accountId) {
-            public NotNullDto(Integer accountId) {
-                this.accountId = accountId;
-            }
-
-            @Override
-            public Integer accountId() {
-                return accountId;
-            }
-        }
-
-    public record MinDto(@FieldName("Quantity") @Min(10) int qty) {
-            public MinDto(int qty) {
-                this.qty = qty;
-            }
-
-            @Override
-            public int qty() {
-                return qty;
-            }
-        }
-
-    public record MaxDto(@FieldName("Age") @Max(100) int age) {
-            public MaxDto(int age) {
-                this.age = age;
-            }
-
-            @Override
-            public int age() {
-                return age;
-            }
-        }
-
-    public record SizeDto(@FieldName("Code") @Size(min = 2, max = 5) String code) {
-            public SizeDto(String code) {
-                this.code = code;
-            }
-
-            @Override
-            public String code() {
-                return code;
-            }
-        }
-
-    public record EmailDto(@FieldName("Work Email") @Email String email) {
-            public EmailDto(String email) {
-                this.email = email;
-            }
-
-            @Override
-            public String email() {
-                return email;
-            }
-        }
-
-    public record PatternDto(@FieldName("PIN") @Pattern(regexp = "\\d+") String pin) {
-            public PatternDto(String pin) {
-                this.pin = pin;
-            }
-
-            @Override
-            public String pin() {
-                return pin;
-            }
-        }
-
-    public record DecimalMinDto(@FieldName("Amount") @DecimalMin("10.0") BigDecimal amount) {
-            public DecimalMinDto(BigDecimal amount) {
-                this.amount = amount;
-            }
-
-            @Override
-            public BigDecimal amount() {
-                return amount;
-            }
-        }
-
-    public record PositiveDto(@FieldName("Score") @Positive Integer score) {
-            public PositiveDto(Integer score) {
-                this.score = score;
-            }
-
-            @Override
-            public Integer score() {
-                return score;
-            }
-        }
-
-    public record NotEmptyDto(@FieldName("Tags") @NotEmpty List<String> tags) {
-            public NotEmptyDto(List<String> tags) {
-                this.tags = tags;
-            }
-
-            @Override
-            public List<String> tags() {
-                return tags;
-            }
-        }
-
-    public record DigitsDto(@FieldName("Price") @Digits(integer = 2, fraction = 1) BigDecimal price) {
-            public DigitsDto(BigDecimal price) {
-                this.price = price;
-            }
-
-            @Override
-            public BigDecimal price() {
-                return price;
-            }
-        }
+    private static void assertDescriptorIsDefaultStockKey(String template) {
+        assertTrue(
+                BeanValidationMessageDescriptors.isDefaultBeanValidationMessageDescriptor(template),
+                "Expected a default BV/HV message descriptor, was: " + template);
+    }
 
     @Test
     void notBlank_withFieldName() {
@@ -287,9 +173,124 @@ class SpringBuiltinAndFieldNameMessageIntegrationTest {
         assertNoRawValidationKey(resolved);
     }
 
-    private static void assertDescriptorIsDefaultStockKey(String template) {
-        assertTrue(
-                BeanValidationMessageDescriptors.isDefaultBeanValidationMessageDescriptor(template),
-                "Expected a default BV/HV message descriptor, was: " + template);
+    public record NotBlankDto(@FieldName("Borrower ID") @NotBlank String borrowerId) {
+        public NotBlankDto(String borrowerId) {
+            this.borrowerId = borrowerId;
+        }
+
+        @Override
+        public String borrowerId() {
+            return borrowerId;
+        }
+    }
+
+    public record NotNullDto(@FieldName("Account ID") @NotNull Integer accountId) {
+        public NotNullDto(Integer accountId) {
+            this.accountId = accountId;
+        }
+
+        @Override
+        public Integer accountId() {
+            return accountId;
+        }
+    }
+
+    public record MinDto(@FieldName("Quantity") @Min(10) int qty) {
+        public MinDto(int qty) {
+            this.qty = qty;
+        }
+
+        @Override
+        public int qty() {
+            return qty;
+        }
+    }
+
+    public record MaxDto(@FieldName("Age") @Max(100) int age) {
+        public MaxDto(int age) {
+            this.age = age;
+        }
+
+        @Override
+        public int age() {
+            return age;
+        }
+    }
+
+    public record SizeDto(@FieldName("Code") @Size(min = 2, max = 5) String code) {
+        public SizeDto(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String code() {
+            return code;
+        }
+    }
+
+    public record EmailDto(@FieldName("Work Email") @Email String email) {
+        public EmailDto(String email) {
+            this.email = email;
+        }
+
+        @Override
+        public String email() {
+            return email;
+        }
+    }
+
+    public record PatternDto(@FieldName("PIN") @Pattern(regexp = "\\d+") String pin) {
+        public PatternDto(String pin) {
+            this.pin = pin;
+        }
+
+        @Override
+        public String pin() {
+            return pin;
+        }
+    }
+
+    public record DecimalMinDto(@FieldName("Amount") @DecimalMin("10.0") BigDecimal amount) {
+        public DecimalMinDto(BigDecimal amount) {
+            this.amount = amount;
+        }
+
+        @Override
+        public BigDecimal amount() {
+            return amount;
+        }
+    }
+
+    public record PositiveDto(@FieldName("Score") @Positive Integer score) {
+        public PositiveDto(Integer score) {
+            this.score = score;
+        }
+
+        @Override
+        public Integer score() {
+            return score;
+        }
+    }
+
+    public record NotEmptyDto(@FieldName("Tags") @NotEmpty List<String> tags) {
+        public NotEmptyDto(List<String> tags) {
+            this.tags = tags;
+        }
+
+        @Override
+        public List<String> tags() {
+            return tags;
+        }
+    }
+
+    public record DigitsDto(@FieldName("Price") @Digits(integer = 2, fraction = 1) BigDecimal price) {
+        public DigitsDto(BigDecimal price) {
+            this.price = price;
+        }
+
+        @Override
+        public BigDecimal price() {
+            return price;
+        }
     }
 }

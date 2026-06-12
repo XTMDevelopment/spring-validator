@@ -8,7 +8,8 @@ public final class BeanValidationMessageDescriptors {
 
     private static final String FRIENDLY_DEFAULT = "{friendly.default}";
 
-    private BeanValidationMessageDescriptors() {}
+    private BeanValidationMessageDescriptors() {
+    }
 
     public static boolean isFriendlyDefault(String template) {
         return FRIENDLY_DEFAULT.equals(template);

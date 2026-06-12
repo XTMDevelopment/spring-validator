@@ -19,7 +19,7 @@ import static id.xtramile.validator.util.ValidatorUtils.validateEmail;
  * Validates that an email address has a domain from the allowed list.
  * This validator ensures the email domain is in the whitelist of allowed domains
  * with optional case-insensitive comparison.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -27,7 +27,7 @@ import static id.xtramile.validator.util.ValidatorUtils.validateEmail;
  * <li>Extracts the domain part from the email</li>
  * <li>Checks if the domain is in the allowed list</li>
  * </ul>
- * 
+ *
  * @see ValidEmailDomain
  */
 public class EmailDomainValidator implements ConstraintValidator<ValidEmailDomain, String> {
@@ -36,6 +36,7 @@ public class EmailDomainValidator implements ConstraintValidator<ValidEmailDomai
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidEmailDomain annotation instance
      */
     @Override
@@ -48,7 +49,8 @@ public class EmailDomainValidator implements ConstraintValidator<ValidEmailDomai
 
     /**
      * Validates that the email domain is in the allowed list.
-     * @param value the email string to validate
+     *
+     * @param value   the email string to validate
      * @param context the constraint validator context
      * @return true if the email domain is allowed or is null/blank
      */

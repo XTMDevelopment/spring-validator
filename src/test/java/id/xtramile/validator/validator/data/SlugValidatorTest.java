@@ -11,14 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SlugValidatorTest {
 
-    private static class SlugDummy {
-        @ValidSlug
-        String defaultSlug;
-
-        @ValidSlug(min = 5, max = 20)
-        String customSlug;
-    }
-
     private SlugValidator validator;
 
     private static ValidSlug getAnnotation(String fieldName) {
@@ -113,5 +105,13 @@ public class SlugValidatorTest {
         assertTrue(validator.isValid("a", null)); // minimum valid
         assertTrue(validator.isValid("a".repeat(100), null)); // exactly 100 chars
         assertFalse(validator.isValid("a".repeat(101), null)); // 101 chars
+    }
+
+    private static class SlugDummy {
+        @ValidSlug
+        String defaultSlug;
+
+        @ValidSlug(min = 5, max = 20)
+        String customSlug;
     }
 }

@@ -12,17 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FileExtensionValidatorTest {
 
-    private static class FileExtensionDummy {
-        @ValidFileExtension(allowed = {"jpg", "png", "pdf"})
-        String defaultFile;
-
-        @ValidFileExtension(allowed = {"JPG", "PNG", "PDF"}, ignoreCase = false)
-        String caseSensitiveFile;
-
-        @ValidFileExtension(allowed = {"txt", "doc", "docx"})
-        String caseInsensitiveFile;
-    }
-
     private FileExtensionValidator validator;
 
     private static ValidFileExtension getAnnotation(String fieldName) {
@@ -136,5 +125,16 @@ public class FileExtensionValidatorTest {
 
         MockMultipartFile fileWithBlankName = new MockMultipartFile("file", "", "image/jpeg", "test content".getBytes());
         assertFalse(validator.isValid(fileWithBlankName, null));
+    }
+
+    private static class FileExtensionDummy {
+        @ValidFileExtension(allowed = {"jpg", "png", "pdf"})
+        String defaultFile;
+
+        @ValidFileExtension(allowed = {"JPG", "PNG", "PDF"}, ignoreCase = false)
+        String caseSensitiveFile;
+
+        @ValidFileExtension(allowed = {"txt", "doc", "docx"})
+        String caseInsensitiveFile;
     }
 }

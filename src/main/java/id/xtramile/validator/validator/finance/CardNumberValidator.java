@@ -14,7 +14,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates credit/debit card numbers using the Luhn algorithm.
  * This validator ensures the card number passes the Luhn checksum algorithm
  * for basic validity with optional separator stripping.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -23,7 +23,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Applies Luhn algorithm validation</li>
  * <li>Handles digit doubling and sum calculation</li>
  * </ul>
- * 
+ *
  * @see ValidCardNumber
  */
 public class CardNumberValidator implements ConstraintValidator<ValidCardNumber, String> {
@@ -31,6 +31,7 @@ public class CardNumberValidator implements ConstraintValidator<ValidCardNumber,
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidCardNumber annotation instance
      */
     @Override
@@ -40,7 +41,8 @@ public class CardNumberValidator implements ConstraintValidator<ValidCardNumber,
 
     /**
      * Validates the card number using Luhn algorithm.
-     * @param value the card number string to validate
+     *
+     * @param value   the card number string to validate
      * @param context the constraint validator context
      * @return true if the card number is valid or is null/blank
      */

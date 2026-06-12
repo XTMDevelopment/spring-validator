@@ -11,20 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InWhitelistValidatorTest {
 
-    private static class InWhitelistDummy {
-        @InWhitelist(values = {"admin", "user", "guest"})
-        String defaultWhitelist;
-
-        @InWhitelist(values = {"admin", "user", "guest"})
-        String ignoreCaseWhitelist;
-
-        @InWhitelist(values = {"admin", "user", "guest"}, ignoreCase = false)
-        String caseSensitiveWhitelist;
-
-        @InWhitelist(values = {"read", "write", "execute"})
-        String customWhitelist;
-    }
-
     private InWhitelistValidator validator;
 
     private static InWhitelist getAnnotation(String fieldName) {
@@ -229,5 +215,19 @@ public class InWhitelistValidatorTest {
         assertFalse(validator.isValid("guestuser", null));
         assertFalse(validator.isValid("root", null));
         assertFalse(validator.isValid("system", null));
+    }
+
+    private static class InWhitelistDummy {
+        @InWhitelist(values = {"admin", "user", "guest"})
+        String defaultWhitelist;
+
+        @InWhitelist(values = {"admin", "user", "guest"})
+        String ignoreCaseWhitelist;
+
+        @InWhitelist(values = {"admin", "user", "guest"}, ignoreCase = false)
+        String caseSensitiveWhitelist;
+
+        @InWhitelist(values = {"read", "write", "execute"})
+        String customWhitelist;
     }
 }

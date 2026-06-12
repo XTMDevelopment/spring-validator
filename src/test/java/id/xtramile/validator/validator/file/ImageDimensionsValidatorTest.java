@@ -16,20 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ImageDimensionsValidatorTest {
 
-    private static class ImageDimensionsDummy {
-        @ValidImageDimensions(minWidth = 100, maxWidth = 1000, minHeight = 100, maxHeight = 1000)
-        String defaultDimensions;
-
-        @ValidImageDimensions(minWidth = 200, maxWidth = 800, minHeight = 200, maxHeight = 600, aspectRatio = 1.33)
-        String aspectRatioImage;
-
-        @ValidImageDimensions(maxWidth = 2000, maxHeight = 2000)
-        String extensionFilteredImage;
-
-        @ValidImageDimensions(minWidth = 50, maxWidth = 500, minHeight = 50, maxHeight = 500, aspectRatio = 1.0)
-        String squareImage;
-    }
-
     private ImageDimensionsValidator validator;
 
     private static ValidImageDimensions getAnnotation(String fieldName) {
@@ -160,5 +146,19 @@ public class ImageDimensionsValidatorTest {
         } catch (IOException e) {
             throw new RuntimeException("Failed to create mock image file", e);
         }
+    }
+
+    private static class ImageDimensionsDummy {
+        @ValidImageDimensions(minWidth = 100, maxWidth = 1000, minHeight = 100, maxHeight = 1000)
+        String defaultDimensions;
+
+        @ValidImageDimensions(minWidth = 200, maxWidth = 800, minHeight = 200, maxHeight = 600, aspectRatio = 1.33)
+        String aspectRatioImage;
+
+        @ValidImageDimensions(maxWidth = 2000, maxHeight = 2000)
+        String extensionFilteredImage;
+
+        @ValidImageDimensions(minWidth = 50, maxWidth = 500, minHeight = 50, maxHeight = 500, aspectRatio = 1.0)
+        String squareImage;
     }
 }

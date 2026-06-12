@@ -24,8 +24,6 @@ import java.util.Set;
 
 public final class AnnotationRegistry {
 
-    public record Entry(String simpleName, Class<?> annotationType, Group messageGroup) {}
-
     private static final Map<String, Class<?>> BY_NAME;
     private static final Map<Class<?>, Entry> BY_CLASS;
 
@@ -136,7 +134,8 @@ public final class AnnotationRegistry {
         BY_CLASS = Collections.unmodifiableMap(byClass);
     }
 
-    private AnnotationRegistry() {}
+    private AnnotationRegistry() {
+    }
 
     private static void register(Map<String, Class<?>> byName, Map<Class<?>, Entry> byClass,
                                  Class<?> type, String simpleName, Group group) {
@@ -176,5 +175,8 @@ public final class AnnotationRegistry {
                 .filter(entry -> entry.messageGroup() == group)
                 .map(Entry::annotationType)
                 .collect(java.util.stream.Collectors.toUnmodifiableSet());
+    }
+
+    public record Entry(String simpleName, Class<?> annotationType, Group messageGroup) {
     }
 }

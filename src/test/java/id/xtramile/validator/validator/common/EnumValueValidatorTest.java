@@ -11,29 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EnumValueValidatorTest {
 
-    // Test enum for validation
-    public enum TestStatus {
-        ACTIVE, INACTIVE, PENDING, COMPLETED
-    }
-
-    public enum TestPriority {
-        LOW, MEDIUM, HIGH, URGENT
-    }
-
-    private static class EnumDummy {
-        @ValidEnum(enumClass = TestStatus.class)
-        String statusField;
-
-        @ValidEnum(enumClass = TestStatus.class)
-        String statusIgnoreCase;
-
-        @ValidEnum(enumClass = TestStatus.class, ignoreCase = false)
-        String statusCaseSensitive;
-
-        @ValidEnum(enumClass = TestPriority.class, ignoreCase = false)
-        String priorityField;
-    }
-
     private EnumValueValidator validator;
 
     private static ValidEnum getAnnotation(String fieldName) {
@@ -170,5 +147,28 @@ public class EnumValueValidatorTest {
 
         assertFalse(validator.isValid("low", null)); // case sensitive by default
         assertFalse(validator.isValid("INVALID_PRIORITY", null));
+    }
+
+    // Test enum for validation
+    public enum TestStatus {
+        ACTIVE, INACTIVE, PENDING, COMPLETED
+    }
+
+    public enum TestPriority {
+        LOW, MEDIUM, HIGH, URGENT
+    }
+
+    private static class EnumDummy {
+        @ValidEnum(enumClass = TestStatus.class)
+        String statusField;
+
+        @ValidEnum(enumClass = TestStatus.class)
+        String statusIgnoreCase;
+
+        @ValidEnum(enumClass = TestStatus.class, ignoreCase = false)
+        String statusCaseSensitive;
+
+        @ValidEnum(enumClass = TestPriority.class, ignoreCase = false)
+        String priorityField;
     }
 }

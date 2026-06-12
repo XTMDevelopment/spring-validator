@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Null values are considered valid. This validator ensures port numbers
  * are within the valid range for network services.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidPort
  * private Integer port; // e.g., 8080
- * 
+ *
  * @ValidPort
  * private String portString; // e.g., "443"
  * }</pre>
- * 
+ *
  * @see PortValidator
  */
 @Documented
@@ -29,6 +29,8 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = PortValidator.class)
 public @interface ValidPort {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

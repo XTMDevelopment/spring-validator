@@ -17,7 +17,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates IPv6 addresses in various formats including compressed notation.
  * This validator ensures the IPv6 address follows the standard format
  * with support for compressed notation and IPv4-mapped addresses.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -26,24 +26,25 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Handles IPv4-mapped IPv6 addresses</li>
  * <li>Uses InetAddress for additional validation</li>
  * </ul>
- * 
+ *
  * @see ValidIPv6Address
  */
 public class IPv6AddressValidator implements ConstraintValidator<ValidIPv6Address, String> {
 
     private static final Pattern IPv6_PATTERN = Pattern.compile(
-        "^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$|" +
-        "^::1$|" +
-        "^::$|" +
-        "^(?:[0-9a-fA-F]{1,4}:)*::(?:[0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{1,4}$|" +
-        "^(?:[0-9a-fA-F]{1,4}:)*::(?:[0-9a-fA-F]{1,4}:)*$|" +
-        "^(?:[0-9a-fA-F]{1,4}:)*::(?:[0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{1,4}$|" +
-        "^::ffff:(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"
+            "^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$|" +
+                    "^::1$|" +
+                    "^::$|" +
+                    "^(?:[0-9a-fA-F]{1,4}:)*::(?:[0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{1,4}$|" +
+                    "^(?:[0-9a-fA-F]{1,4}:)*::(?:[0-9a-fA-F]{1,4}:)*$|" +
+                    "^(?:[0-9a-fA-F]{1,4}:)*::(?:[0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{1,4}$|" +
+                    "^::ffff:(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"
     );
 
     /**
      * Validates the IPv6 address format and components.
-     * @param value the IPv6 address string to validate
+     *
+     * @param value   the IPv6 address string to validate
      * @param context the constraint validator context
      * @return true if the IPv6 address is valid or is null/blank
      */
@@ -70,9 +71,10 @@ public class IPv6AddressValidator implements ConstraintValidator<ValidIPv6Addres
             return false;
         }
     }
-    
+
     /**
      * Validates IPv4 address format for IPv4-mapped IPv6 addresses.
+     *
      * @param value the IPv4 address string to validate
      * @return true if the IPv4 address is valid
      */
@@ -80,7 +82,7 @@ public class IPv6AddressValidator implements ConstraintValidator<ValidIPv6Addres
         try {
             String[] parts = value.split("\\.");
             if (parts.length != 4) return false;
-            
+
             for (String part : parts) {
                 if (part.isEmpty()) return false;
                 int num = Integer.parseInt(part);

@@ -12,7 +12,8 @@ import java.util.Map;
 
 public final class AutoConfigurationTestFixtures {
 
-    private AutoConfigurationTestFixtures() {}
+    private AutoConfigurationTestFixtures() {
+    }
 
     public static class CustomErrorEnvelopeBuilder implements ErrorEnvelopeBuilder {
         @Override

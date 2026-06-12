@@ -11,22 +11,24 @@ import java.lang.annotation.*;
  * <p>
  * Null values are considered valid. This validator ensures latitude values
  * are within the valid range for geographic coordinates.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidLatitude
  * private Double latitude; // e.g., -6.200000
- * 
+ *
  * @ValidLatitude
  * private String latString; // e.g., "-6.200000"
  * }</pre>
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = LatitudeValidator.class)
 public @interface ValidLatitude {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

@@ -5,47 +5,12 @@ import id.xtramile.validator.support.ValidationMessageTestSupport;
 import jakarta.validation.ConstraintViolation;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ContactValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
-
-    public record PhoneNumberDto(@ValidPhoneNumber String value) {
-            public PhoneNumberDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record ContactNumberDto(@ValidContactNumber String value) {
-            public ContactNumberDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record EmailDto(@ValidEmail String value) {
-            public EmailDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record OtpDto(@ValidOtp String value) {
-            public OtpDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record EmailDomainDto(@ValidEmailDomain(allowed = {"gmail.com", "yahoo.com"}) String value) {
-            public EmailDomainDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record EmailDomainSensitiveDto(@ValidEmailDomain(allowed = {"Gmail.com"}, ignoreCase = false) String value) {
-            public EmailDomainSensitiveDto(String value) {
-                this.value = value;
-            }
-        }
 
     @Test
     void phoneNumber_pathB() {
@@ -108,5 +73,41 @@ class ContactValidatorMessageIntegrationTest {
         String resolved = SUPPORT.resolver().resolve(v, "value", EmailDomainSensitiveDto.class);
 
         assertTrue(resolved.contains("case-sensitive"), "Expected case-sensitive in message: " + resolved);
+    }
+
+    public record PhoneNumberDto(@ValidPhoneNumber String value) {
+        public PhoneNumberDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record ContactNumberDto(@ValidContactNumber String value) {
+        public ContactNumberDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record EmailDto(@ValidEmail String value) {
+        public EmailDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record OtpDto(@ValidOtp String value) {
+        public OtpDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record EmailDomainDto(@ValidEmailDomain(allowed = {"gmail.com", "yahoo.com"}) String value) {
+        public EmailDomainDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record EmailDomainSensitiveDto(@ValidEmailDomain(allowed = {"Gmail.com"}, ignoreCase = false) String value) {
+        public EmailDomainSensitiveDto(String value) {
+            this.value = value;
+        }
     }
 }

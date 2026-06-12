@@ -10,7 +10,8 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 
 public class DateUtils {
-    private DateUtils() {}
+    private DateUtils() {
+    }
 
     public static LocalDateTime parseDateTime(String dateStr, String pattern) {
         try {

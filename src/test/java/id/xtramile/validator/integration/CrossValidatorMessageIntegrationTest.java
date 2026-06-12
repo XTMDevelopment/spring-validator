@@ -11,26 +11,6 @@ class CrossValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    @FieldMatch(first = "password", second = "confirmPassword")
-        public record FieldMatchDto(String password, String confirmPassword) {
-    }
-
-    @AtLeastOneOf(fields = {"email", "phone"})
-        public record AtLeastOneDto(String email, String phone) {
-    }
-
-    @DifferentFrom(field = "newEmail", other = "currentEmail")
-        public record DifferentFromDto(String currentEmail, String newEmail) {
-    }
-
-    @OnlyOneOf(fields = {"email", "phone"})
-        public record OnlyOneDto(String email, String phone) {
-    }
-
-    @RequiredWith(when = "token", require = {"email"})
-        public record RequiredWithDto(String token, String email) {
-    }
-
     @Test
     void fieldMatch_mismatch() {
         FieldMatchDto dto = new FieldMatchDto("secret123", "different456");
@@ -104,5 +84,25 @@ class CrossValidatorMessageIntegrationTest {
         String resolved = SUPPORT.resolver().resolve(v, "token", RequiredWithDto.class);
 
         assertEquals("If token is provided, the following fields must also be provided: email", resolved);
+    }
+
+    @FieldMatch(first = "password", second = "confirmPassword")
+    public record FieldMatchDto(String password, String confirmPassword) {
+    }
+
+    @AtLeastOneOf(fields = {"email", "phone"})
+    public record AtLeastOneDto(String email, String phone) {
+    }
+
+    @DifferentFrom(field = "newEmail", other = "currentEmail")
+    public record DifferentFromDto(String currentEmail, String newEmail) {
+    }
+
+    @OnlyOneOf(fields = {"email", "phone"})
+    public record OnlyOneDto(String email, String phone) {
+    }
+
+    @RequiredWith(when = "token", require = {"email"})
+    public record RequiredWithDto(String token, String email) {
     }
 }

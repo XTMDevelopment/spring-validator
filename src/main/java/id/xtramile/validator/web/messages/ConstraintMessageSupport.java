@@ -4,7 +4,8 @@ import java.util.Map;
 
 final class ConstraintMessageSupport {
 
-    private ConstraintMessageSupport() {}
+    private ConstraintMessageSupport() {
+    }
 
     static Map<String, Object> nullSafeAttrs(Map<String, Object> attrs) {
         return attrs != null ? attrs : Map.of();

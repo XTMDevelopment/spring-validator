@@ -12,26 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UniqueElementsValidatorTest {
 
-    private record Person(String name, int age) {
-
-        @Override
-            public boolean equals(Object obj) {
-                if (this == obj) {
-                    return true;
-                }
-                if (!(obj instanceof Person other)) {
-                    return false;
-                }
-            return age == other.age && Objects.equals(name, other.name);
-            }
-
-    }
-
-    private static class UniqueElementsDummy {
-        @UniqueElements
-        Collection<String> collectionField;
-    }
-
     private UniqueElementsValidator validator;
 
     private static UniqueElements getAnnotation(String fieldName) {
@@ -168,5 +148,25 @@ public class UniqueElementsValidatorTest {
         // Test with empty strings
         List<String> withEmptyStrings = Arrays.asList("apple", "", "banana", "");
         assertFalse(validator.isValid(withEmptyStrings, null));
+    }
+
+    private record Person(String name, int age) {
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof Person other)) {
+                return false;
+            }
+            return age == other.age && Objects.equals(name, other.name);
+        }
+
+    }
+
+    private static class UniqueElementsDummy {
+        @UniqueElements
+        Collection<String> collectionField;
     }
 }

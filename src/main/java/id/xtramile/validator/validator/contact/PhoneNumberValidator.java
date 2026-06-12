@@ -14,7 +14,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates an Indonesian phone number in MSISDN format.
  * This validator ensures the phone number follows Indonesian mobile number standards
  * with proper country code and digit constraints.
- * 
+ *
  * <p>The validator performs the following checks:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -22,9 +22,9 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Ensures 8-11 additional digits after country code</li>
  * <li>First digit after country code must be 1-9 (E.164 compliant)</li>
  * </ul>
- * 
+ *
  * <p>Example: 6281234567890
- * 
+ *
  * @see ValidPhoneNumber
  */
 public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumber, String> {
@@ -32,7 +32,8 @@ public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumbe
 
     /**
      * Validates the Indonesian phone number format.
-     * @param value the phone number string to validate
+     *
+     * @param value   the phone number string to validate
      * @param context the constraint validator context
      * @return true if the phone number is valid or is null/blank
      */

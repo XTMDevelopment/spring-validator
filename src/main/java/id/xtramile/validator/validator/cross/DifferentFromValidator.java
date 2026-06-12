@@ -13,7 +13,7 @@ import org.springframework.beans.BeanWrapperImpl;
  * Validates that the value of one field is different from the value of another field.
  * This validator ensures two fields have different values, supporting null handling
  * and proper equality comparison.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null beans as valid</li>
@@ -21,7 +21,7 @@ import org.springframework.beans.BeanWrapperImpl;
  * <li>Handles null values appropriately</li>
  * <li>Adds violation to the first field if they are equal</li>
  * </ul>
- * 
+ *
  * @see DifferentFrom
  */
 public class DifferentFromValidator implements ConstraintValidator<DifferentFrom, Object> {
@@ -30,6 +30,7 @@ public class DifferentFromValidator implements ConstraintValidator<DifferentFrom
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the DifferentFrom annotation instance
      */
     @Override
@@ -40,7 +41,8 @@ public class DifferentFromValidator implements ConstraintValidator<DifferentFrom
 
     /**
      * Validates that the two fields have different values.
-     * @param bean the object to validate
+     *
+     * @param bean    the object to validate
      * @param context the constraint validator context
      * @return true if the fields are different or bean is null
      */
@@ -59,6 +61,7 @@ public class DifferentFromValidator implements ConstraintValidator<DifferentFrom
 
     /**
      * Checks if the two fields have different values.
+     *
      * @param bean the object to check
      * @return true if the fields are different
      */

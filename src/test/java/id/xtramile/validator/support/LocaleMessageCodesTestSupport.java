@@ -19,7 +19,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class LocaleMessageCodesTestSupport {
 
-    public record FormattedMessageCase(String key, Object[] args, String expected) {}
+    protected static int countPlaceholders(String message) {
+        if (message == null || message.isEmpty()) {
+            return 0;
+        }
+
+        int maxIndex = -1;
+        int index = 0;
+
+        while ((index = message.indexOf("{", index)) != -1) {
+            int endIndex = message.indexOf("}", index);
+            if (endIndex != -1) {
+                try {
+                    String placeholder = message.substring(index + 1, endIndex);
+                    int placeholderIndex = Integer.parseInt(placeholder);
+                    maxIndex = Math.max(maxIndex, placeholderIndex);
+                } catch (NumberFormatException ignored) {
+                    // skip non-numeric placeholders
+                }
+                index = endIndex + 1;
+            } else {
+                break;
+            }
+        }
+
+        return maxIndex + 1;
+    }
 
     protected abstract String locale();
 
@@ -125,30 +150,6 @@ public abstract class LocaleMessageCodesTestSupport {
         return props;
     }
 
-    protected static int countPlaceholders(String message) {
-        if (message == null || message.isEmpty()) {
-            return 0;
-        }
-
-        int maxIndex = -1;
-        int index = 0;
-
-        while ((index = message.indexOf("{", index)) != -1) {
-            int endIndex = message.indexOf("}", index);
-            if (endIndex != -1) {
-                try {
-                    String placeholder = message.substring(index + 1, endIndex);
-                    int placeholderIndex = Integer.parseInt(placeholder);
-                    maxIndex = Math.max(maxIndex, placeholderIndex);
-                } catch (NumberFormatException ignored) {
-                    // skip non-numeric placeholders
-                }
-                index = endIndex + 1;
-            } else {
-                break;
-            }
-        }
-
-        return maxIndex + 1;
+    public record FormattedMessageCase(String key, Object[] args, String expected) {
     }
 }

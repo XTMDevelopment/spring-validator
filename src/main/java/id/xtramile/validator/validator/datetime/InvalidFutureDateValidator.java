@@ -27,7 +27,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * For ISO 8601 format (yyyy-MM-dd'T'HH:mm:ssX), input data is expected to be in UTC.
  * The validation converts the UTC input to the system timezone (which should be UTC+7)
  * and compares with the current time (which is already in the system timezone), applying tolerance in hours.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -37,7 +37,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>For date only: compares dates only</li>
  * <li>Applies tolerance in hours when specified</li>
  * </ul>
- * 
+ *
  * @see InvalidFutureDate
  */
 public class InvalidFutureDateValidator implements ConstraintValidator<InvalidFutureDate, String> {
@@ -46,6 +46,7 @@ public class InvalidFutureDateValidator implements ConstraintValidator<InvalidFu
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the InvalidFutureDate annotation instance
      */
     @Override
@@ -56,7 +57,8 @@ public class InvalidFutureDateValidator implements ConstraintValidator<InvalidFu
 
     /**
      * Validates that the date is not in the future (within tolerance).
-     * @param value the date string to validate
+     *
+     * @param value   the date string to validate
      * @param context the constraint validator context
      * @return true if the date is not in the future (within tolerance) or is null/blank
      */
@@ -83,13 +85,13 @@ public class InvalidFutureDateValidator implements ConstraintValidator<InvalidFu
             }
 
             return validateDefault(value, context);
-            
+
         } catch (Exception e) {
             MessageUtils.buildViolation(context, Group.DATETIME, "invalid-future-date.pattern", pattern);
             return false;
         }
     }
-    
+
     /**
      * Validates date-time without timezone (no conversion, just compare with current time).
      */
@@ -106,13 +108,13 @@ public class InvalidFutureDateValidator implements ConstraintValidator<InvalidFu
             }
 
             return true;
-            
+
         } catch (DateTimeParseException e) {
             MessageUtils.buildViolation(context, Group.DATETIME, "invalid-future-date.pattern", pattern);
             return false;
         }
     }
-    
+
     /**
      * Validates date only (no time, just compare dates).
      */
@@ -128,13 +130,13 @@ public class InvalidFutureDateValidator implements ConstraintValidator<InvalidFu
             }
 
             return true;
-            
+
         } catch (DateTimeParseException e) {
             MessageUtils.buildViolation(context, Group.DATETIME, "invalid-future-date.pattern", pattern);
             return false;
         }
     }
-    
+
     /**
      * Default validation behavior for other patterns.
      */

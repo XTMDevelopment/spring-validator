@@ -17,16 +17,16 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <p>
  * Validates that a string value is one of the provided whitelist entries.
  * Supports case-sensitive and case-insensitive comparison modes.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Converts the whitelist values to a set for efficient lookup</li>
  * <li>Applies case conversion if case-insensitive mode is enabled</li>
  * <li>Checks if the input value exists in the whitelist</li>
  * </ul>
- * 
+ *
  * <p>Null/blank values are considered valid.
- * 
+ *
  * @see InWhitelist
  */
 public class InWhitelistValidator implements ConstraintValidator<InWhitelist, String> {
@@ -35,6 +35,7 @@ public class InWhitelistValidator implements ConstraintValidator<InWhitelist, St
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the InWhitelist annotation instance
      */
     @Override
@@ -47,22 +48,23 @@ public class InWhitelistValidator implements ConstraintValidator<InWhitelist, St
 
     /**
      * Validates that the value is in the whitelist.
-     * @param value the string value to validate
+     *
+     * @param value   the string value to validate
      * @param context the constraint validator context
      * @return true if the value is in the whitelist or is null/blank
      */
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-         if (isBlank(value)) return true;
+        if (isBlank(value)) return true;
 
-         String key = ignoreCase ? value.toLowerCase() : value;
-         if (set.contains(key)) {
-             return true;
-         }
+        String key = ignoreCase ? value.toLowerCase() : value;
+        if (set.contains(key)) {
+            return true;
+        }
 
-         String messageKey = ignoreCase ? "in-whitelist" : "in-whitelist.sensitive";
-         MessageUtils.buildViolation(context, Group.COMMON, messageKey, MessageUtils.join(set));
+        String messageKey = ignoreCase ? "in-whitelist" : "in-whitelist.sensitive";
+        MessageUtils.buildViolation(context, Group.COMMON, messageKey, MessageUtils.join(set));
 
-         return false;
+        return false;
     }
 }

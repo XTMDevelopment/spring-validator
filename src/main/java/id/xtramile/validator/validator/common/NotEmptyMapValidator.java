@@ -13,19 +13,20 @@ import java.util.Map;
  * <p>
  * Validates that a Map is not null and not empty.
  * This validator ensures that the map contains at least one key-value pair.
- * 
+ *
  * <p>The validator performs the following checks:
  * <ul>
  * <li>Rejects null maps</li>
  * <li>Rejects empty maps</li>
  * </ul>
- * 
+ *
  * @see NotEmptyCollection
  */
 public class NotEmptyMapValidator implements ConstraintValidator<NotEmptyCollection, Map<?, ?>> {
     /**
      * Validates that the map is not null and not empty.
-     * @param value the map to validate
+     *
+     * @param value   the map to validate
      * @param context the constraint validator context
      * @return true if the map is not null and not empty
      */

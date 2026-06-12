@@ -105,7 +105,7 @@ class ValidationAutoConfigurationTest {
                 .run(context -> {
                     ApiExceptionHandler handler = context.getBean(ApiExceptionHandler.class);
                     ErrorEnvelopeBuilder builder = context.getBean(ErrorEnvelopeBuilder.class);
-                    
+
                     assertThat(handler).isNotNull();
                     assertThat(builder).isNotNull();
                 });
@@ -159,7 +159,7 @@ class ValidationAutoConfigurationTest {
                     // ErrorEnvelopeBuilder should be created first
                     ErrorEnvelopeBuilder builder = context.getBean(ErrorEnvelopeBuilder.class);
                     assertThat(builder).isNotNull();
-                    
+
                     // ApiExceptionHandler should be created with the builder
                     ApiExceptionHandler handler = context.getBean(ApiExceptionHandler.class);
                     assertThat(handler).isNotNull();
@@ -177,17 +177,17 @@ class ValidationAutoConfigurationTest {
     @Configuration
     static class TestConfigurationWithHandler {
         static final ApiExceptionHandler testHandler = mock(ApiExceptionHandler.class);
-        
+
         @Bean
         public ApiExceptionHandler apiExceptionHandler() {
             return testHandler;
         }
-        
+
         @Bean
         public MessageResourceResolver messageResourceResolver() {
             return new MessageResourceResolver("id");
         }
-        
+
         @Bean
         public FriendlyMessageResolver friendlyMessageResolver(MessageResourceResolver messageResourceResolver) {
             return new FriendlyMessageResolver(messageResourceResolver);

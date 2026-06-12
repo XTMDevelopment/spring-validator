@@ -12,60 +12,6 @@ class NetworkValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    public record CidrDto(@ValidCIDR String value) {
-            public CidrDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record IpAddressDto(@ValidIPAddress String value) {
-            public IpAddressDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record Ipv4Dto(@ValidIPv4Address String value) {
-            public Ipv4Dto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record Ipv6Dto(@ValidIPv6Address String value) {
-            public Ipv6Dto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record MacAddressDto(@ValidMacAddress String value) {
-            public MacAddressDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record PortIntDto(@ValidPort Integer value) {
-            public PortIntDto(Integer value) {
-                this.value = value;
-            }
-        }
-
-    public record PortStringDto(@ValidPort String value) {
-            public PortStringDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record UrlDto(@ValidURL String value) {
-            public UrlDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record DomainNameDto(@ValidDomainName String value) {
-            public DomainNameDto(String value) {
-                this.value = value;
-            }
-        }
-
     @Test
     void cidr_pathB() {
         CidrDto dto = new CidrDto("192.168.0.0/33");
@@ -181,5 +127,59 @@ class NetworkValidatorMessageIntegrationTest {
 
         assertEquals("value must be a valid domain name", resolved);
         assertNoRawValidationKey(resolved);
+    }
+
+    public record CidrDto(@ValidCIDR String value) {
+        public CidrDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record IpAddressDto(@ValidIPAddress String value) {
+        public IpAddressDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record Ipv4Dto(@ValidIPv4Address String value) {
+        public Ipv4Dto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record Ipv6Dto(@ValidIPv6Address String value) {
+        public Ipv6Dto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record MacAddressDto(@ValidMacAddress String value) {
+        public MacAddressDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record PortIntDto(@ValidPort Integer value) {
+        public PortIntDto(Integer value) {
+            this.value = value;
+        }
+    }
+
+    public record PortStringDto(@ValidPort String value) {
+        public PortStringDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record UrlDto(@ValidURL String value) {
+        public UrlDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record DomainNameDto(@ValidDomainName String value) {
+        public DomainNameDto(String value) {
+            this.value = value;
+        }
     }
 }

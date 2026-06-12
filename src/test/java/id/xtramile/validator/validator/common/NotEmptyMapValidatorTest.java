@@ -12,14 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NotEmptyMapValidatorTest {
 
-    private record Person(String name, int age) {
-    }
-
-    private static class NotEmptyMapDummy {
-        @NotEmptyCollection
-        Map<String, String> mapField;
-    }
-
     private NotEmptyMapValidator validator;
 
     private static NotEmptyCollection getAnnotation(String fieldName) {
@@ -198,5 +190,13 @@ public class NotEmptyMapValidatorTest {
         emptyValues.put("key1", "");
         emptyValues.put("key2", "");
         assertTrue(validator.isValid(emptyValues, null));
+    }
+
+    private record Person(String name, int age) {
+    }
+
+    private static class NotEmptyMapDummy {
+        @NotEmptyCollection
+        Map<String, String> mapField;
     }
 }

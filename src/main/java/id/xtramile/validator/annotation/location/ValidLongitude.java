@@ -11,22 +11,24 @@ import java.lang.annotation.*;
  * <p>
  * Null values are considered valid. This validator ensures longitude values
  * are within the valid range for geographic coordinates.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidLongitude
  * private Double longitude; // e.g., 106.816666
- * 
+ *
  * @ValidLongitude
  * private String lngString; // e.g., "106.816666"
  * }</pre>
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = LongitudeValidator.class)
 public @interface ValidLongitude {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

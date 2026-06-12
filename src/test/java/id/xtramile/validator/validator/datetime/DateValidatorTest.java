@@ -11,20 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DateValidatorTest {
 
-    private static class DateDummy {
-        @ValidDate
-        String defaultDate;
-
-        @ValidDate(pattern = "dd/MM/yyyy")
-        String customPatternDate;
-
-        @ValidDate(pattern = "MM-dd-yyyy")
-        String usPatternDate;
-
-        @ValidDate(pattern = "yyyy/MM/dd")
-        String isoPatternDate;
-    }
-
     private DateValidator validator;
 
     private static ValidDate getAnnotation(String fieldName) {
@@ -256,5 +242,19 @@ public class DateValidatorTest {
         // Should not trigger the special yyyy-MM-dd logic
         assertTrue(validator.isValid("12-25-2023", null));
         assertFalse(validator.isValid("2023-12-25", null)); // wrong format for this pattern
+    }
+
+    private static class DateDummy {
+        @ValidDate
+        String defaultDate;
+
+        @ValidDate(pattern = "dd/MM/yyyy")
+        String customPatternDate;
+
+        @ValidDate(pattern = "MM-dd-yyyy")
+        String usPatternDate;
+
+        @ValidDate(pattern = "yyyy/MM/dd")
+        String isoPatternDate;
     }
 }

@@ -18,6 +18,23 @@ import static org.mockito.Mockito.when;
  */
 class MessageUtilsThreadLocalTest {
 
+    private static ConstraintValidatorContext mockContext() {
+        ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
+        ConstraintValidatorContext.ConstraintViolationBuilder builder =
+                mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
+        when(context.buildConstraintViolationWithTemplate(org.mockito.ArgumentMatchers.anyString()))
+                .thenReturn(builder);
+        when(builder.addConstraintViolation()).thenReturn(context);
+        return context;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static ThreadLocal<Map<String, Object[]>> argStorage() throws Exception {
+        Field field = MessageUtils.class.getDeclaredField("ARG_STORAGE");
+        field.setAccessible(true);
+        return (ThreadLocal<Map<String, Object[]>>) field.get(null);
+    }
+
     @AfterEach
     void tearDown() {
         MessageUtils.clearStoredArgs();
@@ -61,22 +78,5 @@ class MessageUtilsThreadLocalTest {
         Map<String, Object[]> mapAfterClear = storage.get();
         assertThat(mapAfterClear).isNotSameAs(mapBeforeClear);
         assertThat(mapAfterClear).isEmpty();
-    }
-
-    private static ConstraintValidatorContext mockContext() {
-        ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
-        ConstraintValidatorContext.ConstraintViolationBuilder builder =
-                mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
-        when(context.buildConstraintViolationWithTemplate(org.mockito.ArgumentMatchers.anyString()))
-                .thenReturn(builder);
-        when(builder.addConstraintViolation()).thenReturn(context);
-        return context;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static ThreadLocal<Map<String, Object[]>> argStorage() throws Exception {
-        Field field = MessageUtils.class.getDeclaredField("ARG_STORAGE");
-        field.setAccessible(true);
-        return (ThreadLocal<Map<String, Object[]>>) field.get(null);
     }
 }

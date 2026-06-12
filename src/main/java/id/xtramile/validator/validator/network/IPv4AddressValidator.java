@@ -12,7 +12,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates IPv4 addresses in dotted decimal notation.
  * This validator ensures the IPv4 address follows the standard format
  * with four octets in the range 0-255.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -21,14 +21,15 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Validates octet range (0-255)</li>
  * <li>Handles parsing exceptions gracefully</li>
  * </ul>
- * 
+ *
  * @see ValidIPv4Address
  */
 public class IPv4AddressValidator implements ConstraintValidator<ValidIPv4Address, String> {
 
     /**
      * Validates the IPv4 address format and octet ranges.
-     * @param value the IPv4 address string to validate
+     *
+     * @param value   the IPv4 address string to validate
      * @param context the constraint validator context
      * @return true if the IPv4 address is valid or is null/blank
      */

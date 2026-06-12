@@ -11,7 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public final class ValidationMessageAssertions {
 
-    private ValidationMessageAssertions() {}
+    private ValidationMessageAssertions() {
+    }
 
     /**
      * Ensures the resolved message is human-readable text, not a {@code validation.*} key.

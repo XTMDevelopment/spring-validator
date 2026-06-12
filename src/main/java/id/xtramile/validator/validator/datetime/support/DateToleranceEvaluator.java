@@ -13,42 +13,8 @@ import java.time.temporal.TemporalAccessor;
 
 public final class DateToleranceEvaluator {
 
-    public enum ParseResult {
-        SUCCESS,
-        PATTERN_ERROR,
-        LEAP_YEAR_ERROR
+    private DateToleranceEvaluator() {
     }
-
-    public static final class ParsedTemporal {
-        private final ZonedDateTime zonedDateTime;
-        private final LocalDateTime localDateTime;
-        private final LocalDate localDate;
-
-        private ParsedTemporal(ZonedDateTime zonedDateTime, LocalDateTime localDateTime, LocalDate localDate) {
-            this.zonedDateTime = zonedDateTime;
-            this.localDateTime = localDateTime;
-            this.localDate = localDate;
-        }
-
-        public static ParsedTemporal from(TemporalAccessor parsed) {
-            if (parsed instanceof ZonedDateTime) {
-                return new ParsedTemporal((ZonedDateTime) parsed, null, null);
-            }
-            if (parsed instanceof LocalDateTime) {
-                return new ParsedTemporal(null, (LocalDateTime) parsed, null);
-            }
-            if (parsed instanceof LocalDate) {
-                return new ParsedTemporal(null, null, (LocalDate) parsed);
-            }
-            return new ParsedTemporal(null, null, null);
-        }
-
-        public boolean isRecognized() {
-            return zonedDateTime != null || localDateTime != null || localDate != null;
-        }
-    }
-
-    private DateToleranceEvaluator() {}
 
     public static ParseResult parseStrictThenSmart(String value, String pattern, ParsedTemporal[] out) {
         try {
@@ -208,5 +174,40 @@ public final class DateToleranceEvaluator {
             }
         }
         return ParseResult.SUCCESS;
+    }
+
+    public enum ParseResult {
+        SUCCESS,
+        PATTERN_ERROR,
+        LEAP_YEAR_ERROR
+    }
+
+    public static final class ParsedTemporal {
+        private final ZonedDateTime zonedDateTime;
+        private final LocalDateTime localDateTime;
+        private final LocalDate localDate;
+
+        private ParsedTemporal(ZonedDateTime zonedDateTime, LocalDateTime localDateTime, LocalDate localDate) {
+            this.zonedDateTime = zonedDateTime;
+            this.localDateTime = localDateTime;
+            this.localDate = localDate;
+        }
+
+        public static ParsedTemporal from(TemporalAccessor parsed) {
+            if (parsed instanceof ZonedDateTime) {
+                return new ParsedTemporal((ZonedDateTime) parsed, null, null);
+            }
+            if (parsed instanceof LocalDateTime) {
+                return new ParsedTemporal(null, (LocalDateTime) parsed, null);
+            }
+            if (parsed instanceof LocalDate) {
+                return new ParsedTemporal(null, null, (LocalDate) parsed);
+            }
+            return new ParsedTemporal(null, null, null);
+        }
+
+        public boolean isRecognized() {
+            return zonedDateTime != null || localDateTime != null || localDate != null;
+        }
     }
 }

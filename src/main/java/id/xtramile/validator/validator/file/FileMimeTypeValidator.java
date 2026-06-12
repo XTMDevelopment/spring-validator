@@ -13,7 +13,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates MIME types for both String values and MultipartFile objects.
  * This validator ensures the MIME type matches one of the allowed types
  * with support for wildcard patterns and case-insensitive comparison.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null values as valid</li>
@@ -22,7 +22,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Supports wildcard patterns (e.g., "image/*")</li>
  * <li>Supports case-insensitive comparison</li>
  * </ul>
- * 
+ *
  * @see ValidFileMimeType
  */
 public class FileMimeTypeValidator implements ConstraintValidator<ValidFileMimeType, Object> {
@@ -31,6 +31,7 @@ public class FileMimeTypeValidator implements ConstraintValidator<ValidFileMimeT
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidFileMimeType annotation instance
      */
     @Override
@@ -41,7 +42,8 @@ public class FileMimeTypeValidator implements ConstraintValidator<ValidFileMimeT
 
     /**
      * Validates the MIME type against the allowed list.
-     * @param value the file object (String or MultipartFile) to validate
+     *
+     * @param value   the file object (String or MultipartFile) to validate
      * @param context the constraint validator context
      * @return true if the MIME type is allowed or value is null/empty
      */
@@ -74,6 +76,7 @@ public class FileMimeTypeValidator implements ConstraintValidator<ValidFileMimeT
 
     /**
      * Checks if a MIME type matches a rule (exact or wildcard).
+     *
      * @param rule the rule to match against
      * @param mime the MIME type to check
      * @return true if the MIME type matches the rule

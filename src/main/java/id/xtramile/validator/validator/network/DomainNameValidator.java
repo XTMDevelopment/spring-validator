@@ -14,7 +14,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates domain names following RFC-1035 standards with optional punycode support.
  * This validator ensures the domain name follows proper format with label length
  * constraints and character restrictions.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -24,16 +24,16 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Optionally allows punycode (xn--) labels</li>
  * <li>Prevents consecutive dots and invalid characters</li>
  * </ul>
- * 
+ *
  * @see ValidDomainName
  */
 public class DomainNameValidator implements ConstraintValidator<ValidDomainName, String> {
-    private boolean allowPunycode;
-
     private static final Pattern PUNYCODE_PATTERN = Pattern.compile("^xn--");
+    private boolean allowPunycode;
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidDomainName annotation instance
      */
     @Override
@@ -43,7 +43,8 @@ public class DomainNameValidator implements ConstraintValidator<ValidDomainName,
 
     /**
      * Validates the domain name against RFC-1035 standards.
-     * @param value the domain name string to validate
+     *
+     * @param value   the domain name string to validate
      * @param context the constraint validator context
      * @return true if the domain name is valid or is null/blank
      */
@@ -56,9 +57,9 @@ public class DomainNameValidator implements ConstraintValidator<ValidDomainName,
 
         if (trimmed.contains("://")) return false;
         if (trimmed.contains(":") && !trimmed.contains("::")) return false;
-        if (trimmed.contains("@") || trimmed.contains("#") || trimmed.contains("%") || 
-            trimmed.contains("&") || trimmed.contains("*") || trimmed.contains("+") || 
-            trimmed.contains("=") || trimmed.contains("!") || trimmed.contains(" ")) {
+        if (trimmed.contains("@") || trimmed.contains("#") || trimmed.contains("%") ||
+                trimmed.contains("&") || trimmed.contains("*") || trimmed.contains("+") ||
+                trimmed.contains("=") || trimmed.contains("!") || trimmed.contains(" ")) {
             return false;
         }
 

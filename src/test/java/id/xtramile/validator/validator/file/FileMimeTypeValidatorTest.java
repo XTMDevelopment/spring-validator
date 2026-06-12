@@ -11,20 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FileMimeTypeValidatorTest {
 
-    private static class FileMimeTypeDummy {
-        @ValidFileMimeType(allowed = {"image/jpeg", "image/png", "application/pdf"})
-        String defaultMime;
-
-        @ValidFileMimeType(allowed = {"IMAGE/JPEG", "IMAGE/PNG"}, ignoreCase = false)
-        String caseSensitiveMime;
-
-        @ValidFileMimeType(allowed = {"image/*", "text/*"})
-        String wildcardMime;
-
-        @ValidFileMimeType(allowed = {"application/*", "text/plain"})
-        String mixedWildcardMime;
-    }
-
     private FileMimeTypeValidator validator;
 
     private static ValidFileMimeType getAnnotation(String fieldName) {
@@ -163,5 +149,19 @@ public class FileMimeTypeValidatorTest {
         assertFalse(validator.isValid("invalid", null));
         assertFalse(validator.isValid("image", null));
         assertFalse(validator.isValid("/jpeg", null));
+    }
+
+    private static class FileMimeTypeDummy {
+        @ValidFileMimeType(allowed = {"image/jpeg", "image/png", "application/pdf"})
+        String defaultMime;
+
+        @ValidFileMimeType(allowed = {"IMAGE/JPEG", "IMAGE/PNG"}, ignoreCase = false)
+        String caseSensitiveMime;
+
+        @ValidFileMimeType(allowed = {"image/*", "text/*"})
+        String wildcardMime;
+
+        @ValidFileMimeType(allowed = {"application/*", "text/plain"})
+        String mixedWildcardMime;
     }
 }

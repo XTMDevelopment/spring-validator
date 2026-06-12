@@ -14,7 +14,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates an ISO 8601 date-time string using OffsetDateTime parsing.
  * This validator ensures the string follows the ISO 8601 standard format
  * with proper timezone handling and format validation.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -22,14 +22,15 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Attempts to parse using OffsetDateTime</li>
  * <li>Handles parsing exceptions gracefully</li>
  * </ul>
- * 
+ *
  * @see ValidISO8601
  */
 public class ISO8601Validator implements ConstraintValidator<ValidISO8601, String> {
 
     /**
      * Validates the ISO 8601 date-time string.
-     * @param value the ISO 8601 string to validate
+     *
+     * @param value   the ISO 8601 string to validate
      * @param context the constraint validator context
      * @return true if the string is valid ISO 8601 or is null/blank
      */
@@ -43,16 +44,17 @@ public class ISO8601Validator implements ConstraintValidator<ValidISO8601, Strin
                     return false;
                 }
             }
-            
+
             OffsetDateTime.parse(value);
             return true;
         } catch (Exception e) {
             return false;
         }
     }
-    
+
     /**
      * Checks if the timezone format is invalid.
+     *
      * @param value the string to check
      * @return true if the timezone format is invalid
      */
@@ -67,7 +69,7 @@ public class ISO8601Validator implements ConstraintValidator<ValidISO8601, Strin
                 }
             }
         }
-        
+
         if (value.contains("-")) {
             String[] parts = value.split("-");
             if (parts.length >= 2) {
@@ -75,7 +77,7 @@ public class ISO8601Validator implements ConstraintValidator<ValidISO8601, Strin
                 return lastPart.matches("\\d{1,2}$");
             }
         }
-        
+
         return false;
     }
 }

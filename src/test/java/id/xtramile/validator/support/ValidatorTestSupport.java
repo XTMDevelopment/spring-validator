@@ -7,7 +7,8 @@ import java.lang.reflect.Field;
 
 public final class ValidatorTestSupport {
 
-    private ValidatorTestSupport() {}
+    private ValidatorTestSupport() {
+    }
 
     public static <A extends Annotation> A getAnnotation(Class<?> dtoClass, String fieldName, Class<A> annotationType) {
         try {

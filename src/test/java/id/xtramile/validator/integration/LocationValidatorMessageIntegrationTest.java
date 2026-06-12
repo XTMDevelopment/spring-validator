@@ -12,48 +12,6 @@ class LocationValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    public record CoordinatesDto(@ValidCoordinates String value) {
-            public CoordinatesDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record CoordinatesFlipDto(@ValidCoordinates(flipCoordinates = true) String value) {
-            public CoordinatesFlipDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record LatitudeDto(@ValidLatitude String value) {
-            public LatitudeDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record LongitudeDto(@ValidLongitude String value) {
-            public LongitudeDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record PostalCodeUnsupportedDto(@ValidPostalCode(country = "US") String value) {
-            public PostalCodeUnsupportedDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record PostalCodeBadFormatDto(@ValidPostalCode String value) {
-            public PostalCodeBadFormatDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record RtRwDto(@ValidRTRW String value) {
-            public RtRwDto(String value) {
-                this.value = value;
-            }
-        }
-
     @Test
     void coordinates_defaultOrder() {
         CoordinatesDto dto = new CoordinatesDto("91,0");
@@ -147,5 +105,47 @@ class LocationValidatorMessageIntegrationTest {
 
         assertEquals("value must be a valid RT/RW number", resolved);
         assertNoRawValidationKey(resolved);
+    }
+
+    public record CoordinatesDto(@ValidCoordinates String value) {
+        public CoordinatesDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record CoordinatesFlipDto(@ValidCoordinates(flipCoordinates = true) String value) {
+        public CoordinatesFlipDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record LatitudeDto(@ValidLatitude String value) {
+        public LatitudeDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record LongitudeDto(@ValidLongitude String value) {
+        public LongitudeDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record PostalCodeUnsupportedDto(@ValidPostalCode(country = "US") String value) {
+        public PostalCodeUnsupportedDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record PostalCodeBadFormatDto(@ValidPostalCode String value) {
+        public PostalCodeBadFormatDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record RtRwDto(@ValidRTRW String value) {
+        public RtRwDto(String value) {
+            this.value = value;
+        }
     }
 }

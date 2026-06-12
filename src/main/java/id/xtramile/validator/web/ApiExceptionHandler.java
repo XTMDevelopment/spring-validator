@@ -25,6 +25,11 @@ public class ApiExceptionHandler {
         this.messageResolver = messageResolver;
     }
 
+    private static Class<?> resolveDtoClassFromBinding(MethodArgumentNotValidException ex) {
+        Object target = ex.getBindingResult().getTarget();
+        return target != null ? target.getClass() : Object.class;
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> onConstraintViolationException(ConstraintViolationException ex) {
         try {
@@ -72,10 +77,5 @@ public class ApiExceptionHandler {
         } finally {
             MessageUtils.clearStoredArgs();
         }
-    }
-
-    private static Class<?> resolveDtoClassFromBinding(MethodArgumentNotValidException ex) {
-        Object target = ex.getBindingResult().getTarget();
-        return target != null ? target.getClass() : Object.class;
     }
 }

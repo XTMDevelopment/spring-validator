@@ -15,7 +15,7 @@ import java.io.InputStream;
  * Validates image dimensions and optional aspect ratio for MultipartFile objects.
  * This validator ensures uploaded images meet specific dimension requirements
  * with support for file extension filtering and aspect ratio validation.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null values as valid</li>
@@ -23,7 +23,7 @@ import java.io.InputStream;
  * <li>Checks optional aspect ratio requirements</li>
  * <li>Handles image parsing exceptions gracefully</li>
  * </ul>
- * 
+ *
  * @see ValidImageDimensions
  */
 public class ImageDimensionsValidator implements ConstraintValidator<ValidImageDimensions, Object> {
@@ -35,6 +35,7 @@ public class ImageDimensionsValidator implements ConstraintValidator<ValidImageD
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidImageDimensions annotation instance
      */
     @Override
@@ -48,7 +49,8 @@ public class ImageDimensionsValidator implements ConstraintValidator<ValidImageD
 
     /**
      * Validates the image dimensions against the configured constraints.
-     * @param value the MultipartFile object to validate
+     *
+     * @param value   the MultipartFile object to validate
      * @param context the constraint validator context
      * @return true if the image meets dimension requirements or value is null/empty
      */

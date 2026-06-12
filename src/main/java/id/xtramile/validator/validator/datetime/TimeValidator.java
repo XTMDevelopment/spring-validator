@@ -18,7 +18,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates a time string using the provided pattern with strict and smart parsing.
  * This validator ensures the string represents a valid time according to the specified
  * format with support for both 12-hour and 24-hour formats.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -27,7 +27,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Attempts strict parsing first, then smart parsing</li>
  * <li>Validates hour and minute ranges appropriately</li>
  * </ul>
- * 
+ *
  * @see ValidTime
  */
 public class TimeValidator implements ConstraintValidator<ValidTime, String> {
@@ -35,6 +35,7 @@ public class TimeValidator implements ConstraintValidator<ValidTime, String> {
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidTime annotation instance
      */
     @Override
@@ -44,7 +45,8 @@ public class TimeValidator implements ConstraintValidator<ValidTime, String> {
 
     /**
      * Validates the time string against the configured pattern.
-     * @param value the time string to validate
+     *
+     * @param value   the time string to validate
      * @param context the constraint validator context
      * @return true if the string is a valid time or is null/blank
      */
@@ -87,6 +89,7 @@ public class TimeValidator implements ConstraintValidator<ValidTime, String> {
 
     /**
      * Validates 12-hour format time with AM/PM indicators.
+     *
      * @param value the time string to validate
      * @return true if the time is valid in 12-hour format
      */
@@ -96,7 +99,7 @@ public class TimeValidator implements ConstraintValidator<ValidTime, String> {
             if (parts.length != 2) {
                 return false;
             }
-            
+
             String timePart = parts[0];
             String ampmPart = parts[1];
 
@@ -108,7 +111,7 @@ public class TimeValidator implements ConstraintValidator<ValidTime, String> {
             if (timeComponents.length != 2) {
                 return false;
             }
-            
+
             int hour = Integer.parseInt(timeComponents[0]);
             int minute = Integer.parseInt(timeComponents[1]);
 
@@ -122,5 +125,5 @@ public class TimeValidator implements ConstraintValidator<ValidTime, String> {
             return false;
         }
     }
-    
+
 }

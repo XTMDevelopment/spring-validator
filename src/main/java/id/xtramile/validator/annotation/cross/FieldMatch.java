@@ -11,7 +11,7 @@ import java.lang.annotation.*;
  * <p>
  * It is valid when both are null or when both are non-null and equal.
  * Violation is attached to the "second" field when they don't match.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @FieldMatch(first = "password", second = "confirmPassword")
@@ -20,23 +20,25 @@ import java.lang.annotation.*;
  *     private String confirmPassword;
  * }
  * }</pre>
- * 
+ *
  * @see FieldMatchValidator
  */
 @Documented
-@Target({ElementType.TYPE })
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = FieldMatchValidator.class)
 public @interface FieldMatch {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The first field to compare.
      */
     String first();
-    
+
     /**
      * The second field to compare.
      */

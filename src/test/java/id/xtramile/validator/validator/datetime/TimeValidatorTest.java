@@ -11,20 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TimeValidatorTest {
 
-    private static class TimeDummy {
-        @ValidTime
-        String defaultTime;
-
-        @ValidTime(pattern = "HH:mm")
-        String hourMinuteTime;
-
-        @ValidTime(pattern = "h:mm a")
-        String twelveHourTime;
-
-        @ValidTime(pattern = "HH:mm:ss.SSS")
-        String millisecondTime;
-    }
-
     private TimeValidator validator;
 
     private static ValidTime getAnnotation(String fieldName) {
@@ -223,5 +209,19 @@ public class TimeValidatorTest {
         assertFalse(validator.isValid("10:30:00.1000", null)); // too many milliseconds
         assertFalse(validator.isValid("10:30:00.0000", null)); // too many milliseconds
         assertFalse(validator.isValid("10:30:00", null)); // missing milliseconds
+    }
+
+    private static class TimeDummy {
+        @ValidTime
+        String defaultTime;
+
+        @ValidTime(pattern = "HH:mm")
+        String hourMinuteTime;
+
+        @ValidTime(pattern = "h:mm a")
+        String twelveHourTime;
+
+        @ValidTime(pattern = "HH:mm:ss.SSS")
+        String millisecondTime;
     }
 }

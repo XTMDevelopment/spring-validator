@@ -11,42 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
 
 import static id.xtramile.validator.integration.ValidationMessageAssertions.assertNoRawValidationKey;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FileValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
-
-    public record FileExtensionDto(@ValidFileExtension(allowed = {"jpg", "png"}) Object value) {
-            public FileExtensionDto(Object value) {
-                this.value = value;
-            }
-        }
-
-    public record FileMimeTypeDto(@ValidFileMimeType(allowed = {"image/jpeg", "image/png"}) Object value) {
-            public FileMimeTypeDto(Object value) {
-                this.value = value;
-            }
-        }
-
-    public record ImageDimensionsDto(
-            @ValidImageDimensions(minWidth = 100, minHeight = 100, maxWidth = 4096, maxHeight = 4096) Object value) {
-            public ImageDimensionsDto(Object value) {
-                this.value = value;
-            }
-        }
-
-    public record FileSizeMinDto(@ValidFileSize(minBytes = 1000) Object value) {
-            public FileSizeMinDto(Object value) {
-                this.value = value;
-            }
-        }
-
-    public record FileSizeMaxDto(@ValidFileSize(maxBytes = 100) Object value) {
-            public FileSizeMaxDto(Object value) {
-                this.value = value;
-            }
-        }
 
     private static MultipartFile mockFile(String name, String contentType, byte[] bytes) {
         return new MockMultipartFile(name, name, contentType, bytes);
@@ -119,5 +89,36 @@ class FileValidatorMessageIntegrationTest {
 
         assertTrue(resolved.startsWith("value must have maximal"),
                 "Unexpected message: " + resolved);
+    }
+
+    public record FileExtensionDto(@ValidFileExtension(allowed = {"jpg", "png"}) Object value) {
+        public FileExtensionDto(Object value) {
+            this.value = value;
+        }
+    }
+
+    public record FileMimeTypeDto(@ValidFileMimeType(allowed = {"image/jpeg", "image/png"}) Object value) {
+        public FileMimeTypeDto(Object value) {
+            this.value = value;
+        }
+    }
+
+    public record ImageDimensionsDto(
+            @ValidImageDimensions(minWidth = 100, minHeight = 100, maxWidth = 4096, maxHeight = 4096) Object value) {
+        public ImageDimensionsDto(Object value) {
+            this.value = value;
+        }
+    }
+
+    public record FileSizeMinDto(@ValidFileSize(minBytes = 1000) Object value) {
+        public FileSizeMinDto(Object value) {
+            this.value = value;
+        }
+    }
+
+    public record FileSizeMaxDto(@ValidFileSize(maxBytes = 100) Object value) {
+        public FileSizeMaxDto(Object value) {
+            this.value = value;
+        }
     }
 }

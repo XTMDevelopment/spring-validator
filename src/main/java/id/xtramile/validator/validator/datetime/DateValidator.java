@@ -18,7 +18,7 @@ import static id.xtramile.validator.util.ValidatorUtils.*;
  * Validates a date string using the provided pattern with strict and smart parsing.
  * This validator ensures the string represents a valid date according to the specified
  * format with comprehensive date component validation.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -27,7 +27,7 @@ import static id.xtramile.validator.util.ValidatorUtils.*;
  * <li>Attempts strict parsing first, then smart parsing</li>
  * <li>Validates date components for logical consistency</li>
  * </ul>
- * 
+ *
  * @see ValidDate
  */
 public class DateValidator implements ConstraintValidator<ValidDate, String> {
@@ -35,6 +35,7 @@ public class DateValidator implements ConstraintValidator<ValidDate, String> {
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidDate annotation instance
      */
     @Override
@@ -44,7 +45,8 @@ public class DateValidator implements ConstraintValidator<ValidDate, String> {
 
     /**
      * Validates the date string against the configured pattern.
-     * @param value the date string to validate
+     *
+     * @param value   the date string to validate
      * @param context the constraint validator context
      * @return true if the string is a valid date or is null/blank
      */
@@ -67,7 +69,8 @@ public class DateValidator implements ConstraintValidator<ValidDate, String> {
                             return false;
                         }
 
-                    } catch (NumberFormatException ignore) {}
+                    } catch (NumberFormatException ignore) {
+                    }
                 }
             }
 

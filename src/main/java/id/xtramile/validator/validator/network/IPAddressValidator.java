@@ -12,7 +12,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates general IP addresses (both IPv4 and IPv6).
  * This validator delegates to IPv4 and IPv6 validators to ensure
  * the address is valid in either format.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -20,13 +20,14 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Falls back to IPv6 validator if IPv4 fails</li>
  * <li>Returns true if either format is valid</li>
  * </ul>
- * 
+ *
  * @see ValidIPAddress
  */
 public class IPAddressValidator implements ConstraintValidator<ValidIPAddress, String> {
     /**
      * Validates the IP address against IPv4 and IPv6 formats.
-     * @param value the IP address string to validate
+     *
+     * @param value   the IP address string to validate
      * @param context the constraint validator context
      * @return true if the IP address is valid or is null/blank
      */

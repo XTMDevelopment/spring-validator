@@ -50,11 +50,6 @@ public class FriendlyMessageResolver {
         );
     }
 
-    private record DefaultCollaborators(
-            ValidationFieldDisplayNames fieldNames,
-            ValidationMessageArgsBuilder messageArgsBuilder,
-            CompositeConstraintMessageResolver annotationMessages) {}
-
     public String resolve(ConstraintViolation<?> v, String field, Class<?> dtoClass) {
         String template = v.getMessageTemplate();
 
@@ -128,5 +123,11 @@ public class FriendlyMessageResolver {
 
     private Class<?> resolveAnnotationType(String annotationName) {
         return AnnotationRegistry.resolve(annotationName);
+    }
+
+    private record DefaultCollaborators(
+            ValidationFieldDisplayNames fieldNames,
+            ValidationMessageArgsBuilder messageArgsBuilder,
+            CompositeConstraintMessageResolver annotationMessages) {
     }
 }

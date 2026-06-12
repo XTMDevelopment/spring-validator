@@ -11,23 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OtpValidatorTest {
 
-    private static class OtpDummy {
-        @ValidOtp
-        String defaultOtp;
-
-        @ValidOtp(length = 4)
-        String fourDigitOtp;
-
-        @ValidOtp(length = 8)
-        String eightDigitOtp;
-
-        @ValidOtp(alphabets = true)
-        String alphanumericOtp;
-
-        @ValidOtp(length = 4, alphabets = true)
-        String fourCharOtp;
-    }
-
     private OtpValidator validator;
 
     private static ValidOtp getAnnotation(String fieldName) {
@@ -205,5 +188,22 @@ public class OtpValidatorTest {
         assertTrue(validator.isValid("12345678", null));
         assertFalse(validator.isValid("1234567", null));
         assertFalse(validator.isValid("123456789", null));
+    }
+
+    private static class OtpDummy {
+        @ValidOtp
+        String defaultOtp;
+
+        @ValidOtp(length = 4)
+        String fourDigitOtp;
+
+        @ValidOtp(length = 8)
+        String eightDigitOtp;
+
+        @ValidOtp(alphabets = true)
+        String alphanumericOtp;
+
+        @ValidOtp(length = 4, alphabets = true)
+        String fourCharOtp;
     }
 }

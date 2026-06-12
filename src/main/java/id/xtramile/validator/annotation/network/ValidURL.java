@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Null/blank values are considered valid. This validator ensures URLs
  * follow the correct format and optionally enforces HTTPS-only protocols.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidURL
  * private String website; // e.g., https://example.com
- * 
+ *
  * @ValidURL(httpsOnly = true)
  * private String secureUrl; // e.g., https://api.example.com
  * }</pre>
- * 
+ *
  * @see URLValidator
  */
 @Documented
@@ -29,7 +29,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = URLValidator.class)
 public @interface ValidURL {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**

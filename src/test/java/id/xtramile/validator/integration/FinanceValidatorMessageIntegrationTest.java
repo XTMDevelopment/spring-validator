@@ -6,89 +6,12 @@ import jakarta.validation.ConstraintViolation;
 import org.junit.jupiter.api.Test;
 
 import static id.xtramile.validator.integration.ValidationMessageAssertions.assertNoRawValidationKey;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FinanceValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
-
-    public record CardExpiryDto(@ValidCardExpiry String value) {
-            public CardExpiryDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record CardExpiryFutureDto(@ValidCardExpiry String value) {
-            public CardExpiryFutureDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record CardNumberDto(@ValidCardNumber String value) {
-            public CardNumberDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record CardNumberStripDto(@ValidCardNumber(stripSeparators = false) String value) {
-            public CardNumberStripDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record CurrencyCodeDto(@ValidCurrencyCode String value) {
-            public CurrencyCodeDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record CvvDto(@ValidCVV String value) {
-            public CvvDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record CvvFourDto(@ValidCVV(allowFourDigits = false) String value) {
-            public CvvFourDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record IBANDto(@ValidIBAN String value) {
-            public IBANDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record PaymentReferenceDto(@ValidPaymentReference(pattern = "^[A-Z]{2}\\d{8}$") String value) {
-            public PaymentReferenceDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record SwiftCodeDto(@ValidSwiftCode String value) {
-            public SwiftCodeDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record TransactionAmountMinDto(@ValidTransactionAmount(min = 1000L) Long value) {
-            public TransactionAmountMinDto(Long value) {
-                this.value = value;
-            }
-        }
-
-    public record TransactionAmountMaxDto(@ValidTransactionAmount(max = 1000000L) Long value) {
-            public TransactionAmountMaxDto(Long value) {
-                this.value = value;
-            }
-        }
-
-    public record TransactionAmountZeroDto(@ValidTransactionAmount(allowZero = false) Long value) {
-            public TransactionAmountZeroDto(Long value) {
-                this.value = value;
-            }
-        }
 
     @Test
     void cardExpiry_invalidFormat() {
@@ -257,5 +180,83 @@ class FinanceValidatorMessageIntegrationTest {
 
         assertEquals(SUPPORT.messages().getMessage("validation.finance.transaction-amount.zero", "value"), resolved);
         assertNoRawValidationKey(resolved);
+    }
+
+    public record CardExpiryDto(@ValidCardExpiry String value) {
+        public CardExpiryDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record CardExpiryFutureDto(@ValidCardExpiry String value) {
+        public CardExpiryFutureDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record CardNumberDto(@ValidCardNumber String value) {
+        public CardNumberDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record CardNumberStripDto(@ValidCardNumber(stripSeparators = false) String value) {
+        public CardNumberStripDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record CurrencyCodeDto(@ValidCurrencyCode String value) {
+        public CurrencyCodeDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record CvvDto(@ValidCVV String value) {
+        public CvvDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record CvvFourDto(@ValidCVV(allowFourDigits = false) String value) {
+        public CvvFourDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record IBANDto(@ValidIBAN String value) {
+        public IBANDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record PaymentReferenceDto(@ValidPaymentReference(pattern = "^[A-Z]{2}\\d{8}$") String value) {
+        public PaymentReferenceDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record SwiftCodeDto(@ValidSwiftCode String value) {
+        public SwiftCodeDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record TransactionAmountMinDto(@ValidTransactionAmount(min = 1000L) Long value) {
+        public TransactionAmountMinDto(Long value) {
+            this.value = value;
+        }
+    }
+
+    public record TransactionAmountMaxDto(@ValidTransactionAmount(max = 1000000L) Long value) {
+        public TransactionAmountMaxDto(Long value) {
+            this.value = value;
+        }
+    }
+
+    public record TransactionAmountZeroDto(@ValidTransactionAmount(allowZero = false) Long value) {
+        public TransactionAmountZeroDto(Long value) {
+            this.value = value;
+        }
     }
 }

@@ -15,7 +15,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isPresent;
  * Validates conditional field requirements based on the presence of a trigger field.
  * This validator ensures that when the "when" field is present, all "require" fields
  * must also be present, implementing conditional validation logic.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null beans as valid</li>
@@ -23,7 +23,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isPresent;
  * <li>Validates all required fields are present when triggered</li>
  * <li>Adds violations to missing required fields</li>
  * </ul>
- * 
+ *
  * @see RequiredWith
  */
 public class RequiredWithValidator implements ConstraintValidator<RequiredWith, Object> {
@@ -32,6 +32,7 @@ public class RequiredWithValidator implements ConstraintValidator<RequiredWith, 
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the RequiredWith annotation instance
      */
     @Override
@@ -42,7 +43,8 @@ public class RequiredWithValidator implements ConstraintValidator<RequiredWith, 
 
     /**
      * Validates conditional field requirements.
-     * @param bean the object to validate
+     *
+     * @param bean    the object to validate
      * @param context the constraint validator context
      * @return true if requirements are met or bean is null
      */

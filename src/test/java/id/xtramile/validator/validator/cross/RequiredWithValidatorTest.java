@@ -9,22 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RequiredWithValidatorTest {
 
-    @RequiredWith(when = "hasEmail", require = {"email"})
-        private record EmailRequiredDummy(Boolean hasEmail, String email) {
-    }
-
-    @RequiredWith(when = "hasPhone", require = {"phone", "phoneType"})
-        private record PhoneRequiredDummy(Boolean hasPhone, String phone, String phoneType) {
-    }
-
-    @RequiredWith(when = "isActive", require = {"username", "password"})
-        private record UserRequiredDummy(Boolean isActive, String username, String password) {
-    }
-
-    @RequiredWith(when = "hasAddress", require = {"street", "city", "zipCode"})
-        private record AddressRequiredDummy(Boolean hasAddress, String street, String city, String zipCode) {
-    }
-
     private RequiredWithValidator validator;
 
     @BeforeEach
@@ -128,7 +112,7 @@ public class RequiredWithValidatorTest {
     @Test
     void testStringTriggerValues() {
         @RequiredWith(when = "status", require = {"message"})
-                record StatusDummy(String status, String message) {
+        record StatusDummy(String status, String message) {
         }
 
         validator.initialize(StatusDummy.class.getAnnotation(RequiredWith.class));
@@ -146,7 +130,7 @@ public class RequiredWithValidatorTest {
     @Test
     void testNumericTriggerValues() {
         @RequiredWith(when = "count", require = {"description"})
-                record CountDummy(Integer count, String description) {
+        record CountDummy(Integer count, String description) {
         }
 
         validator.initialize(CountDummy.class.getAnnotation(RequiredWith.class));
@@ -201,5 +185,21 @@ public class RequiredWithValidatorTest {
         assertTrue(validator.isValid(new EmailRequiredDummy(true, "Test@Example.com"), null)); // Case sensitive email
         assertTrue(validator.isValid(new EmailRequiredDummy(true, "TEST@EXAMPLE.COM"), null)); // Uppercase email
         assertTrue(validator.isValid(new EmailRequiredDummy(true, "test@example.com"), null)); // Lowercase email
+    }
+
+    @RequiredWith(when = "hasEmail", require = {"email"})
+    private record EmailRequiredDummy(Boolean hasEmail, String email) {
+    }
+
+    @RequiredWith(when = "hasPhone", require = {"phone", "phoneType"})
+    private record PhoneRequiredDummy(Boolean hasPhone, String phone, String phoneType) {
+    }
+
+    @RequiredWith(when = "isActive", require = {"username", "password"})
+    private record UserRequiredDummy(Boolean isActive, String username, String password) {
+    }
+
+    @RequiredWith(when = "hasAddress", require = {"street", "city", "zipCode"})
+    private record AddressRequiredDummy(Boolean hasAddress, String street, String city, String zipCode) {
     }
 }

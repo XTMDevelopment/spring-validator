@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Null/blank values are considered valid. This validator ensures the date
  * is in the past relative to the current date.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidPastDate
  * private String startedAt; // must be a past date
- * 
+ *
  * @ValidPastDate(pattern = "dd/MM/yyyy")
  * private String birthDate; // must be in the past
  * }</pre>
- * 
+ *
  * @see PastDateValidator
  */
 @Documented
@@ -29,7 +29,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = PastDateValidator.class)
 public @interface ValidPastDate {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**

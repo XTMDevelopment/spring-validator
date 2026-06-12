@@ -11,32 +11,34 @@ import java.lang.annotation.*;
  * <p>
  * Case sensitivity can be configured. Null/blank values are considered valid.
  * This validator checks the domain part of an email address against a whitelist.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidEmailDomain(allowed = {"example.com", "mycorp.co"}, ignoreCase = true)
  * private String corporateEmail;
- * 
+ *
  * @ValidEmailDomain(allowed = {"company.com"})
  * private String workEmail;
  * }</pre>
- * 
+ *
  * @see EmailDomainValidator
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = EmailDomainValidator.class)
 public @interface ValidEmailDomain {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The list of allowed email domains.
      */
     String[] allowed();
-    
+
     /**
      * Whether the comparison should be case-insensitive.
      */

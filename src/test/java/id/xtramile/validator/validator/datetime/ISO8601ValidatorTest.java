@@ -11,11 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ISO8601ValidatorTest {
 
-    private static class ISO8601Dummy {
-        @ValidISO8601
-        String iso8601Field;
-    }
-
     private ISO8601Validator validator;
 
     private static ValidISO8601 getAnnotation(String fieldName) {
@@ -190,5 +185,10 @@ public class ISO8601ValidatorTest {
         assertFalse(validator.isValid("2023-12-32T10:30:00Z", null)); // invalid day
         assertFalse(validator.isValid("2023-02-30T10:30:00Z", null)); // invalid day for February
         assertFalse(validator.isValid("2023-04-31T10:30:00Z", null)); // invalid day for April
+    }
+
+    private static class ISO8601Dummy {
+        @ValidISO8601
+        String iso8601Field;
     }
 }

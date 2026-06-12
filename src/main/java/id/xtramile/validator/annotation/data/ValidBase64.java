@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * When urlSafe=true, uses URL-safe Base64 alphabet. Null/blank values are considered valid.
  * This validator ensures the string is properly Base64 encoded.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidBase64
  * private String imagePayload; // Standard Base64
- * 
+ *
  * @ValidBase64(urlSafe = true)
  * private String jwtSegment; // URL-safe Base64
  * }</pre>
- * 
+ *
  * @see Base64Validator
  */
 @Documented
@@ -29,7 +29,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = Base64Validator.class)
 public @interface ValidBase64 {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**

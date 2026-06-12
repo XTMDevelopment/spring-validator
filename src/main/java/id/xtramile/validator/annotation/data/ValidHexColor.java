@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Long form #RRGGBB is always allowed; when shortFormAllowed=true, #RGB is also allowed.
  * Case-insensitive. Null/blank values are considered valid.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidHexColor
  * private String primaryColor; // e.g., #ff8800 or #f80
- * 
+ *
  * @ValidHexColor(shortFormAllowed = false)
  * private String strictColor; // e.g., #00FFCC
  * }</pre>
- * 
+ *
  * @see HexColorValidator
  */
 @Documented
@@ -29,7 +29,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = HexColorValidator.class)
 public @interface ValidHexColor {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**

@@ -20,29 +20,6 @@ class IndonesianMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.ID;
 
-    public record NotBlankDto(@FieldName("ID Peminjam") @NotBlank String borrowerId) {
-            public NotBlankDto(String borrowerId) {
-                this.borrowerId = borrowerId;
-            }
-
-            @Override
-            public String borrowerId() {
-                return borrowerId;
-            }
-        }
-
-    public record ValidUUIDDto(@FieldName("Referensi") @ValidUUID String value) {
-            public ValidUUIDDto(String value) {
-                this.value = value;
-            }
-        }
-
-    public record EmailDto(@FieldName("Email Kerja") @ValidEmail String value) {
-            public EmailDto(String value) {
-                this.value = value;
-            }
-        }
-
     @Test
     void notBlank_withFieldName_resolvesIndonesianMessage() {
         NotBlankDto dto = new NotBlankDto("");
@@ -83,5 +60,28 @@ class IndonesianMessageIntegrationTest {
 
         assertEquals(expected, resolved);
         assertNoRawValidationKey(resolved);
+    }
+
+    public record NotBlankDto(@FieldName("ID Peminjam") @NotBlank String borrowerId) {
+        public NotBlankDto(String borrowerId) {
+            this.borrowerId = borrowerId;
+        }
+
+        @Override
+        public String borrowerId() {
+            return borrowerId;
+        }
+    }
+
+    public record ValidUUIDDto(@FieldName("Referensi") @ValidUUID String value) {
+        public ValidUUIDDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record EmailDto(@FieldName("Email Kerja") @ValidEmail String value) {
+        public EmailDto(String value) {
+            this.value = value;
+        }
     }
 }

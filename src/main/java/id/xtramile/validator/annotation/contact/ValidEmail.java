@@ -11,24 +11,26 @@ import java.lang.annotation.*;
  * <p>
  * This validator delegates to jakarta.validation.constraints.Email for validation.
  * Null/blank values are considered valid.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidEmail
  * private String email; // e.g., user@example.com
- * 
+ *
  * @ValidEmail
  * private String contactEmail; // e.g., support@mycompany.co
  * }</pre>
- * 
+ *
  * @see EmailValidator
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = EmailValidator.class)
 public @interface ValidEmail {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

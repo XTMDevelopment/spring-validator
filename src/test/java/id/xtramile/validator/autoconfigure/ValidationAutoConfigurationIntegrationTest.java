@@ -70,7 +70,7 @@ class ValidationAutoConfigurationIntegrationTest {
         // ApiExceptionHandler should be able to use ErrorEnvelopeBuilder
         ErrorEnvelopeBuilder builder = applicationContext.getBean(ErrorEnvelopeBuilder.class);
         ApiExceptionHandler handler = applicationContext.getBean(ApiExceptionHandler.class);
-        
+
         assertThat(builder).isNotNull();
         assertThat(handler).isNotNull();
         // Both beans should be available and functional
@@ -87,7 +87,7 @@ class ValidationAutoConfigurationIntegrationTest {
                 "Error message 1",
                 "Error message 2"
         );
-        
+
         var result = errorEnvelopeBuilder.validation(errors);
         assertThat(result).isNotNull();
         assertThat(result).containsKey("code");

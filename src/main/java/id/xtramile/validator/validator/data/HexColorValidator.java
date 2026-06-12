@@ -16,7 +16,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates a hex color code in either long form (#RRGGBB) or short form (#RGB).
  * This validator ensures the string follows the correct hex color format
  * with optional support for short form colors.
- * 
+ *
  * <p>The validator performs the following checks:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -24,16 +24,17 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Optionally validates short form hex colors (#RGB)</li>
  * <li>Case-insensitive validation</li>
  * </ul>
- * 
+ *
  * @see ValidHexColor
  */
 public class HexColorValidator implements ConstraintValidator<ValidHexColor, String> {
-    private boolean allowShort;
     private static final Pattern LONG = Pattern.compile("^#([0-9a-fA-F]{6})$");
     private static final Pattern SHORT = Pattern.compile("^#([0-9a-fA-F]{3})$");
+    private boolean allowShort;
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidHexColor annotation instance
      */
     @Override
@@ -43,7 +44,8 @@ public class HexColorValidator implements ConstraintValidator<ValidHexColor, Str
 
     /**
      * Validates the hex color string against the configured format.
-     * @param value the hex color string to validate
+     *
+     * @param value   the hex color string to validate
      * @param context the constraint validator context
      * @return true if the string is a valid hex color or is null/blank
      */

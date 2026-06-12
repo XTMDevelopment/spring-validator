@@ -11,17 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TaxIdValidatorTest {
 
-    private static class TaxIdDummy {
-        @ValidTaxID
-        String defaultTaxId;
-
-        @ValidTaxID()
-        String indonesianTaxId;
-
-        @ValidTaxID(country = "US")
-        String usTaxId;
-    }
-
     private TaxIdValidator validator;
 
     private static ValidTaxID getAnnotation(String fieldName) {
@@ -94,5 +83,16 @@ public class TaxIdValidatorTest {
         assertTrue(validator.isValid("1234567890123456", null)); // exactly 16 digits
         assertFalse(validator.isValid("12345678901234", null)); // 14 digits
         assertFalse(validator.isValid("12345678901234567", null)); // 17 digits
+    }
+
+    private static class TaxIdDummy {
+        @ValidTaxID
+        String defaultTaxId;
+
+        @ValidTaxID()
+        String indonesianTaxId;
+
+        @ValidTaxID(country = "US")
+        String usTaxId;
     }
 }

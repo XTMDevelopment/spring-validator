@@ -9,22 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OnlyOneOfValidatorTest {
 
-    @OnlyOneOf(fields = {"email", "phone"})
-        private record ContactDummy(String email, String phone) {
-    }
-
-    @OnlyOneOf(fields = {"username", "email", "phone"})
-        private record UserDummy(String username, String email, String phone) {
-    }
-
-    @OnlyOneOf(fields = {"field1", "field2", "field3", "field4"})
-        private record MultiFieldDummy(String field1, String field2, String field3, String field4) {
-    }
-
-    @OnlyOneOf(fields = {"value"})
-        private record SingleFieldDummy(String value) {
-    }
-
     private OnlyOneOfValidator validator;
 
     @BeforeEach
@@ -193,7 +177,7 @@ public class OnlyOneOfValidatorTest {
     void testLongValues() {
         String longEmail = "verylongemailaddressthatmightexceednormallimits@verylongdomainname.com";
         String longPhone = "+12345678901234567890";
-        
+
         assertTrue(validator.isValid(new ContactDummy(longEmail, null), null)); // Long email
         assertTrue(validator.isValid(new ContactDummy(null, longPhone), null)); // Long phone
         assertFalse(validator.isValid(new ContactDummy(longEmail, longPhone), null)); // Both long values
@@ -204,5 +188,21 @@ public class OnlyOneOfValidatorTest {
         assertTrue(validator.isValid(new ContactDummy("tëst@ëxämplë.com", null), null)); // Unicode email
         assertTrue(validator.isValid(new ContactDummy(null, "tëst@ëxämplë.com"), null)); // Unicode phone
         assertFalse(validator.isValid(new ContactDummy("tëst@ëxämplë.com", "tëst@ëxämplë.com"), null)); // Both unicode
+    }
+
+    @OnlyOneOf(fields = {"email", "phone"})
+    private record ContactDummy(String email, String phone) {
+    }
+
+    @OnlyOneOf(fields = {"username", "email", "phone"})
+    private record UserDummy(String username, String email, String phone) {
+    }
+
+    @OnlyOneOf(fields = {"field1", "field2", "field3", "field4"})
+    private record MultiFieldDummy(String field1, String field2, String field3, String field4) {
+    }
+
+    @OnlyOneOf(fields = {"value"})
+    private record SingleFieldDummy(String value) {
     }
 }

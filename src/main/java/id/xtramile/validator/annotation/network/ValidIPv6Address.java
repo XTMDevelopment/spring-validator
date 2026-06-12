@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Null/blank values are considered valid. This validator ensures the IP address
  * follows the correct IPv6 format (hexadecimal notation with colons).
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidIPv6Address
  * private String ipv6Address; // e.g., 2001:db8::1
- * 
+ *
  * @ValidIPv6Address
  * private String serverIpv6; // e.g., ::1 (localhost)
  * }</pre>
- * 
+ *
  * @see IPv6AddressValidator
  */
 @Documented
@@ -29,6 +29,8 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = IPv6AddressValidator.class)
 public @interface ValidIPv6Address {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

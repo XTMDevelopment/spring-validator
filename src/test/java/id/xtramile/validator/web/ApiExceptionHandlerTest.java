@@ -75,15 +75,15 @@ class ApiExceptionHandlerTest {
 
         ConstraintDescriptor descriptor = mock(ConstraintDescriptor.class);
         when(violation.getConstraintDescriptor()).thenReturn(descriptor);
-        
+
         Annotation annotation = mock(Annotation.class);
         when(descriptor.getAnnotation()).thenReturn(annotation);
         when(annotation.annotationType()).thenReturn((Class) NotNull.class);
         when(descriptor.getAttributes()).thenReturn(Map.of());
-        
+
         ConstraintViolationException exception = mock(ConstraintViolationException.class);
         when(exception.getConstraintViolations()).thenReturn(Set.of(violation));
-        
+
         when(mockMessageResolver.resolve(any(), eq("email"), eq(Object.class))).thenReturn("email is required");
         when(mockBuilder.validation(List.of("email is required"))).thenReturn(Map.of("test", "response"));
 
@@ -405,15 +405,15 @@ class ApiExceptionHandlerTest {
 
         ConstraintDescriptor descriptor = mock(ConstraintDescriptor.class);
         when(violation.getConstraintDescriptor()).thenReturn(descriptor);
-        
+
         Annotation annotation = mock(Annotation.class);
         when(descriptor.getAnnotation()).thenReturn(annotation);
         when(annotation.annotationType()).thenReturn((Class) NotNull.class);
         when(descriptor.getAttributes()).thenReturn(Map.of());
-        
+
         ConstraintViolationException exception = mock(ConstraintViolationException.class);
         when(exception.getConstraintViolations()).thenReturn(Set.of(violation));
-        
+
         when(mockMessageResolver.resolve(any(), eq("request"), eq(Object.class))).thenReturn("request is required");
         when(mockBuilder.validation(List.of("request is required"))).thenReturn(Map.of("test", "response"));
 

@@ -2,11 +2,7 @@ package id.xtramile.validator.integration;
 
 import id.xtramile.validator.annotation.common.FieldName;
 import id.xtramile.validator.annotation.common.InWhitelist;
-import id.xtramile.validator.web.FriendlyMessageResolver;
-import id.xtramile.validator.web.MessageResourceResolver;
-import id.xtramile.validator.web.ValidationAnnotationTypeRegistry;
-import id.xtramile.validator.web.ValidationFieldDisplayNames;
-import id.xtramile.validator.web.ValidationMessageArgsBuilder;
+import id.xtramile.validator.web.*;
 import id.xtramile.validator.web.messages.CompositeConstraintMessageResolver;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -125,37 +121,43 @@ class ValidationWebComponentsCollaborationIntegrationTest {
     public record MultiViolationDto(
             @FieldName("Channel label") @InWhitelist(values = {"sms", "email"}) @NotBlank String channel,
             @FieldName("Code") @NotBlank String code) {
-            public MultiViolationDto(String channel, String code) {
-                this.channel = channel;
-                this.code = code;
-            }
-
-            @Override
-            public String channel() {
-                return channel;
-            }
-
-            @Override
-            public String code() {
-                return code;
-            }
+        public MultiViolationDto(String channel, String code) {
+            this.channel = channel;
+            this.code = code;
         }
+
+        @Override
+        public String channel() {
+            return channel;
+        }
+
+        @Override
+        public String code() {
+            return code;
+        }
+    }
 
     record NotBlankOnlyDto(@FieldName("Email") @NotBlank String email) {
-            NotBlankOnlyDto(String email) {
-                this.email = email;
-            }
-
-            @Override
-            public String email() {
-                return email;
-            }
+        NotBlankOnlyDto(String email) {
+            this.email = email;
         }
+
+        @Override
+        public String email() {
+            return email;
+        }
+    }
 
     static class MapLikeDto {
         @FieldName("Channel label")
         @InWhitelist(values = {"sms", "email"})
         private String channel = "invalid";
+
+        static MapLikeDto withInvalidChannel() {
+            MapLikeDto d = new MapLikeDto();
+            d.setChannel("invalid");
+            return d;
+        }
 
         public String getChannel() {
             return channel;
@@ -163,12 +165,6 @@ class ValidationWebComponentsCollaborationIntegrationTest {
 
         public void setChannel(String channel) {
             this.channel = channel;
-        }
-
-        static MapLikeDto withInvalidChannel() {
-            MapLikeDto d = new MapLikeDto();
-            d.setChannel("invalid");
-            return d;
         }
     }
 }

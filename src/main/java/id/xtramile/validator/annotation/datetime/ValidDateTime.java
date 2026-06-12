@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Null/blank values are considered valid. This validator ensures the string
  * represents a valid date-time according to the specified format.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidDateTime // default pattern yyyy-MM-dd HH:mm:ss
  * private String createdAt; // e.g., 2025-08-11 23:24:00
- * 
+ *
  * @ValidDateTime(pattern = "yyyy/MM/dd HH:mm")
  * private String publishedAt; // e.g., 2025/08/11 09:30
  * }</pre>
- * 
+ *
  * @see DateTimeValidator
  */
 @Documented
@@ -29,7 +29,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = DateTimeValidator.class)
 public @interface ValidDateTime {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**

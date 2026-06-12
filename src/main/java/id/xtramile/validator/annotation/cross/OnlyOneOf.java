@@ -11,7 +11,7 @@ import java.lang.annotation.*;
  * <p>
  * If none or more than one is present, a violation is added (to the first field when none present,
  * or to the last present field when more than one). This ensures mutual exclusivity.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @OnlyOneOf(fields = {"username", "email"})
@@ -20,7 +20,7 @@ import java.lang.annotation.*;
  *     private String email;
  * }
  * }</pre>
- * 
+ *
  * @see OnlyOneOfValidator
  */
 @Documented
@@ -29,7 +29,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = OnlyOneOfValidator.class)
 public @interface OnlyOneOf {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**

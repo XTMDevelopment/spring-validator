@@ -2,8 +2,8 @@ package id.xtramile.validator.integration;
 
 import id.xtramile.validator.annotation.common.*;
 import id.xtramile.validator.enums.ISOType;
-import id.xtramile.validator.util.MessageUtils;
 import id.xtramile.validator.support.ValidationMessageTestSupport;
+import id.xtramile.validator.util.MessageUtils;
 import jakarta.validation.ConstraintViolation;
 import org.junit.jupiter.api.Test;
 
@@ -18,60 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CommonValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
-
-    public record InWhitelistDto(@InWhitelist(values = {"ACTIVE", "INACTIVE"}) String value) {
-        public InWhitelistDto(String value) {
-            this.value = value;
-        }
-    }
-
-    public record InWhitelistSensitiveDto(@InWhitelist(values = {"ACTIVE", "INACTIVE"}, ignoreCase = false) String value) {
-        public InWhitelistSensitiveDto(String value) {
-            this.value = value;
-        }
-    }
-
-    public record NotInBlacklistDto(@NotInBlacklist(values = {"BANNED", "BLOCKED"}) String value) {
-        public NotInBlacklistDto(String value) {
-            this.value = value;
-        }
-    }
-
-    public record NotInBlacklistSensitiveDto(@NotInBlacklist(values = {"BANNED", "BLOCKED"}, ignoreCase = false) String value) {
-        public NotInBlacklistSensitiveDto(String value) {
-            this.value = value;
-        }
-    }
-
-    public record ValidEnumDto(@ValidEnum(enumClass = ISOType.class) String value) {
-        public ValidEnumDto(String value) {
-            this.value = value;
-        }
-    }
-
-    public record ValidEnumSensitiveDto(@ValidEnum(enumClass = ISOType.class, ignoreCase = false) String value) {
-        public ValidEnumSensitiveDto(String value) {
-            this.value = value;
-        }
-    }
-
-    public record UniqueElementsDto(@UniqueElements List<String> value) {
-        public UniqueElementsDto(List<String> value) {
-            this.value = value;
-        }
-    }
-
-    public record NotEmptyCollectionDto(@NotEmptyCollection List<String> value) {
-        public NotEmptyCollectionDto(List<String> value) {
-            this.value = value;
-        }
-    }
-
-    public record ValidUUIDDto(@ValidUUID String value) {
-        public ValidUUIDDto(String value) {
-            this.value = value;
-        }
-    }
 
     @Test
     void inWhitelist_caseInsensitive() {
@@ -203,5 +149,61 @@ class CommonValidatorMessageIntegrationTest {
 
         assertEquals(expected, resolved);
         assertNoRawValidationKey(resolved);
+    }
+
+    public record InWhitelistDto(@InWhitelist(values = {"ACTIVE", "INACTIVE"}) String value) {
+        public InWhitelistDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record InWhitelistSensitiveDto(
+            @InWhitelist(values = {"ACTIVE", "INACTIVE"}, ignoreCase = false) String value) {
+        public InWhitelistSensitiveDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record NotInBlacklistDto(@NotInBlacklist(values = {"BANNED", "BLOCKED"}) String value) {
+        public NotInBlacklistDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record NotInBlacklistSensitiveDto(
+            @NotInBlacklist(values = {"BANNED", "BLOCKED"}, ignoreCase = false) String value) {
+        public NotInBlacklistSensitiveDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record ValidEnumDto(@ValidEnum(enumClass = ISOType.class) String value) {
+        public ValidEnumDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record ValidEnumSensitiveDto(@ValidEnum(enumClass = ISOType.class, ignoreCase = false) String value) {
+        public ValidEnumSensitiveDto(String value) {
+            this.value = value;
+        }
+    }
+
+    public record UniqueElementsDto(@UniqueElements List<String> value) {
+        public UniqueElementsDto(List<String> value) {
+            this.value = value;
+        }
+    }
+
+    public record NotEmptyCollectionDto(@NotEmptyCollection List<String> value) {
+        public NotEmptyCollectionDto(List<String> value) {
+            this.value = value;
+        }
+    }
+
+    public record ValidUUIDDto(@ValidUUID String value) {
+        public ValidUUIDDto(String value) {
+            this.value = value;
+        }
     }
 }

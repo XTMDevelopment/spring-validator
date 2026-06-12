@@ -65,14 +65,14 @@ class FriendlyMessageResolverTest {
         // Given
         ConstraintViolation<?> violation = mock(ConstraintViolation.class);
         when(violation.getMessageTemplate()).thenReturn("{jakarta.validation.constraints.NotNull.message}");
-        
+
         ConstraintDescriptor descriptor = mock(ConstraintDescriptor.class);
         when(violation.getConstraintDescriptor()).thenReturn(descriptor);
-        
+
         Annotation annotation = mock(Annotation.class);
         when(descriptor.getAnnotation()).thenReturn(annotation);
         when(annotation.annotationType()).thenAnswer(invocation -> NotNull.class);
-        
+
         Map<String, Object> attributes = new HashMap<>();
         when(descriptor.getAttributes()).thenReturn(attributes);
 
@@ -761,12 +761,6 @@ class FriendlyMessageResolverTest {
         assertThat(result).isEqualTo("Channel must be one of: sms, wa");
     }
 
-    private static class WhitelistChannelForm {
-        @FieldName("Channel")
-        @InWhitelist(values = {"sms", "wa"})
-        String channel;
-    }
-
     @Test
     void shouldResolveFieldErrorWhenValidationTemplateIsNameMin() {
         FieldError fieldError = mock(FieldError.class);
@@ -776,12 +770,6 @@ class FriendlyMessageResolverTest {
 
         String result = resolver.resolve(fieldError, NameMinForm.class);
         assertThat(result).isEqualTo("Nama must have minimal 10 characters");
-    }
-
-    private static class NameMinForm {
-        @FieldName("Nama")
-        @ValidName(min = 10)
-        String name;
     }
 
     @Test
@@ -795,18 +783,6 @@ class FriendlyMessageResolverTest {
         assertThat(result).isEqualTo("Gender is required");
     }
 
-    private static class GenderForm {
-        @FieldName("Gender")
-        @NotBlank
-        String gender;
-    }
-
-    private static class BorrowerForm {
-        @FieldName("Borrower ID")
-        @NotBlank
-        String borrowerId;
-    }
-
     @Test
     void shouldResolveFieldErrorWithAnnotationCode() {
         // Test resolve with annotation code
@@ -814,7 +790,7 @@ class FriendlyMessageResolverTest {
         when(fieldError.getField()).thenReturn("testField");
         when(fieldError.getDefaultMessage()).thenReturn("{friendly.default}");
         when(fieldError.getCode()).thenReturn("ValidName");
-        
+
         String result = resolver.resolve(fieldError, Object.class);
         assertThat(result).isNotNull();
     }
@@ -825,7 +801,7 @@ class FriendlyMessageResolverTest {
         FieldError fieldError = mock(FieldError.class);
         when(fieldError.getField()).thenReturn("testField");
         when(fieldError.getDefaultMessage()).thenReturn("Custom error message");
-        
+
         String result = resolver.resolve(fieldError, Object.class);
         assertThat(result).isEqualTo("Custom error message");
     }
@@ -854,6 +830,30 @@ class FriendlyMessageResolverTest {
         assertThat(ValidationAnnotationTypeRegistry.resolve("ValidRTRW")).isEqualTo(ValidRTRW.class);
     }
 
+    private static class WhitelistChannelForm {
+        @FieldName("Channel")
+        @InWhitelist(values = {"sms", "wa"})
+        String channel;
+    }
+
+    private static class NameMinForm {
+        @FieldName("Nama")
+        @ValidName(min = 10)
+        String name;
+    }
+
+    private static class GenderForm {
+        @FieldName("Gender")
+        @NotBlank
+        String gender;
+    }
+
+    private static class BorrowerForm {
+        @FieldName("Borrower ID")
+        @NotBlank
+        String borrowerId;
+    }
+
     @DateBefore(first = "start", second = "end", pattern = "yyyy-MM-dd")
     private static class DateBeforeRangeForm {
         @FieldName("Start date")
@@ -870,6 +870,76 @@ class FriendlyMessageResolverTest {
 
         @FieldName("Period end")
         String end;
+    }
+
+    private static class ValidDatePatternForm {
+        @FieldName("Date of birth")
+        @ValidDate(pattern = "dd/MM/yyyy")
+        String birthDate;
+    }
+
+    private static class PastDatePatternForm {
+        @FieldName("Started at")
+        @ValidPastDate(pattern = "yyyy-MM-dd HH:mm")
+        String startedAt;
+    }
+
+    private static class InvalidPastDateToleranceForm {
+        @FieldName("Due")
+        @InvalidPastDate(tolerance = 7)
+        String due;
+    }
+
+    private static class InvalidPastFutureToleranceForm {
+        @FieldName("Slot")
+        @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 12)
+        String slot;
+    }
+
+    private static class PaymentRefPatternForm {
+        @FieldName("Payment ref")
+        @ValidPaymentReference(pattern = "^[A-Z]+$")
+        String reference;
+    }
+
+    private static class ImageDimForm {
+        @FieldName("Photo")
+        @ValidImageDimensions(minWidth = 100, minHeight = 200, maxWidth = 800, maxHeight = 600)
+        String photo;
+    }
+
+    private static class FileExtForm {
+        @FieldName("Document")
+        @ValidFileExtension(allowed = {"pdf", "docx"})
+        String doc;
+    }
+
+    private static class FileMimeForm {
+        @FieldName("Upload")
+        @ValidFileMimeType(allowed = {"application/pdf", "image/png"})
+        String upload;
+    }
+
+    private static class FileSizeForm {
+        @FieldName("Payload")
+        @ValidFileSize(minBytes = 512, maxBytes = 4096)
+        String payload;
+    }
+
+    private static class DigitsForm {
+        @FieldName("Code")
+        @Digits(integer = 5, fraction = 2)
+        String code;
+    }
+
+    private static class NestedParentForSizeForm {
+        NestedChildForSizeForm dto;
+    }
+
+    private static class NestedChildForSizeForm {
+        @FieldName("Email")
+        @Size(max = 40)
+        String email;
     }
 
     /**
@@ -1021,76 +1091,6 @@ class FriendlyMessageResolverTest {
             String result = resolver.resolve(fe, NestedParentForSizeForm.class);
             assertThat(result).isEqualTo(expectedEnglishMessage("validation.spring.size.max", "Email", 40));
         }
-    }
-
-    private static class ValidDatePatternForm {
-        @FieldName("Date of birth")
-        @ValidDate(pattern = "dd/MM/yyyy")
-        String birthDate;
-    }
-
-    private static class PastDatePatternForm {
-        @FieldName("Started at")
-        @ValidPastDate(pattern = "yyyy-MM-dd HH:mm")
-        String startedAt;
-    }
-
-    private static class InvalidPastDateToleranceForm {
-        @FieldName("Due")
-        @InvalidPastDate(tolerance = 7)
-        String due;
-    }
-
-    private static class InvalidPastFutureToleranceForm {
-        @FieldName("Slot")
-        @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 12)
-        String slot;
-    }
-
-    private static class PaymentRefPatternForm {
-        @FieldName("Payment ref")
-        @ValidPaymentReference(pattern = "^[A-Z]+$")
-        String reference;
-    }
-
-    private static class ImageDimForm {
-        @FieldName("Photo")
-        @ValidImageDimensions(minWidth = 100, minHeight = 200, maxWidth = 800, maxHeight = 600)
-        String photo;
-    }
-
-    private static class FileExtForm {
-        @FieldName("Document")
-        @ValidFileExtension(allowed = {"pdf", "docx"})
-        String doc;
-    }
-
-    private static class FileMimeForm {
-        @FieldName("Upload")
-        @ValidFileMimeType(allowed = {"application/pdf", "image/png"})
-        String upload;
-    }
-
-    private static class FileSizeForm {
-        @FieldName("Payload")
-        @ValidFileSize(minBytes = 512, maxBytes = 4096)
-        String payload;
-    }
-
-    private static class DigitsForm {
-        @FieldName("Code")
-        @Digits(integer = 5, fraction = 2)
-        String code;
-    }
-
-    private static class NestedParentForSizeForm {
-        NestedChildForSizeForm dto;
-    }
-
-    private static class NestedChildForSizeForm {
-        @FieldName("Email")
-        @Size(max = 40)
-        String email;
     }
 
 }

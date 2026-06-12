@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Parseable by java.time.OffsetDateTime. Null/blank values are considered valid.
  * This validator ensures the string follows ISO 8601 standard format.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidISO8601
  * private String isoTimestamp; // e.g., 2025-08-11T16:24:00Z
- * 
+ *
  * @ValidISO8601
  * private String eventTime; // e.g., 2025-08-11T16:24:00+07:00
  * }</pre>
- * 
+ *
  * @see ISO8601Validator
  */
 @Documented
@@ -29,6 +29,8 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = ISO8601Validator.class)
 public @interface ValidISO8601 {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

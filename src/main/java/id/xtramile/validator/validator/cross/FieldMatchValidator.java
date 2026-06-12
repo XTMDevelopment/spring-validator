@@ -13,7 +13,7 @@ import org.springframework.beans.BeanWrapperImpl;
  * Validates that two specified fields have equal values.
  * This validator ensures field equality with proper null handling,
  * commonly used for password confirmation scenarios.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null beans as valid</li>
@@ -21,7 +21,7 @@ import org.springframework.beans.BeanWrapperImpl;
  * <li>Handles null values (both null is considered equal)</li>
  * <li>Adds violation to the second field if they don't match</li>
  * </ul>
- * 
+ *
  * @see FieldMatch
  */
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
@@ -30,6 +30,7 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the FieldMatch annotation instance
      */
     @Override
@@ -40,7 +41,8 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 
     /**
      * Validates that the two fields have equal values.
-     * @param bean the object to validate
+     *
+     * @param bean    the object to validate
      * @param context the constraint validator context
      * @return true if the fields match or bean is null
      */

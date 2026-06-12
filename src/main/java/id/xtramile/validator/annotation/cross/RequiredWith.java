@@ -12,7 +12,7 @@ import java.lang.annotation.*;
  * If the "when" field is absent, all fields listed in "require" must be present;
  * otherwise violations are added to each missing field. This behaves like a
  * "required when [when] is missing" rule.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @RequiredWith(when = "primaryId", require = {"secondaryId", "backupCode"})
@@ -22,7 +22,7 @@ import java.lang.annotation.*;
  *     private String backupCode;
  * }
  * }</pre>
- * 
+ *
  * @see RequiredWithValidator
  */
 @Documented
@@ -31,14 +31,16 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = RequiredWithValidator.class)
 public @interface RequiredWith {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The field that, when present, makes the rule pass.
      */
     String when();
-    
+
     /**
      * The fields that must be present when "when" field is absent.
      */

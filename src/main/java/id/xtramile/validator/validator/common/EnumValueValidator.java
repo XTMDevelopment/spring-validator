@@ -35,6 +35,7 @@ public class EnumValueValidator implements ConstraintValidator<ValidEnum, String
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidEnum annotation instance
      */
     @Override
@@ -47,7 +48,8 @@ public class EnumValueValidator implements ConstraintValidator<ValidEnum, String
 
     /**
      * Validates that the value matches one of the enum names.
-     * @param value the string value to validate
+     *
+     * @param value   the string value to validate
      * @param context the constraint validator context
      * @return true if the value matches an enum name or is null/blank
      */

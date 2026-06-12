@@ -1,18 +1,12 @@
 package id.xtramile.validator.web;
 
 import id.xtramile.validator.annotation.common.FieldName;
-import id.xtramile.validator.web.messages.CompositeConstraintMessageResolver;
 import id.xtramile.validator.annotation.common.InWhitelist;
 import id.xtramile.validator.annotation.datetime.DateBefore;
 import id.xtramile.validator.annotation.datetime.ValidDate;
 import id.xtramile.validator.enums.DatePrecision;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import id.xtramile.validator.web.messages.CompositeConstraintMessageResolver;
+import jakarta.validation.constraints.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +23,7 @@ class ConstraintAnnotationMessagesTest {
     @BeforeEach
     void setUp() {
         messages = new MessageResourceResolver("en");
-        
+
         ValidationFieldDisplayNames fieldNames = new ValidationFieldDisplayNames();
         resolver = new CompositeConstraintMessageResolver(messages, fieldNames);
     }

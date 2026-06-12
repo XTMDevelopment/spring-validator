@@ -21,12 +21,12 @@ class MessageUtilsTest {
     void testBuildViolationWithGroupAndKey() {
         ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
         ConstraintValidatorContext.ConstraintViolationBuilder builder = mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
-        
+
         when(context.buildConstraintViolationWithTemplate(anyString())).thenReturn(builder);
         when(builder.addConstraintViolation()).thenReturn(context);
-        
+
         MessageUtils.buildViolation(context, Group.DATA, "test.key");
-        
+
         verify(context).disableDefaultConstraintViolation();
         verify(context).buildConstraintViolationWithTemplate("validation.data.test.key");
         verify(builder).addConstraintViolation();
@@ -36,16 +36,16 @@ class MessageUtilsTest {
     void testBuildViolationWithGroupKeyAndArgs() {
         ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
         ConstraintValidatorContext.ConstraintViolationBuilder builder = mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
-        
+
         when(context.buildConstraintViolationWithTemplate(anyString())).thenReturn(builder);
         when(builder.addConstraintViolation()).thenReturn(context);
-        
+
         MessageUtils.buildViolation(context, Group.CONTACT, "email.invalid", "min", 5);
-        
+
         verify(context).disableDefaultConstraintViolation();
         verify(context).buildConstraintViolationWithTemplate("validation.contact.email.invalid");
         verify(builder).addConstraintViolation();
-        
+
         Object[] args = MessageUtils.getStoredArgs("validation.contact.email.invalid");
         assertNotNull(args);
         assertEquals(2, args.length);
@@ -63,14 +63,14 @@ class MessageUtilsTest {
     void testBuildViolationWithNullArgs() {
         ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
         ConstraintValidatorContext.ConstraintViolationBuilder builder = mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
-        
+
         when(context.buildConstraintViolationWithTemplate(anyString())).thenReturn(builder);
         when(builder.addConstraintViolation()).thenReturn(context);
-        
+
         MessageUtils.buildViolation(context, Group.DATA, "test.key", (Object[]) null);
-        
+
         verify(context).buildConstraintViolationWithTemplate("validation.data.test.key");
-        
+
         Object[] args = MessageUtils.getStoredArgs("validation.data.test.key");
         assertNull(args);
     }
@@ -79,19 +79,19 @@ class MessageUtilsTest {
     void testGetStoredArgs() {
         ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
         ConstraintValidatorContext.ConstraintViolationBuilder builder = mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
-        
+
         when(context.buildConstraintViolationWithTemplate(anyString())).thenReturn(builder);
         when(builder.addConstraintViolation()).thenReturn(context);
-        
+
         String key = "validation.data.test.key";
         MessageUtils.buildViolation(context, Group.DATA, "test.key", "arg1", "arg2");
-        
+
         Object[] args = MessageUtils.getStoredArgs(key);
         assertNotNull(args);
         assertEquals(2, args.length);
         assertEquals("arg1", args[0]);
         assertEquals("arg2", args[1]);
-        
+
         Object[] argsAgain = MessageUtils.getStoredArgs(key);
         assertNull(argsAgain);
     }
@@ -105,14 +105,14 @@ class MessageUtilsTest {
     void testClearStoredArgs() {
         ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
         ConstraintValidatorContext.ConstraintViolationBuilder builder = mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
-        
+
         when(context.buildConstraintViolationWithTemplate(anyString())).thenReturn(builder);
         when(builder.addConstraintViolation()).thenReturn(context);
-        
+
         MessageUtils.buildViolation(context, Group.DATA, "test.key", "arg1");
-        
+
         MessageUtils.clearStoredArgs();
-        
+
         Object[] args = MessageUtils.getStoredArgs("validation.data.test.key");
         assertNull(args);
     }

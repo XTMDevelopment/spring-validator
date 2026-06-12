@@ -19,7 +19,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates a human name string containing only letters and configured allowed symbols.
  * This validator ensures the name follows the specified format with proper length constraints
  * and allowed symbol validation.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -28,7 +28,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Optionally allows digits when {@code allowDigits} is enabled</li>
  * <li>Properly escapes special regex characters in symbols</li>
  * </ul>
- * 
+ *
  * @see ValidName
  */
 public class NameValidator implements ConstraintValidator<ValidName, String> {
@@ -39,6 +39,7 @@ public class NameValidator implements ConstraintValidator<ValidName, String> {
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidName annotation instance
      */
     @Override
@@ -60,7 +61,8 @@ public class NameValidator implements ConstraintValidator<ValidName, String> {
 
     /**
      * Validates the name string against the configured constraints.
-     * @param value the name string to validate
+     *
+     * @param value   the name string to validate
      * @param context the constraint validator context
      * @return true if the name is valid or is null/blank
      */
@@ -95,6 +97,7 @@ public class NameValidator implements ConstraintValidator<ValidName, String> {
 
     /**
      * Checks if the string contains any digits.
+     *
      * @param value the string to check
      * @return true if the string contains digits
      */
@@ -104,6 +107,7 @@ public class NameValidator implements ConstraintValidator<ValidName, String> {
 
     /**
      * Checks if the string matches the allowed pattern (letters, optionally digits, and allowed symbols).
+     *
      * @param value the string to check
      * @return true if the string matches the allowed pattern
      */
@@ -118,21 +122,50 @@ public class NameValidator implements ConstraintValidator<ValidName, String> {
 
         for (String symbol : allowedSymbols) {
             switch (symbol) {
-                case "\\": sb.append("\\\\"); break;
-                case "^": sb.append("\\^"); break;
-                case "$": sb.append("\\$"); break;
-                case ".": sb.append("\\."); break;
-                case "|": sb.append("\\|"); break;
-                case "?": sb.append("\\?"); break;
-                case "*": sb.append("\\*"); break;
-                case "+": sb.append("\\+"); break;
-                case "(": sb.append("\\("); break;
-                case ")": sb.append("\\)"); break;
-                case "[": sb.append("\\["); break;
-                case "]": sb.append("\\]"); break;
-                case "{": sb.append("\\{"); break;
-                case "}": sb.append("\\}"); break;
-                default: sb.append(symbol);
+                case "\\":
+                    sb.append("\\\\");
+                    break;
+                case "^":
+                    sb.append("\\^");
+                    break;
+                case "$":
+                    sb.append("\\$");
+                    break;
+                case ".":
+                    sb.append("\\.");
+                    break;
+                case "|":
+                    sb.append("\\|");
+                    break;
+                case "?":
+                    sb.append("\\?");
+                    break;
+                case "*":
+                    sb.append("\\*");
+                    break;
+                case "+":
+                    sb.append("\\+");
+                    break;
+                case "(":
+                    sb.append("\\(");
+                    break;
+                case ")":
+                    sb.append("\\)");
+                    break;
+                case "[":
+                    sb.append("\\[");
+                    break;
+                case "]":
+                    sb.append("\\]");
+                    break;
+                case "{":
+                    sb.append("\\{");
+                    break;
+                case "}":
+                    sb.append("\\}");
+                    break;
+                default:
+                    sb.append(symbol);
             }
         }
 

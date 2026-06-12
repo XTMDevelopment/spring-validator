@@ -14,19 +14,19 @@ import java.lang.annotation.*;
  * <p>
  * For ISO 8601 format (yyyy-MM-dd'T'HH:mm:ssX), input data is expected to be in UTC format and UTC time.
  * The validation compares the UTC input with the current time in UTC+7, applying tolerance in hours.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @InvalidFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssX", toleranceHours = 2)
  * private String date; // valid if UTC+7 until UTC+9 (tolerance 2 hours)
- * 
+ *
  * @InvalidFutureDate(pattern = "yyyy-MM-dd HH:mm:ss")
  * private String dateTime; // validates using current time and tolerance (no conversion)
- * 
+ *
  * @InvalidFutureDate(pattern = "yyyy-MM-dd")
  * private String birthDate; // validates only the date
  * }</pre>
- * 
+ *
  * @see InvalidFutureDateValidator
  */
 @Documented
@@ -35,7 +35,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = InvalidFutureDateValidator.class)
 public @interface InvalidFutureDate {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**

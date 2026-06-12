@@ -11,11 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PhoneNumberValidatorTest {
 
-    private static class PhoneNumberDummy {
-        @ValidPhoneNumber
-        String phoneNumberField;
-    }
-
     private PhoneNumberValidator validator;
 
     private static ValidPhoneNumber getAnnotation(String fieldName) {
@@ -167,5 +162,10 @@ public class PhoneNumberValidatorTest {
         assertFalse(validator.isValid("628123456", null)); // too short
         assertFalse(validator.isValid("81234567890", null)); // missing country code
         assertFalse(validator.isValid("6281234567890a", null)); // contains letter
+    }
+
+    private static class PhoneNumberDummy {
+        @ValidPhoneNumber
+        String phoneNumberField;
     }
 }

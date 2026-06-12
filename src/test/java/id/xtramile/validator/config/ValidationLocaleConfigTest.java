@@ -45,10 +45,10 @@ class ValidationLocaleConfigTest {
         ValidationLocaleConfig config = new ValidationLocaleConfig();
         config.setLocale("en");
         assertEquals("en", config.getLocale());
-        
+
         config.setLocale("id");
         assertEquals("id", config.getLocale());
-        
+
         config.setLocale("fr");
         assertEquals("fr", config.getLocale());
     }

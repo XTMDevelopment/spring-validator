@@ -1,12 +1,6 @@
 package id.xtramile.validator.autoconfigure;
 
-import id.xtramile.validator.support.AutoConfigurationTestFixtures.BothCustomBeansConfig;
-import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomApiExceptionHandler;
-import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomApiExceptionHandlerConfig;
-import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomErrorEnvelopeBuilder;
-import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomErrorEnvelopeBuilderConfig;
-import id.xtramile.validator.support.AutoConfigurationTestFixtures.MultipleApiExceptionHandlersConfig;
-import id.xtramile.validator.support.AutoConfigurationTestFixtures.MultipleErrorEnvelopeBuildersConfig;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.*;
 import id.xtramile.validator.web.ApiExceptionHandler;
 import id.xtramile.validator.web.DefaultErrorEnvelopeBuilder;
 import id.xtramile.validator.web.ErrorEnvelopeBuilder;
@@ -147,10 +141,10 @@ class ValidationAutoConfigurationMissingBeanTest {
                 .run(context -> {
                     ErrorEnvelopeBuilder builder = context.getBean(ErrorEnvelopeBuilder.class);
                     ApiExceptionHandler handler = context.getBean(ApiExceptionHandler.class);
-                    
+
                     assertThat(builder).isNotNull();
                     assertThat(handler).isNotNull();
-                    
+
                     // The handler should be able to use the builder
                     assertThat(handler).isInstanceOf(ApiExceptionHandler.class);
                 });

@@ -9,18 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DifferentFromValidatorTest {
 
-    @DifferentFrom(field = "username", other = "email")
-        private record UserDifferentDummy(String username, String email) {
-    }
-
-    @DifferentFrom(field = "password", other = "confirmPassword")
-        private record PasswordDifferentDummy(String password, String confirmPassword) {
-    }
-
-    @DifferentFrom(field = "field1", other = "field2")
-        private record GenericDifferentDummy(Object field1, Object field2) {
-    }
-
     private DifferentFromValidator validator;
 
     @BeforeEach
@@ -244,5 +232,17 @@ public class DifferentFromValidatorTest {
         String longString2 = "verylongstringthatexceedsnormallimitsandmightcauseproblems2";
         assertTrue(validator.isValid(new UserDifferentDummy(longString1, longString2), null)); // Different long strings
         assertFalse(validator.isValid(new UserDifferentDummy(longString1, longString1), null)); // Same long strings
+    }
+
+    @DifferentFrom(field = "username", other = "email")
+    private record UserDifferentDummy(String username, String email) {
+    }
+
+    @DifferentFrom(field = "password", other = "confirmPassword")
+    private record PasswordDifferentDummy(String password, String confirmPassword) {
+    }
+
+    @DifferentFrom(field = "field1", other = "field2")
+    private record GenericDifferentDummy(Object field1, Object field2) {
     }
 }

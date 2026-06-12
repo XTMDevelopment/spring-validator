@@ -9,21 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AtLeastOneOfValidatorTest {
 
-    @AtLeastOneOf(fields = {"email", "phone"})
-    private record ContactAtLeastOneDummy(String email, String phone) {}
-
-    @AtLeastOneOf(fields = {"username", "email", "phone"})
-    private record UserAtLeastOneDummy(String username, String email, String phone) {}
-
-    @AtLeastOneOf(fields = {"field1", "field2", "field3", "field4"})
-    private record MultiFieldAtLeastOneDummy(String field1, String field2, String field3, String field4) {}
-
-    @AtLeastOneOf(fields = {"value"})
-    private record SingleFieldAtLeastOneDummy(String value) {}
-
-    @AtLeastOneOf(fields = {"stringField", "intField", "boolField"})
-    private record MixedTypeDummy(String stringField, Integer intField, Boolean boolField) {}
-
     private AtLeastOneOfValidator validator;
 
     @BeforeEach
@@ -192,7 +177,7 @@ public class AtLeastOneOfValidatorTest {
     void testLongValues() {
         String longEmail = "verylongemailaddressthatmightexceednormallimits@verylongdomainname.com";
         String longPhone = "+12345678901234567890";
-        
+
         assertTrue(validator.isValid(new ContactAtLeastOneDummy(longEmail, null), null)); // Long email
         assertTrue(validator.isValid(new ContactAtLeastOneDummy(null, longPhone), null)); // Long phone
         assertTrue(validator.isValid(new ContactAtLeastOneDummy(longEmail, longPhone), null)); // Both long values
@@ -238,5 +223,25 @@ public class AtLeastOneOfValidatorTest {
         assertFalse(validator.isValid(new ContactAtLeastOneDummy(null, null), null)); // Both null
         assertFalse(validator.isValid(new ContactAtLeastOneDummy("", ""), null)); // Both empty
         assertFalse(validator.isValid(new ContactAtLeastOneDummy("   ", "   "), null)); // Both whitespace
+    }
+
+    @AtLeastOneOf(fields = {"email", "phone"})
+    private record ContactAtLeastOneDummy(String email, String phone) {
+    }
+
+    @AtLeastOneOf(fields = {"username", "email", "phone"})
+    private record UserAtLeastOneDummy(String username, String email, String phone) {
+    }
+
+    @AtLeastOneOf(fields = {"field1", "field2", "field3", "field4"})
+    private record MultiFieldAtLeastOneDummy(String field1, String field2, String field3, String field4) {
+    }
+
+    @AtLeastOneOf(fields = {"value"})
+    private record SingleFieldAtLeastOneDummy(String value) {
+    }
+
+    @AtLeastOneOf(fields = {"stringField", "intField", "boolField"})
+    private record MixedTypeDummy(String stringField, Integer intField, Boolean boolField) {
     }
 }

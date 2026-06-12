@@ -17,20 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class IDImageValidatorTest {
 
-    private static class IDImageDummy {
-        @ValidIDImage
-        MultipartFile defaultImage;
-
-        @ValidIDImage(maxMB = 5, minWidth = 800, minHeight = 600, maxWidth = 4000, maxHeight = 4000, aspectRatio = 1.33)
-        MultipartFile customImage;
-
-        @ValidIDImage(maxMB = 10, mimeAllowed = {"image/jpeg", "image/png", "image/webp"})
-        MultipartFile multipleMimeImage;
-
-        @ValidIDImage(maxMB = 2, aspectRatio = 1.0)
-        MultipartFile squareImage;
-    }
-
     private IDImageValidator validator;
 
     private static ValidIDImage getAnnotation(String fieldName) {
@@ -227,7 +213,7 @@ public class IDImageValidatorTest {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);
             byte[] imageBytes = baos.toByteArray();
-            
+
             // If the requested size is larger than the actual image, pad it
             if (size > imageBytes.length) {
                 byte[] sizedBytes = new byte[(int) size];
@@ -244,5 +230,19 @@ public class IDImageValidatorTest {
         } catch (IOException e) {
             throw new RuntimeException("Failed to create mock image file", e);
         }
+    }
+
+    private static class IDImageDummy {
+        @ValidIDImage
+        MultipartFile defaultImage;
+
+        @ValidIDImage(maxMB = 5, minWidth = 800, minHeight = 600, maxWidth = 4000, maxHeight = 4000, aspectRatio = 1.33)
+        MultipartFile customImage;
+
+        @ValidIDImage(maxMB = 10, mimeAllowed = {"image/jpeg", "image/png", "image/webp"})
+        MultipartFile multipleMimeImage;
+
+        @ValidIDImage(maxMB = 2, aspectRatio = 1.0)
+        MultipartFile squareImage;
     }
 }

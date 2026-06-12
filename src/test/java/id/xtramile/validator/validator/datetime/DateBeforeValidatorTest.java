@@ -10,35 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DateBeforeValidatorTest {
 
-    @DateBefore(first = "startDate", second = "endDate")
-        private record DateBeforeDummy(String startDate, String endDate) {
-    }
-
-    @DateBefore(first = "startDate", second = "endDate",
-                maxDistance = 30, precision = DatePrecision.DAYS)
-        private record DateBeforeWithDistanceDummy(String startDate, String endDate) {
-    }
-
-    @DateBefore(first = "startDate", second = "endDate",
-                maxDistance = 24, precision = DatePrecision.HOURS)
-        private record DateBeforeWithHoursDummy(String startDate, String endDate) {
-    }
-
-    @DateBefore(first = "startDate", second = "endDate",
-                maxDistance = 60, precision = DatePrecision.MINUTES)
-        private record DateBeforeWithMinutesDummy(String startDate, String endDate) {
-    }
-
-    @DateBefore(first = "startDate", second = "endDate",
-                maxDistance = 3600, precision = DatePrecision.SECONDS)
-        private record DateBeforeWithSecondsDummy(String startDate, String endDate) {
-    }
-
-    @DateBefore(first = "startDate", second = "endDate",
-            pattern = "dd/MM/yyyy HH:mm:ss")
-        private record DateBeforeCustomPatternDummy(String startDate, String endDate) {
-    }
-
     private DateBeforeValidator validator;
 
     @BeforeEach
@@ -185,11 +156,40 @@ public class DateBeforeValidatorTest {
     void testNonStringFields() {
         // Non-string fields should be considered valid (validator returns true for non-strings)
         @DateBefore(first = "field1", second = "field2")
-                record NonStringDummy(Integer field1, Integer field2) {
+        record NonStringDummy(Integer field1, Integer field2) {
         }
 
         validator.initialize(NonStringDummy.class.getAnnotation(DateBefore.class));
         assertTrue(validator.isValid(new NonStringDummy(1, 2), null));
         assertTrue(validator.isValid(new NonStringDummy(null, null), null));
+    }
+
+    @DateBefore(first = "startDate", second = "endDate")
+    private record DateBeforeDummy(String startDate, String endDate) {
+    }
+
+    @DateBefore(first = "startDate", second = "endDate",
+            maxDistance = 30, precision = DatePrecision.DAYS)
+    private record DateBeforeWithDistanceDummy(String startDate, String endDate) {
+    }
+
+    @DateBefore(first = "startDate", second = "endDate",
+            maxDistance = 24, precision = DatePrecision.HOURS)
+    private record DateBeforeWithHoursDummy(String startDate, String endDate) {
+    }
+
+    @DateBefore(first = "startDate", second = "endDate",
+            maxDistance = 60, precision = DatePrecision.MINUTES)
+    private record DateBeforeWithMinutesDummy(String startDate, String endDate) {
+    }
+
+    @DateBefore(first = "startDate", second = "endDate",
+            maxDistance = 3600, precision = DatePrecision.SECONDS)
+    private record DateBeforeWithSecondsDummy(String startDate, String endDate) {
+    }
+
+    @DateBefore(first = "startDate", second = "endDate",
+            pattern = "dd/MM/yyyy HH:mm:ss")
+    private record DateBeforeCustomPatternDummy(String startDate, String endDate) {
     }
 }

@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Null/blank values are considered valid. This validator ensures payment references
  * follow the specified format for financial transactions.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidPaymentReference
  * private String reference; // e.g., TXN-2025-001
- * 
+ *
  * @ValidPaymentReference(pattern = "^PAY-[A-Z0-9]{8}$")
  * private String customRef; // e.g., PAY-ABC12345
  * }</pre>
- * 
+ *
  * @see PaymentReferenceValidator
  */
 @Documented
@@ -29,7 +29,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = PaymentReferenceValidator.class)
 public @interface ValidPaymentReference {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**

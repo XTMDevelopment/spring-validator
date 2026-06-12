@@ -16,23 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InvalidPastFutureDateValidatorTest {
 
-    private static class InvalidPastFutureDateDummy {
-        @InvalidPastFutureDate(toleranceHours = 2)
-        String defaultInvalidPastFutureDate;
-
-        @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 48)
-        String toleranceInvalidPastFutureDate;
-
-        @InvalidPastFutureDate(pattern = "dd/MM/yyyy", toleranceHours = 24)
-        String customPatternInvalidPastFutureDate;
-
-        @InvalidPastFutureDate(pattern = "yyyy-MM-dd HH:mm:ss", toleranceHours = 2)
-        String dateTimeInvalidPastFutureDate;
-
-        @InvalidPastFutureDate(toleranceHours = 2)
-        String iso8601InvalidPastFutureDate;
-    }
-
     private InvalidPastFutureDateValidator validator;
 
     private static InvalidPastFutureDate getAnnotation(String fieldName) {
@@ -344,20 +327,20 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime recent = now.minusHours(1);
         String recentStr = recent.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         assertTrue(validator.isValid(recentStr, null));
-        
+
         ZonedDateTime future = now.plusHours(1);
         String futureStr = future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         assertFalse(validator.isValid(futureStr, null));
-        
+
         ZonedDateTime tooPast = now.minusHours(3);
         String tooPastStr = tooPast.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         assertFalse(validator.isValid(tooPastStr, null));
@@ -369,16 +352,16 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ss", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime recent = now.minusHours(1);
         String recentStr = recent.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
         assertTrue(validator.isValid(recentStr, null));
-        
+
         LocalDateTime future = now.plusHours(1);
         String futureStr = future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
         assertFalse(validator.isValid(futureStr, null));
@@ -390,15 +373,15 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 48)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         LocalDate today = LocalDate.now();
         LocalDate recent = today.minusDays(1);
         assertTrue(validator.isValid(recent.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
-        
+
         LocalDate future = today.plusDays(1);
         assertFalse(validator.isValid(future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
     }
@@ -409,21 +392,21 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         // Test smart parsing in validateDefault with ZonedDateTime and leap year check
         assertFalse(validator.isValid("2023-02-29T10:30:00+07:00", null)); // Invalid leap year
-        
+
         // Test valid leap year in smart parsing
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime validLeap = ZonedDateTime.of(2024, 2, 29, 10, 30, 0, 0, now.getZone());
         if (validLeap.isBefore(now) && validLeap.isAfter(now.minusHours(2))) {
             assertTrue(validator.isValid(validLeap.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")), null));
         }
-        
+
         // Test valid date within tolerance
         ZonedDateTime recent = now.minusHours(1);
         String recentStr = recent.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
@@ -436,14 +419,14 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ss", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         // Test smart parsing in validateDefault with LocalDateTime and leap year check
         assertFalse(validator.isValid("2023-02-29T10:30:00", null)); // Invalid leap year
-        
+
         // Test valid date within tolerance
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime recent = now.minusHours(1);
@@ -457,14 +440,14 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 48)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         // Test smart parsing in validateDefault with LocalDate and leap year check
         assertFalse(validator.isValid("2023-02-29", null)); // Invalid leap year
-        
+
         // Test valid date within tolerance
         LocalDate today = LocalDate.now();
         LocalDate recent = today.minusDays(1);
@@ -474,7 +457,7 @@ public class InvalidPastFutureDateValidatorTest {
     @Test
     void testExceptionHandling() {
         validator.initialize(getAnnotation("defaultInvalidPastFutureDate"));
-        
+
         // Test exception handling in isValid
         assertFalse(validator.isValid("completely-invalid", null));
     }
@@ -485,11 +468,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         // Test when parseBest returns a type that's not ZonedDateTime, LocalDateTime, or LocalDate
         // This should trigger the "pattern" violation message
         assertFalse(validator.isValid("invalid", null));
@@ -498,15 +481,15 @@ public class InvalidPastFutureDateValidatorTest {
     @Test
     void testValidateDateTimeWithoutTimezoneStrictParsing() {
         validator.initialize(getAnnotation("dateTimeInvalidPastFutureDate"));
-        
+
         // Test strict parsing path
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime withinTolerance = now.minusHours(1);
         assertTrue(validator.isValid(withinTolerance.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
-        
+
         LocalDateTime beyondTolerance = now.minusHours(3);
         assertFalse(validator.isValid(beyondTolerance.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
-        
+
         LocalDateTime future = now.plusHours(1);
         assertFalse(validator.isValid(future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
     }
@@ -514,14 +497,14 @@ public class InvalidPastFutureDateValidatorTest {
     @Test
     void testValidateDateTimeWithoutTimezoneSmartParsingLeapYear() {
         validator.initialize(getAnnotation("dateTimeInvalidPastFutureDate"));
-        
+
         // Test smart parsing with valid leap year
         LocalDateTime validLeap = LocalDateTime.of(2024, 2, 29, 10, 30, 0);
         LocalDateTime now = LocalDateTime.now();
         if (validLeap.isBefore(now) && validLeap.isAfter(now.minusHours(2))) {
             assertTrue(validator.isValid(validLeap.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
         }
-        
+
         // Test smart parsing with invalid leap year
         assertFalse(validator.isValid("2023-02-29 10:30:00", null));
     }
@@ -529,15 +512,15 @@ public class InvalidPastFutureDateValidatorTest {
     @Test
     void testValidateDateOnlyStrictParsing() {
         validator.initialize(getAnnotation("toleranceInvalidPastFutureDate"));
-        
+
         // Test strict parsing path
         LocalDate today = LocalDate.now();
         LocalDate withinTolerance = today.minusDays(1);
         assertTrue(validator.isValid(withinTolerance.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
-        
+
         LocalDate beyondTolerance = today.minusDays(3);
         assertFalse(validator.isValid(beyondTolerance.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
-        
+
         LocalDate future = today.plusDays(1);
         assertFalse(validator.isValid(future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
     }
@@ -545,17 +528,17 @@ public class InvalidPastFutureDateValidatorTest {
     @Test
     void testValidateDateOnlySmartParsingLeapYear() {
         validator.initialize(getAnnotation("toleranceInvalidPastFutureDate"));
-        
+
         // Test smart parsing with invalid leap year
         assertFalse(validator.isValid("2023-02-29", null));
-        
+
         // Test with a past valid leap year that's within tolerance (48 hours = 2 days)
         LocalDate today = LocalDate.now();
         LocalDate pastLeap = LocalDate.of(2020, 2, 29);
         // If it's too far in the past (beyond 2 days), it should be invalid
         // 2020-02-29 is way past, so it should be invalid
         assertFalse(validator.isValid(pastLeap.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
-        
+
         // Test with a recent date within tolerance
         LocalDate recent = today.minusDays(1);
         assertTrue(validator.isValid(recent.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
@@ -567,11 +550,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         // Test exception in smart parsing
         assertFalse(validator.isValid("completely-invalid", null));
     }
@@ -579,16 +562,16 @@ public class InvalidPastFutureDateValidatorTest {
     @Test
     void testBoundaryConditionsAtTolerance() {
         validator.initialize(getAnnotation("dateTimeInvalidPastFutureDate"));
-        
+
         LocalDateTime now = LocalDateTime.now();
         // Within tolerance (1 hour ago)
         LocalDateTime withinTolerance = now.minusHours(1);
         assertTrue(validator.isValid(withinTolerance.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
-        
+
         // Just beyond tolerance (more than 2 hours ago)
         LocalDateTime justBeyondTolerance = now.minusHours(2).minusSeconds(1);
         assertFalse(validator.isValid(justBeyondTolerance.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
-        
+
         // Exactly at tolerance might be edge case due to timing, so test with a value clearly within
         LocalDateTime clearlyWithin = now.minusHours(1).minusMinutes(30);
         assertTrue(validator.isValid(clearlyWithin.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
@@ -597,11 +580,11 @@ public class InvalidPastFutureDateValidatorTest {
     @Test
     void testBoundaryConditionsAtNow() {
         validator.initialize(getAnnotation("dateTimeInvalidPastFutureDate"));
-        
+
         LocalDateTime now = LocalDateTime.now();
         // Exactly at now
         assertTrue(validator.isValid(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
-        
+
         // Just after now (future)
         LocalDateTime justFuture = now.plusSeconds(1);
         assertFalse(validator.isValid(justFuture.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
@@ -610,7 +593,7 @@ public class InvalidPastFutureDateValidatorTest {
     @Test
     void testValidateDateTimeWithoutTimezoneStrictParsingFuture() {
         validator.initialize(getAnnotation("dateTimeInvalidPastFutureDate"));
-        
+
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime future = now.plusHours(1);
         assertFalse(validator.isValid(future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
@@ -619,7 +602,7 @@ public class InvalidPastFutureDateValidatorTest {
     @Test
     void testValidateDateTimeWithoutTimezoneStrictParsingTooPast() {
         validator.initialize(getAnnotation("dateTimeInvalidPastFutureDate"));
-        
+
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime tooPast = now.minusHours(3);
         assertFalse(validator.isValid(tooPast.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
@@ -628,7 +611,7 @@ public class InvalidPastFutureDateValidatorTest {
     @Test
     void testValidateDateOnlyStrictParsingFuture() {
         validator.initialize(getAnnotation("toleranceInvalidPastFutureDate"));
-        
+
         LocalDate today = LocalDate.now();
         LocalDate future = today.plusDays(1);
         assertFalse(validator.isValid(future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
@@ -637,7 +620,7 @@ public class InvalidPastFutureDateValidatorTest {
     @Test
     void testValidateDateOnlyStrictParsingTooPast() {
         validator.initialize(getAnnotation("toleranceInvalidPastFutureDate"));
-        
+
         LocalDate today = LocalDate.now();
         LocalDate tooPast = today.minusDays(3);
         assertFalse(validator.isValid(tooPast.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
@@ -649,11 +632,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime future = now.plusHours(1);
         String futureStr = future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
@@ -666,11 +649,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tooPast = now.minusHours(3);
         String tooPastStr = tooPast.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
@@ -683,11 +666,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ss", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime future = now.plusHours(1);
         String futureStr = future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
@@ -700,11 +683,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ss", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime tooPast = now.minusHours(3);
         String tooPastStr = tooPast.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
@@ -717,11 +700,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 48)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         LocalDate today = LocalDate.now();
         LocalDate future = today.plusDays(1);
         assertFalse(validator.isValid(future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
@@ -733,11 +716,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 48)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         LocalDate today = LocalDate.now();
         LocalDate tooPast = today.minusDays(3);
         assertFalse(validator.isValid(tooPast.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
@@ -749,11 +732,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime future = now.plusHours(1);
         String futureStr = future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
@@ -766,11 +749,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tooPast = now.minusHours(3);
         String tooPastStr = tooPast.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
@@ -783,11 +766,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ss", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime future = now.plusHours(1);
         String futureStr = future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
@@ -800,11 +783,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ss", toleranceHours = 2)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime tooPast = now.minusHours(3);
         String tooPastStr = tooPast.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
@@ -817,11 +800,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 48)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         LocalDate today = LocalDate.now();
         LocalDate future = today.plusDays(1);
         assertFalse(validator.isValid(future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
@@ -833,11 +816,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 48)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         LocalDate today = LocalDate.now();
         LocalDate tooPast = today.minusDays(3);
         assertFalse(validator.isValid(tooPast.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
@@ -849,11 +832,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", toleranceHours = 8760)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         // Test with valid leap year that's within tolerance (365 days = 8760 hours)
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime validLeap = ZonedDateTime.of(2024, 2, 29, 10, 30, 0, 0, now.getZone());
@@ -869,11 +852,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ss", toleranceHours = 8760)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         // Test with valid leap year that's within tolerance
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime validLeap = LocalDateTime.of(2024, 2, 29, 10, 30, 0);
@@ -889,11 +872,11 @@ public class InvalidPastFutureDateValidatorTest {
             @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 8760)
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         InvalidPastFutureDate annotation = f.getAnnotation(InvalidPastFutureDate.class);
         validator.initialize(annotation);
-        
+
         // Test with valid leap year that's within tolerance
         LocalDate today = LocalDate.now();
         LocalDate validLeap = LocalDate.of(2024, 2, 29);
@@ -902,5 +885,22 @@ public class InvalidPastFutureDateValidatorTest {
                 assertTrue(validator.isValid(validLeap.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
             }
         }
+    }
+
+    private static class InvalidPastFutureDateDummy {
+        @InvalidPastFutureDate(toleranceHours = 2)
+        String defaultInvalidPastFutureDate;
+
+        @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 48)
+        String toleranceInvalidPastFutureDate;
+
+        @InvalidPastFutureDate(pattern = "dd/MM/yyyy", toleranceHours = 24)
+        String customPatternInvalidPastFutureDate;
+
+        @InvalidPastFutureDate(pattern = "yyyy-MM-dd HH:mm:ss", toleranceHours = 2)
+        String dateTimeInvalidPastFutureDate;
+
+        @InvalidPastFutureDate(toleranceHours = 2)
+        String iso8601InvalidPastFutureDate;
     }
 }

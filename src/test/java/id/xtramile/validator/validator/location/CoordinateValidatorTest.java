@@ -12,14 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CoordinateValidatorTest {
 
-    private static class CoordinateDummy {
-        @ValidCoordinates
-        String defaultCoordinates;
-
-        @ValidCoordinates(flipCoordinates = true)
-        String flippedCoordinates;
-    }
-
     private CoordinateValidator validator;
 
     private static ValidCoordinates getAnnotation(String fieldName) {
@@ -174,5 +166,13 @@ public class CoordinateValidatorTest {
         assertTrue(validator.isValid("2.3522,48.8566", null)); // Paris (flipped)
         assertTrue(validator.isValid("139.6503,35.6762", null)); // Tokyo (flipped)
         assertTrue(validator.isValid("-0.1278,51.5074", null)); // London (flipped)
+    }
+
+    private static class CoordinateDummy {
+        @ValidCoordinates
+        String defaultCoordinates;
+
+        @ValidCoordinates(flipCoordinates = true)
+        String flippedCoordinates;
     }
 }

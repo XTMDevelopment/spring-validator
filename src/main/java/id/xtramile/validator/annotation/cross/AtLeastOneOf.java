@@ -11,7 +11,7 @@ import java.lang.annotation.*;
  * <p>
  * If none are present, a violation is attached to the first field.
  * This validator ensures that at least one field from the list has a value.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @AtLeastOneOf(fields = {"email", "phone"})
@@ -20,7 +20,7 @@ import java.lang.annotation.*;
  *     private String phone;
  * }
  * }</pre>
- * 
+ *
  * @see AtLeastOneOfValidator
  */
 @Documented
@@ -29,7 +29,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = AtLeastOneOfValidator.class)
 public @interface AtLeastOneOf {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**

@@ -11,11 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JsonStringValidatorTest {
 
-    private static class JsonDummy {
-        @ValidJSON
-        String jsonField;
-    }
-
     private JsonStringValidator validator;
 
     private static ValidJSON getAnnotation(String fieldName) {
@@ -120,5 +115,10 @@ public class JsonStringValidatorTest {
         assertTrue(validator.isValid("\"\"", null)); // empty string
         assertTrue(validator.isValid("[]", null)); // empty array
         assertTrue(validator.isValid("{}", null)); // empty object
+    }
+
+    private static class JsonDummy {
+        @ValidJSON
+        String jsonField;
     }
 }

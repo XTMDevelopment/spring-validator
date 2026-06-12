@@ -13,17 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SuppressWarnings("HttpUrlsUsage")
 public class URLValidatorTest {
 
-    private static class URLDummy {
-        @ValidURL
-        String defaultURL;
-
-        @ValidURL(httpsOnly = true)
-        String httpsOnlyURL;
-
-        @ValidURL()
-        String httpAndHttpsURL;
-    }
-
     private URLValidator validator;
 
     private static ValidURL getAnnotation(String fieldName) {
@@ -232,5 +221,16 @@ public class URLValidatorTest {
         assertTrue(validator.isValid("https://user@example.com", null)); // HTTPS with username only
         assertTrue(validator.isValid("http://user:pass@example.com:8080", null)); // HTTP with credentials and port
         assertTrue(validator.isValid("https://user:pass@example.com:8443", null)); // HTTPS with credentials and port
+    }
+
+    private static class URLDummy {
+        @ValidURL
+        String defaultURL;
+
+        @ValidURL(httpsOnly = true)
+        String httpsOnlyURL;
+
+        @ValidURL()
+        String httpAndHttpsURL;
     }
 }

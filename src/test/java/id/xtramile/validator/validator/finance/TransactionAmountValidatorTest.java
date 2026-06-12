@@ -11,20 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TransactionAmountValidatorTest {
 
-    private static class TransactionAmountDummy {
-        @ValidTransactionAmount
-        Long defaultAmount;
-
-        @ValidTransactionAmount(min = 500_000L, max = 5_000_000_000L)
-        Long rangeAmount;
-
-        @ValidTransactionAmount(min = 1_000_000L, allowZero = false)
-        Long noZeroAmount;
-
-        @ValidTransactionAmount(max = 1_000_000_000L)
-        Long boundedAmount;
-    }
-
     private TransactionAmountValidator validator;
 
     private static ValidTransactionAmount getAnnotation(String fieldName) {
@@ -107,5 +93,19 @@ public class TransactionAmountValidatorTest {
         assertTrue(validator.isValid(100_000_000L, null)); // 100M
         assertTrue(validator.isValid(1_000_000_000L, null)); // 1B
         assertTrue(validator.isValid(5_000_000_000L, null)); // 5B (maximum)
+    }
+
+    private static class TransactionAmountDummy {
+        @ValidTransactionAmount
+        Long defaultAmount;
+
+        @ValidTransactionAmount(min = 500_000L, max = 5_000_000_000L)
+        Long rangeAmount;
+
+        @ValidTransactionAmount(min = 1_000_000L, allowZero = false)
+        Long noZeroAmount;
+
+        @ValidTransactionAmount(max = 1_000_000_000L)
+        Long boundedAmount;
     }
 }

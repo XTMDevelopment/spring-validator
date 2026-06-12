@@ -11,20 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EmailDomainValidatorTest {
 
-    private static class EmailDomainDummy {
-        @ValidEmailDomain(allowed = {"gmail.com", "yahoo.com", "outlook.com"})
-        String defaultEmailDomain;
-
-        @ValidEmailDomain(allowed = {"company.com", "corp.com"})
-        String ignoreCaseEmailDomain;
-
-        @ValidEmailDomain(allowed = {"company.com", "corp.com"}, ignoreCase = false)
-        String caseSensitiveEmailDomain;
-
-        @ValidEmailDomain(allowed = {"test.com", "example.org", "demo.net"})
-        String customEmailDomain;
-    }
-
     private EmailDomainValidator validator;
 
     private static ValidEmailDomain getAnnotation(String fieldName) {
@@ -215,5 +201,19 @@ public class EmailDomainValidatorTest {
         assertFalse(validator.isValid("user@domain@gmail.com", null)); // multiple @
         assertFalse(validator.isValid("user@@gmail.com", null)); // double @
         assertFalse(validator.isValid("user@domain@", null)); // @ at end
+    }
+
+    private static class EmailDomainDummy {
+        @ValidEmailDomain(allowed = {"gmail.com", "yahoo.com", "outlook.com"})
+        String defaultEmailDomain;
+
+        @ValidEmailDomain(allowed = {"company.com", "corp.com"})
+        String ignoreCaseEmailDomain;
+
+        @ValidEmailDomain(allowed = {"company.com", "corp.com"}, ignoreCase = false)
+        String caseSensitiveEmailDomain;
+
+        @ValidEmailDomain(allowed = {"test.com", "example.org", "demo.net"})
+        String customEmailDomain;
     }
 }

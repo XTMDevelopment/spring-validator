@@ -12,11 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UUIDValidatorTest {
 
-    private static class UUIDDummy {
-        @ValidUUID
-        String uuidField;
-    }
-
     private UUIDValidator validator;
 
     private static ValidUUID getAnnotation(String fieldName) {
@@ -92,7 +87,7 @@ public class UUIDValidatorTest {
 
         // Test with minimum valid UUID
         assertTrue(validator.isValid("00000000-0000-0000-0000-000000000000", null));
-        
+
         // Test with maximum valid UUID
         assertTrue(validator.isValid("ffffffff-ffff-ffff-ffff-ffffffffffff", null));
 
@@ -120,5 +115,10 @@ public class UUIDValidatorTest {
         assertTrue(validator.isValid("123e4567-e89b-12d3-a456-426614174000", null));
         assertTrue(validator.isValid("f47ac10b-58cc-4372-a567-0e02b2c3d479", null));
         assertTrue(validator.isValid("6ba7b810-9dad-11d1-80b4-00c04fd430c8", null));
+    }
+
+    private static class UUIDDummy {
+        @ValidUUID
+        String uuidField;
     }
 }

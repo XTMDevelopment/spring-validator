@@ -111,7 +111,7 @@ class DefaultErrorEnvelopeBuilderTest {
 
         // Then
         assertThat(result).isNotNull();
-        
+
         @SuppressWarnings("unchecked")
         List<String> errorsArray = (List<String>) result.get("errors");
         assertThat(errorsArray).hasSize(2);
@@ -133,7 +133,7 @@ class DefaultErrorEnvelopeBuilderTest {
 
         // Then
         assertThat(result).isNotNull();
-        
+
         @SuppressWarnings("unchecked")
         List<String> errorsArray = (List<String>) result.get("errors");
         assertThat(errorsArray).hasSize(3);
@@ -209,7 +209,7 @@ class DefaultErrorEnvelopeBuilderTest {
 
         // Then
         assertThat(result).isNotNull();
-        
+
         @SuppressWarnings("unchecked")
         Map<String, String> data = (Map<String, String>) result.get("data");
         assertThat(data).containsEntry("cause", cause);
@@ -227,7 +227,7 @@ class DefaultErrorEnvelopeBuilderTest {
 
         // Then
         assertThat(result).isNotNull();
-        
+
         @SuppressWarnings("unchecked")
         Map<String, String> data = (Map<String, String>) result.get("data");
         assertThat(data).containsEntry("cause", cause);
@@ -250,7 +250,7 @@ class DefaultErrorEnvelopeBuilderTest {
         @SuppressWarnings("unchecked")
         List<String> errorsArray = (List<String>) result.get("errors");
         assertThat(errorsArray).hasSize(3);
-        
+
         // Verify order is maintained
         assertThat(errorsArray.get(0)).isEqualTo("First error");
         assertThat(errorsArray.get(1)).isEqualTo("Second error");

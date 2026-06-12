@@ -11,20 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NotInBlacklistValidatorTest {
 
-    private static class NotInBlacklistDummy {
-        @NotInBlacklist(values = {"admin", "root", "system"})
-        String defaultBlacklist;
-
-        @NotInBlacklist(values = {"admin", "root", "system"})
-        String ignoreCaseBlacklist;
-
-        @NotInBlacklist(values = {"admin", "root", "system"}, ignoreCase = false)
-        String caseSensitiveBlacklist;
-
-        @NotInBlacklist(values = {"test", "demo", "sample"})
-        String customBlacklist;
-    }
-
     private NotInBlacklistValidator validator;
 
     private static NotInBlacklist getAnnotation(String fieldName) {
@@ -200,5 +186,19 @@ public class NotInBlacklistValidatorTest {
         for (String value : validValues) {
             assertTrue(validator.isValid(value, null));
         }
+    }
+
+    private static class NotInBlacklistDummy {
+        @NotInBlacklist(values = {"admin", "root", "system"})
+        String defaultBlacklist;
+
+        @NotInBlacklist(values = {"admin", "root", "system"})
+        String ignoreCaseBlacklist;
+
+        @NotInBlacklist(values = {"admin", "root", "system"}, ignoreCase = false)
+        String caseSensitiveBlacklist;
+
+        @NotInBlacklist(values = {"test", "demo", "sample"})
+        String customBlacklist;
     }
 }

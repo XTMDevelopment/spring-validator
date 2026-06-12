@@ -66,7 +66,8 @@ public class MessageResourceResolver {
                 }
             }
 
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
 
         return props;
     }

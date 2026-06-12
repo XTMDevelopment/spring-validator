@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Null/blank values are considered valid. This validator ensures the SWIFT code
  * follows the international standard format for bank identification.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidSwiftCode
  * private String swiftCode; // e.g., DEUTDEFF
- * 
+ *
  * @ValidSwiftCode
  * private String bankCode; // e.g., CHASUS33
  * }</pre>
- * 
+ *
  * @see SwiftCodeValidator
  */
 @Documented
@@ -29,6 +29,8 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = SwiftCodeValidator.class)
 public @interface ValidSwiftCode {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

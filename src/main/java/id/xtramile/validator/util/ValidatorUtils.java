@@ -8,7 +8,8 @@ import java.util.Collection;
 import java.util.Map;
 
 public class ValidatorUtils {
-    private ValidatorUtils() {}
+    private ValidatorUtils() {
+    }
 
     public static boolean isBlank(String str) {
         return str == null || str.isBlank();
@@ -58,7 +59,8 @@ public class ValidatorUtils {
                     if (!Year.isLeap(year)) {
                         return false;
                     }
-                } catch (NumberFormatException ignore) {}
+                } catch (NumberFormatException ignore) {
+                }
             }
         }
 

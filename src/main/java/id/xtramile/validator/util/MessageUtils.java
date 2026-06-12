@@ -7,9 +7,10 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MessageUtils {
-    private MessageUtils() {}
-
     private static final ThreadLocal<Map<String, Object[]>> ARG_STORAGE = ThreadLocal.withInitial(ConcurrentHashMap::new);
+
+    private MessageUtils() {
+    }
 
     public static void buildViolation(ConstraintValidatorContext context, Group group, String key) {
         buildViolation(context, group, key, (Object[]) null);

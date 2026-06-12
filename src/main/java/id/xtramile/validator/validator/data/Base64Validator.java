@@ -13,7 +13,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <p>
  * Validates a Base64-encoded string using either standard or URL-safe Base64 alphabet.
  * This validator ensures the string is properly Base64 encoded and can be decoded successfully.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -21,7 +21,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Validates using standard Base64 decoder when urlSafe=false</li>
  * <li>Handles padding for standard Base64 when needed</li>
  * </ul>
- * 
+ *
  * @see ValidBase64
  */
 public class Base64Validator implements ConstraintValidator<ValidBase64, String> {
@@ -29,6 +29,7 @@ public class Base64Validator implements ConstraintValidator<ValidBase64, String>
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidBase64 annotation instance
      */
     @Override
@@ -38,7 +39,8 @@ public class Base64Validator implements ConstraintValidator<ValidBase64, String>
 
     /**
      * Validates the Base64 string using the configured alphabet.
-     * @param value the Base64 string to validate
+     *
+     * @param value   the Base64 string to validate
      * @param context the constraint validator context
      * @return true if the string is valid Base64 or is null/blank
      */

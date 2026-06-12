@@ -14,7 +14,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates a tax identification number for the configured country.
  * Currently supports Indonesian NPWP (Nomor Pokok Wajib Pajak) format.
  * This validator ensures the tax ID follows the correct format for the specified country.
- * 
+ *
  * <p>The validator performs the following checks:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -22,7 +22,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Removes non-digit characters before validation</li>
  * <li>Returns false for unsupported countries</li>
  * </ul>
- * 
+ *
  * @see ValidTaxID
  */
 public class TaxIdValidator implements ConstraintValidator<ValidTaxID, String> {
@@ -30,6 +30,7 @@ public class TaxIdValidator implements ConstraintValidator<ValidTaxID, String> {
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidTaxID annotation instance
      */
     @Override
@@ -39,14 +40,15 @@ public class TaxIdValidator implements ConstraintValidator<ValidTaxID, String> {
 
     /**
      * Validates the tax ID against the configured country format.
-     * @param value the tax ID string to validate
+     *
+     * @param value   the tax ID string to validate
      * @param context the constraint validator context
      * @return true if the tax ID is valid or is null/blank
      */
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (isBlank(value)) return true;
-        
+
         if (!"ID".equalsIgnoreCase(country)) {
             MessageUtils.buildViolation(context, Group.DATA, "tax-id");
             return false;

@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Currently supported: ID (Indonesia), accepts 15–16 digits (non-digits ignored before length check).
  * Null/blank values are considered valid.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidTaxID // defaults to ID (Indonesia)
  * private String npwp;
- * 
+ *
  * @ValidTaxID(country = "ID")
  * private String taxId; // Indonesian NPWP
  * }</pre>
- * 
+ *
  * @see TaxIdValidator
  */
 @Documented
@@ -29,7 +29,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = TaxIdValidator.class)
 public @interface ValidTaxID {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     /**

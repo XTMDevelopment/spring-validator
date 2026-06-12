@@ -12,24 +12,24 @@ import java.lang.annotation.*;
  * <p>
  * This validator works with Collections, Maps, and Arrays. It ensures that the
  * collection contains at least one element. Null collections are considered invalid.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @NotEmptyCollection
  * private List<String> tags;
- * 
+ *
  * @NotEmptyCollection
  * private Map<String, Object> attributes;
- * 
+ *
  * @NotEmptyCollection
  * private String[] categories;
  * }</pre>
- * 
+ *
  * @see NotEmptyCollectionValidator
  * @see NotEmptyMapValidator
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {
         NotEmptyCollectionValidator.class,
@@ -37,6 +37,8 @@ import java.lang.annotation.*;
 })
 public @interface NotEmptyCollection {
     String message() default "{friendly.default}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

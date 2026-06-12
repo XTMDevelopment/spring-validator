@@ -12,7 +12,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates SWIFT/BIC (Bank Identifier Code) format.
  * This validator ensures the SWIFT code follows the international standard
  * format with proper bank, country, location, and optional branch codes.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -22,14 +22,15 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Validates location code (2 letters/digits)</li>
  * <li>Validates optional branch code (3 letters/digits)</li>
  * </ul>
- * 
+ *
  * @see ValidSwiftCode
  */
 public class SwiftCodeValidator implements ConstraintValidator<ValidSwiftCode, String> {
 
     /**
      * Validates the SWIFT/BIC code format.
-     * @param value the SWIFT code string to validate
+     *
+     * @param value   the SWIFT code string to validate
      * @param context the constraint validator context
      * @return true if the SWIFT code is valid or is null/blank
      */

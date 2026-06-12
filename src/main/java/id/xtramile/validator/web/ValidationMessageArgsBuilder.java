@@ -17,6 +17,15 @@ public class ValidationMessageArgsBuilder {
         this.fieldNames = fieldNames;
     }
 
+    public static String joinSortedComma(String[] values) {
+        if (values == null || values.length == 0) {
+            return "";
+        }
+        String[] copy = Arrays.copyOf(values, values.length);
+        Arrays.sort(copy);
+        return String.join(", ", copy);
+    }
+
     Map<String, Object> constraintAttributesForFieldError(Class<?> dtoClass, String fieldName, Class<?> annotationType) {
         if (dtoClass == null || annotationType == null) {
             return new HashMap<>();
@@ -225,14 +234,5 @@ public class ValidationMessageArgsBuilder {
         }
 
         return null;
-    }
-
-    public static String joinSortedComma(String[] values) {
-        if (values == null || values.length == 0) {
-            return "";
-        }
-        String[] copy = Arrays.copyOf(values, values.length);
-        Arrays.sort(copy);
-        return String.join(", ", copy);
     }
 }

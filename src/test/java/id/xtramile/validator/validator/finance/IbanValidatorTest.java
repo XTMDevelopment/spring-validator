@@ -11,11 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class IbanValidatorTest {
 
-    private static class IbanDummy {
-        @ValidIBAN
-        String defaultIban;
-    }
-
     private IbanValidator validator;
 
     private static ValidIBAN getAnnotation(String fieldName) {
@@ -168,5 +163,10 @@ public class IbanValidatorTest {
         assertFalse(validator.isValid("GB82-WEST-1234-5698-7654-32", null)); // Hyphens
         assertFalse(validator.isValid("GB82.WEST.1234.5698.7654.32", null)); // Dots
         assertFalse(validator.isValid("GB82_WEST_1234_5698_7654_32", null)); // Underscores
+    }
+
+    private static class IbanDummy {
+        @ValidIBAN
+        String defaultIban;
     }
 }
