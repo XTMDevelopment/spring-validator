@@ -1,0 +1,107 @@
+package id.xtramile.validator.validator.datetime;
+
+import id.xtramile.validator.annotation.datetime.DateAfter;
+import id.xtramile.validator.enums.DatePrecision;
+import id.xtramile.validator.enums.Group;
+import id.xtramile.validator.util.DateUtils;
+import id.xtramile.validator.util.MessageUtils;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.beans.BeanWrapperImpl;
+
+import java.time.LocalDateTime;
+
+import static id.xtramile.validator.util.ValidatorUtils.isBlank;
+
+/**
+ * Validator implementation for {@link DateAfter} annotation.
+ * <p>
+ * Validates that the first date field is after the second date field.
+ * Optionally enforces a maximum distance between the two dates based on precision.
+ * Both fields are parsed as date-time strings using the specified pattern.
+ * 
+ * <p>The validator performs the following operations:
+ * <ul>
+ * <li>Accepts null beans as valid</li>
+ * <li>Accepts null/blank field values as valid</li>
+ * <li>Parses both date fields using the specified pattern</li>
+ * <li>Validates that the first date is after the second date</li>
+ * <li>Optionally validates maximum distance between dates if configured</li>
+ * <li>Adds violation to the first field if validation fails</li>
+ * </ul>
+ * 
+ * @see DateAfter
+ */
+public class DateAfterValidator implements ConstraintValidator<DateAfter, Object> {
+    private String first;
+    private String second;
+    private String pattern;
+    private long maxDistance;
+    private DatePrecision precision;
+
+    /**
+     * Initializes the validator with the annotation parameters.
+     * @param annotation the DateAfter annotation instance
+     */
+    @Override
+    public void initialize(DateAfter annotation) {
+        this.first = annotation.first();
+        this.second = annotation.second();
+        this.pattern = annotation.pattern();
+        this.maxDistance = annotation.maxDistance();
+        this.precision = annotation.precision();
+    }
+
+    /**
+     * Validates that the first date field is after the second date field.
+     * @param bean the object to validate
+     * @param context the constraint validator context
+     * @return true if the first date is after the second date, or bean/fields are null
+     */
+    @Override
+    @SuppressWarnings("DuplicatedCode")
+    public boolean isValid(Object bean, ConstraintValidatorContext context) {
+        if (bean == null) return true;
+
+        BeanWrapperImpl wrapper = new BeanWrapperImpl(bean);
+        Object firstValue = wrapper.getPropertyValue(first);
+        Object secondValue = wrapper.getPropertyValue(second);
+
+        if (firstValue == null || secondValue == null) return true;
+        if (!(firstValue instanceof String) || !(secondValue instanceof String)) return true;
+
+        String firstStr = (String) firstValue;
+        String secondStr = (String) secondValue;
+
+        if (isBlank(firstStr) || isBlank(secondStr)) return true;
+
+        try {
+            LocalDateTime firstDate = DateUtils.parseDateTime(firstStr, pattern);
+            LocalDateTime secondDate = DateUtils.parseDateTime(secondStr, pattern);
+
+            if (firstDate == null || secondDate == null) {
+                MessageUtils.buildViolation(context, Group.DATETIME, "date-after.pattern", pattern);
+                return false;
+            }
+
+            if (!firstDate.isAfter(secondDate)) {
+                MessageUtils.buildViolation(context, Group.DATETIME, "date-after");
+                return false;
+            }
+
+            if (maxDistance >= 0) {
+                long actualDistance = DateUtils.calculateDistance(secondDate, firstDate, precision);
+                if (actualDistance > maxDistance) {
+                    MessageUtils.buildViolation(context, Group.DATETIME, "date-after.distance", secondDate, maxDistance, precision);
+                    return false;
+                }
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            MessageUtils.buildViolation(context, Group.DATETIME, "date-after.pattern", pattern);
+            return false;
+        }
+    }
+}
