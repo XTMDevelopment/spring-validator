@@ -201,7 +201,7 @@ mvn clean test -Dspring-boot.version=3.5.14
 
 **Execute incrementally:** 2a → 2e → 2c → **(Phase 4 High NPE fixes)** → 2b → 2d
 
-**Completed:** 2026-06-12 — 2a, 2b, 2c, 2e done; 2d deferred (no ~30-line identical datetime block); 2f doc deferred to Phase 6 `CONTRIBUTING.md`.
+**Completed:** 2026-06-12 — 2a–2e and 2d done; 2f doc deferred to Phase 6 `CONTRIBUTING.md`.
 
 ### 2a. Dependency Inversion — inject collaborators
 
@@ -293,7 +293,7 @@ mvn clean test
 - [x] `AnnotationRegistry` is single source of truth
 - [x] No `System.out.println` in production code
 - [x] `slf4j-api` optional dependency added if logging retained
-- [ ] `DateToleranceEvaluator` DRY extract (2d — deferred; validators differ materially)
+- [x] `DateToleranceEvaluator` DRY extract (2d — shared strict/smart parsing + tolerance checks)
 
 ---
 
@@ -573,7 +573,7 @@ No major version bump required for PLAN 1 deliverables.
 - [x] **P2a** DIP injection
 - [x] **P2c** AnnotationRegistry
 - [x] **P2b** Split ConstraintAnnotationMessages (after P4-early)
-- [ ] **P2d** Datetime DRY (scoped — deferred)
+- [x] **P2d** Datetime DRY (`DateToleranceEvaluator` in `validator/datetime/support/`)
 - [x] **P2e** SLF4J optional / remove println
 - [x] **P3** Test support + dedupe + extend assertions
 - [ ] **P4-late** Medium/Low bugs
