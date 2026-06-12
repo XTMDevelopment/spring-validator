@@ -13,7 +13,7 @@ public class ValidationMessageArgsBuilder {
 
     private final ValidationFieldDisplayNames fieldNames;
 
-    ValidationMessageArgsBuilder(ValidationFieldDisplayNames fieldNames) {
+    public ValidationMessageArgsBuilder(ValidationFieldDisplayNames fieldNames) {
         this.fieldNames = fieldNames;
     }
 

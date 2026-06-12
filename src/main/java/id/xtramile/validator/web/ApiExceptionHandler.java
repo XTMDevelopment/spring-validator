@@ -23,7 +23,6 @@ public class ApiExceptionHandler {
     public ApiExceptionHandler(ErrorEnvelopeBuilder builder, FriendlyMessageResolver messageResolver) {
         this.builder = builder;
         this.messageResolver = messageResolver;
-        System.out.println("ApiExceptionHandler loaded from id.xtramile.validator");
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

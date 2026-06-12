@@ -19,9 +19,9 @@
 | CI                 | **Consolidated** — `ci.yml` (primary), `build.yml` (cross-OS); Java 17/21/25 only                                    |
 | Documentation      | **`README.md`** created                                                                                            |
 | Code quality       | No Checkstyle, no JaCoCo enforcement, Javadoc plugin attaches JAR only                                             |
-| SOLID debt         | `ConstraintAnnotationMessages` (~650 lines), triple manual registry, DIP violations in `FriendlyMessageResolver`   |
+| SOLID debt         | **Resolved** — DIP wiring, `AnnotationRegistry`, message strategies in `web/messages/`                             |
 | Auto-config        | **Fixed** — `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`                       |
-| Logging            | No `slf4j-api` in `pom.xml`; `System.out.println` in web layer                                                     |
+| Logging            | **`slf4j-api` optional** added; `System.out.println` removed from web layer                                        |
 
 ```mermaid
 flowchart TB
@@ -193,13 +193,15 @@ mvn clean test -Dspring-boot.version=3.5.14
 
 ---
 
-## Phase 2: SOLID Refactoring (Production Code)
+## Phase 2: SOLID Refactoring (Production Code) ✅ COMPLETE
 
 **Objective:** Decouple web message layer; enforce single registry; inject dependencies via Spring.
 
 **Prerequisite (execution order):** Complete **Phase 4 Critical + High** bugs before **Phase 2b** (message class split). DIP wiring (2a) may proceed after Phase 1 META-INF fix.
 
 **Execute incrementally:** 2a → 2e → 2c → **(Phase 4 High NPE fixes)** → 2b → 2d
+
+**Completed:** 2026-06-12 — 2a, 2b, 2c, 2e done; 2d deferred (no ~30-line identical datetime block); 2f doc deferred to Phase 6 `CONTRIBUTING.md`.
 
 ### 2a. Dependency Inversion — inject collaborators
 
@@ -286,11 +288,12 @@ mvn clean test
 
 ### Success criteria
 
-- [ ] Dependencies injected via `ValidationAutoConfiguration`
-- [ ] `ConstraintAnnotationMessages` split into strategy classes behind SPI
-- [ ] `AnnotationRegistry` is single source of truth
-- [ ] No `System.out.println` in production code
-- [ ] `slf4j-api` optional dependency added if logging retained
+- [x] Dependencies injected via `ValidationAutoConfiguration`
+- [x] `ConstraintAnnotationMessages` split into strategy classes behind SPI
+- [x] `AnnotationRegistry` is single source of truth
+- [x] No `System.out.println` in production code
+- [x] `slf4j-api` optional dependency added if logging retained
+- [ ] `DateToleranceEvaluator` DRY extract (2d — deferred; validators differ materially)
 
 ---
 
@@ -342,13 +345,15 @@ public static void assertResolvedMessage(FriendlyMessageResolver resolver,
 
 **Objective:** Fix known defects. **Critical/High items run early** (after Phase 1, before Phase 2b). Medium/Low run after Phase 3.
 
-### 4a. Critical + High (execute early — after Phase 1)
+### 4a. Critical + High (execute early — after Phase 1) ✅ COMPLETE
 
-| Priority     | Location                                                     | Issue                                        | Fix                                                       |
-|--------------|--------------------------------------------------------------|----------------------------------------------|-----------------------------------------------------------|
-| **Critical** | `META-INF.spring/`                                           | Wrong folder — auto-config not discovered    | **Done in Phase 1.9** — verify only                       |
-| **High**     | `ConstraintAnnotationMessages` `Min`/`Max`/`DecimalMin`/etc. | NPE when `attrs == null`                     | `Map<String,Object> a = attrs != null ? attrs : Map.of()` |
-| **High**     | `ApiExceptionHandler.resolveDtoClassFromBinding`             | NPE when `bindingResult.getTarget()` is null | Guard: use `Object.class` when target is null             |
+**Completed:** 2026-06-12 — META-INF verified (Phase 1); NPE guards applied; regression tests added.
+
+| Priority     | Location                                                     | Issue                                        | Fix                                                       | Status |
+|--------------|--------------------------------------------------------------|----------------------------------------------|-----------------------------------------------------------|--------|
+| **Critical** | `META-INF.spring/`                                           | Wrong folder — auto-config not discovered    | **Done in Phase 1.9** — verify only                       | ✅     |
+| **High**     | `ConstraintAnnotationMessages` `Min`/`Max`/`DecimalMin`/etc. | NPE when `attrs == null`                     | `Map<String,Object> a = attrs != null ? attrs : Map.of()` | ✅     |
+| **High**     | `ApiExceptionHandler.resolveDtoClassFromBinding`             | NPE when `bindingResult.getTarget()` is null | Guard: use `Object.class` when target is null             | ✅     |
 
 ### 4b. Medium + Low (execute after Phase 3)
 
@@ -362,7 +367,7 @@ public static void assertResolvedMessage(FriendlyMessageResolver resolver,
 
 ### Success criteria
 
-- [ ] All Critical/High fixes verified before Phase 2b
+- [x] All Critical/High fixes verified before Phase 2b
 - [ ] Medium/Low fixes complete before Phase 6
 
 ---
@@ -562,12 +567,12 @@ No major version bump required for PLAN 1 deliverables.
 ## PLAN 1 — Task Checklist
 
 - [x] **P1** Java 17, BOM, emailvalidator DM, enforcer, **META-INF fix**, **README**, **CI consolidation**
-- [ ] **P4-early** Critical/High bugs (NPE, null target) — before P2b
-- [ ] **P2a** DIP injection
-- [ ] **P2c** AnnotationRegistry
-- [ ] **P2b** Split ConstraintAnnotationMessages (after P4-early)
-- [ ] **P2d** Datetime DRY (scoped)
-- [ ] **P2e** SLF4J optional / remove println
+- [x] **P4-early** Critical/High bugs (NPE, null target) — before P2b
+- [x] **P2a** DIP injection
+- [x] **P2c** AnnotationRegistry
+- [x] **P2b** Split ConstraintAnnotationMessages (after P4-early)
+- [ ] **P2d** Datetime DRY (scoped — deferred)
+- [x] **P2e** SLF4J optional / remove println
 - [ ] **P3** Test support + dedupe + extend assertions
 - [ ] **P4-late** Medium/Low bugs
 - [ ] **P5** New tests (parity, method validation, Group, resolver fallback, registry completeness)

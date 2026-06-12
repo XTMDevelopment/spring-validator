@@ -1,5 +1,6 @@
 package id.xtramile.validator.web;
 
+import id.xtramile.validator.web.messages.CompositeConstraintMessageResolver;
 import jakarta.validation.ConstraintViolation;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.FieldError;
@@ -14,15 +15,45 @@ public class FriendlyMessageResolver {
     private final MessageResourceResolver messageResolver;
     private final ValidationFieldDisplayNames fieldNames;
     private final ValidationMessageArgsBuilder messageArgsBuilder;
-    private final ConstraintAnnotationMessages annotationMessages;
+    private final CompositeConstraintMessageResolver annotationMessages;
+
+    public FriendlyMessageResolver(
+            MessageResourceResolver messageResolver,
+            ValidationFieldDisplayNames fieldNames,
+            ValidationMessageArgsBuilder messageArgsBuilder,
+            CompositeConstraintMessageResolver annotationMessages) {
+        this.messageResolver = messageResolver;
+        this.fieldNames = fieldNames;
+        this.messageArgsBuilder = messageArgsBuilder;
+        this.annotationMessages = annotationMessages;
+    }
 
     public FriendlyMessageResolver(MessageResourceResolver messageResolver) {
-        this.messageResolver = messageResolver;
-        this.fieldNames = new ValidationFieldDisplayNames();
-        this.messageArgsBuilder = new ValidationMessageArgsBuilder(fieldNames);
-        this.annotationMessages = new ConstraintAnnotationMessages(messageResolver, fieldNames);
-        System.out.println("MessageResolver loaded from id.xtramile.validator");
+        this(messageResolver, defaultCollaborators(messageResolver));
     }
+
+    private FriendlyMessageResolver(MessageResourceResolver messageResolver, DefaultCollaborators collaborators) {
+        this(
+                messageResolver,
+                collaborators.fieldNames(),
+                collaborators.messageArgsBuilder(),
+                collaborators.annotationMessages()
+        );
+    }
+
+    private static DefaultCollaborators defaultCollaborators(MessageResourceResolver messageResolver) {
+        ValidationFieldDisplayNames fieldNames = new ValidationFieldDisplayNames();
+        return new DefaultCollaborators(
+                fieldNames,
+                new ValidationMessageArgsBuilder(fieldNames),
+                new CompositeConstraintMessageResolver(messageResolver, fieldNames)
+        );
+    }
+
+    private record DefaultCollaborators(
+            ValidationFieldDisplayNames fieldNames,
+            ValidationMessageArgsBuilder messageArgsBuilder,
+            CompositeConstraintMessageResolver annotationMessages) {}
 
     public String resolve(ConstraintViolation<?> v, String field, Class<?> dtoClass) {
         String template = v.getMessageTemplate();
@@ -96,6 +127,6 @@ public class FriendlyMessageResolver {
     }
 
     private Class<?> resolveAnnotationType(String annotationName) {
-        return ValidationAnnotationTypeRegistry.resolve(annotationName);
+        return AnnotationRegistry.resolve(annotationName);
     }
 }

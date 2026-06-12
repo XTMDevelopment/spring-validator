@@ -1,6 +1,7 @@
 package id.xtramile.validator.web;
 
 import id.xtramile.validator.annotation.common.FieldName;
+import id.xtramile.validator.web.messages.CompositeConstraintMessageResolver;
 import id.xtramile.validator.annotation.common.InWhitelist;
 import id.xtramile.validator.annotation.datetime.DateBefore;
 import id.xtramile.validator.annotation.datetime.ValidDate;
@@ -23,14 +24,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ConstraintAnnotationMessagesTest {
 
     private MessageResourceResolver messages;
-    private ConstraintAnnotationMessages resolver;
+    private CompositeConstraintMessageResolver resolver;
 
     @BeforeEach
     void setUp() {
         messages = new MessageResourceResolver("en");
         
         ValidationFieldDisplayNames fieldNames = new ValidationFieldDisplayNames();
-        resolver = new ConstraintAnnotationMessages(messages, fieldNames);
+        resolver = new CompositeConstraintMessageResolver(messages, fieldNames);
     }
 
     @Test

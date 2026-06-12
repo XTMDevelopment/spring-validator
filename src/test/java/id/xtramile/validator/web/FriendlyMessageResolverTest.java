@@ -15,6 +15,7 @@ import id.xtramile.validator.annotation.kyc.ValidSelfieImage;
 import id.xtramile.validator.annotation.location.*;
 import id.xtramile.validator.annotation.network.*;
 import id.xtramile.validator.enums.DatePrecision;
+import id.xtramile.validator.web.messages.CompositeConstraintMessageResolver;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.constraints.*;
 import jakarta.validation.metadata.ConstraintDescriptor;
@@ -34,14 +35,14 @@ import static org.mockito.Mockito.when;
 class FriendlyMessageResolverTest {
 
     private FriendlyMessageResolver resolver;
-    private ConstraintAnnotationMessages annotationMessages;
+    private CompositeConstraintMessageResolver annotationMessages;
 
     @BeforeEach
     void setUp() {
         MessageResourceResolver messageResolver = new MessageResourceResolver("en");
         resolver = new FriendlyMessageResolver(messageResolver);
         ValidationFieldDisplayNames fieldNames = new ValidationFieldDisplayNames();
-        annotationMessages = new ConstraintAnnotationMessages(messageResolver, fieldNames);
+        annotationMessages = new CompositeConstraintMessageResolver(messageResolver, fieldNames);
     }
 
     @Test

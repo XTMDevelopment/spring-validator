@@ -2,6 +2,7 @@ package id.xtramile.validator.autoconfigure;
 
 import id.xtramile.validator.config.ValidationLocaleConfig;
 import id.xtramile.validator.web.*;
+import id.xtramile.validator.web.messages.CompositeConstraintMessageResolver;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -31,9 +32,38 @@ public class ValidationAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(ValidationFieldDisplayNames.class)
+    public ValidationFieldDisplayNames validationFieldDisplayNames() {
+        return new ValidationFieldDisplayNames();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ValidationMessageArgsBuilder.class)
+    public ValidationMessageArgsBuilder validationMessageArgsBuilder(ValidationFieldDisplayNames fieldNames) {
+        return new ValidationMessageArgsBuilder(fieldNames);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(CompositeConstraintMessageResolver.class)
+    public CompositeConstraintMessageResolver compositeConstraintMessageResolver(
+            MessageResourceResolver messageResourceResolver,
+            ValidationFieldDisplayNames fieldNames) {
+        return new CompositeConstraintMessageResolver(messageResourceResolver, fieldNames);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(FriendlyMessageResolver.class)
-    public FriendlyMessageResolver friendlyMessageResolver(MessageResourceResolver messageResourceResolver) {
-        return new FriendlyMessageResolver(messageResourceResolver);
+    public FriendlyMessageResolver friendlyMessageResolver(
+            MessageResourceResolver messageResourceResolver,
+            ValidationFieldDisplayNames fieldNames,
+            ValidationMessageArgsBuilder messageArgsBuilder,
+            CompositeConstraintMessageResolver compositeConstraintMessageResolver) {
+        return new FriendlyMessageResolver(
+                messageResourceResolver,
+                fieldNames,
+                messageArgsBuilder,
+                compositeConstraintMessageResolver
+        );
     }
 
     @Bean
