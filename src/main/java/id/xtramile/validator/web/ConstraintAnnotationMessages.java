@@ -52,6 +52,8 @@ final class ConstraintAnnotationMessages {
     }
 
     private String springValidatorMessage(String field, Class<?> type, Map<String, Object> attrs) {
+        Map<String, Object> a = attrs != null ? attrs : Map.of();
+
         if (type == NotBlank.class) {
             return messageResolver.getMessage(SPRING, "not-blank", field);
         }
@@ -77,7 +79,6 @@ final class ConstraintAnnotationMessages {
         }
 
         if (type == Size.class) {
-            Map<String, Object> a = attrs != null ? attrs : Map.of();
             int min = intConstraintAttribute(a, "min", 0);
             int max = intConstraintAttribute(a, "max", Integer.MAX_VALUE);
 
@@ -93,36 +94,36 @@ final class ConstraintAnnotationMessages {
         }
 
         if (type == Min.class) {
-            Long value = (Long) attrs.getOrDefault("value", 0L);
+            Long value = (Long) a.getOrDefault("value", 0L);
             return messageResolver.getMessage(SPRING, "min", field, value);
         }
 
         if (type == Max.class) {
-            Long value = (Long) attrs.getOrDefault("value", Long.MAX_VALUE);
+            Long value = (Long) a.getOrDefault("value", Long.MAX_VALUE);
             return messageResolver.getMessage(SPRING, "max", field, value);
         }
 
         if (type == DecimalMin.class) {
-            String value = (String) attrs.getOrDefault("value", "0");
+            String value = (String) a.getOrDefault("value", "0");
 
-            Boolean inclusive = (Boolean) attrs.getOrDefault("inclusive", Boolean.TRUE);
+            Boolean inclusive = (Boolean) a.getOrDefault("inclusive", Boolean.TRUE);
             String key = inclusive ? "decimal-min" : "decimal-min.exclusive";
 
             return messageResolver.getMessage(SPRING, key, field, value);
         }
 
         if (type == DecimalMax.class) {
-            String value = (String) attrs.getOrDefault("value", "0");
+            String value = (String) a.getOrDefault("value", "0");
 
-            Boolean inclusive = (Boolean) attrs.getOrDefault("inclusive", Boolean.TRUE);
+            Boolean inclusive = (Boolean) a.getOrDefault("inclusive", Boolean.TRUE);
             String key = inclusive ? "decimal-max" : "decimal-max.exclusive";
 
             return messageResolver.getMessage(SPRING, key, field, value);
         }
 
         if (type == Digits.class) {
-            Integer integer = (Integer) attrs.getOrDefault("integer", 0);
-            Integer fraction = (Integer) attrs.getOrDefault("fraction", 0);
+            Integer integer = (Integer) a.getOrDefault("integer", 0);
+            Integer fraction = (Integer) a.getOrDefault("fraction", 0);
 
             return messageResolver.getMessage(SPRING, "digits", field, integer, fraction);
         }

@@ -204,6 +204,29 @@ class ApiExceptionHandlerTest {
     }
 
     @Test
+    void shouldHandleMethodArgumentNotValidExceptionWithNullTarget() {
+        FieldError fieldError = mock(FieldError.class);
+        when(fieldError.getField()).thenReturn("email");
+        when(fieldError.getDefaultMessage()).thenReturn("Email is required");
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.getFieldErrors()).thenReturn(List.of(fieldError));
+        when(bindingResult.getTarget()).thenReturn(null);
+
+        MethodArgumentNotValidException exception = mock(MethodArgumentNotValidException.class);
+        when(exception.getBindingResult()).thenReturn(bindingResult);
+
+        when(mockMessageResolver.resolve(fieldError, Object.class)).thenReturn("Email is required");
+        when(mockBuilder.validation(List.of("Email is required"))).thenReturn(Map.of("test", "response"));
+
+        ResponseEntity<Object> response = handler.onValidationException(exception);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        verify(mockMessageResolver).resolve(fieldError, Object.class);
+        verify(mockBuilder).validation(List.of("Email is required"));
+    }
+
+    @Test
     void shouldHandleMethodArgumentNotValidExceptionWithFriendlyDefaultMessage() {
         // Given
         FieldError fieldError = mock(FieldError.class);

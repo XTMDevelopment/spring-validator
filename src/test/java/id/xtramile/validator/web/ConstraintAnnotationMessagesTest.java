@@ -5,6 +5,11 @@ import id.xtramile.validator.annotation.common.InWhitelist;
 import id.xtramile.validator.annotation.datetime.DateBefore;
 import id.xtramile.validator.annotation.datetime.ValidDate;
 import id.xtramile.validator.enums.DatePrecision;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.BeforeEach;
@@ -84,6 +89,22 @@ class ConstraintAnnotationMessagesTest {
 
         String out = resolver.resolveFromAnnotation("ignored", DateBefore.class, attrs, DateBeforeDto.class);
         assertThat(out).isEqualTo("Period start must be before Period end");
+    }
+
+    @Test
+    void resolveFromAnnotation_springConstraintsWithNullAttrs_useDefaults() {
+        assertThat(resolver.resolveFromAnnotation("Age", Min.class, null, Object.class))
+                .isEqualTo("Age must be at least 0");
+        assertThat(resolver.resolveFromAnnotation("Age", Max.class, null, Object.class))
+                .startsWith("Age must be at most ");
+        assertThat(resolver.resolveFromAnnotation("Price", DecimalMin.class, null, Object.class))
+                .isEqualTo("Price must be at least 0");
+        assertThat(resolver.resolveFromAnnotation("Price", DecimalMax.class, null, Object.class))
+                .isEqualTo("Price must be at most 0");
+        assertThat(resolver.resolveFromAnnotation("Amount", Digits.class, null, Object.class))
+                .isEqualTo("Amount must have at most 0 integer digits and at most 0 fractional digits");
+        assertThat(resolver.resolveFromAnnotation("Nick", Size.class, null, Object.class))
+                .startsWith("Nick must be at most ");
     }
 
     @Test

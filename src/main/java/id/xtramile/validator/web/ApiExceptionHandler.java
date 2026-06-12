@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -77,8 +76,7 @@ public class ApiExceptionHandler {
     }
 
     private static Class<?> resolveDtoClassFromBinding(MethodArgumentNotValidException ex) {
-        return Objects.requireNonNull(ex.getBindingResult()
-                        .getTarget())
-                .getClass();
+        Object target = ex.getBindingResult().getTarget();
+        return target != null ? target.getClass() : Object.class;
     }
 }
