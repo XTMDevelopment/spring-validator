@@ -66,10 +66,10 @@ jobs:
         run: mvn install -DskipTests "-Dspring-boot.version=3.5.14" "-Dgpg.skip=true"
 
       - name: Sample consumer smoke (Boot 3.5.14)
-        run: mvn -f examples/spring-boot-starter-sample/pom.xml test "-Dspring-boot.version=3.5.14"
+        run: mvn -f examples/spring-boot-starter-sample/pom.xml clean test "-Dspring-boot.version=3.5.14"
 
       - name: Sample consumer smoke (Boot 4.0.5)
-        run: mvn -f examples/spring-boot-starter-sample/pom.xml test "-Dspring-boot.version=4.0.5"
+        run: mvn -f examples/spring-boot-starter-sample/pom.xml clean test "-Dspring-boot.version=4.0.5"
 
       - name: Upload JaCoCo report
         if: always()

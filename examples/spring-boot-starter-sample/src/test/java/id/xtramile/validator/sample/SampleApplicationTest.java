@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -31,7 +30,7 @@ class SampleApplicationTest {
     @Test
     void invalidRegistration_returnsFriendlyValidationError() throws Exception {
         mockMvc.perform(post("/register")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType("application/json")
                         .content("{\"name\":\"\",\"email\":\"bad\",\"password\":\"weak\"}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message.id").value("Validasi gagal"))
