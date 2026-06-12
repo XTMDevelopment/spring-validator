@@ -14,13 +14,13 @@
 |--------------------|--------------------------------------------------------------------------------------------------------------------|
 | Production classes | 158 files in `src/main/java` (`annotation/`, `validator/`, `web/`, `autoconfigure/`, `util/`, `config/`, `enums/`) |
 | Test classes       | ~106 files in `src/test/java` mirroring production packages                                                        |
-| Java target        | **Java 17** (`maven.compiler.release=17`, enforcer `[17,)`)                                                         |
+| Java target        | **Java 17** (`maven.compiler.release=17`, enforcer `[17,)`)                                                        |
 | Spring Boot        | **3.5.14** via `spring-boot-dependencies` BOM (`spring-boot.version` property)                                     |
-| CI                 | **Consolidated** — `ci.yml` (primary), `build.yml` (cross-OS); Java 17/21/25 only                                    |
+| CI                 | **Consolidated** — `ci.yml` (primary), `build.yml` (cross-OS); Java 17/21/25 only                                  |
 | Documentation      | **`README.md`** created                                                                                            |
-| Code quality       | JaCoCo bundle + area thresholds; Javadoc `failOnWarnings`; compiler `-Xlint:all` + `-Werror`                         |
+| Code quality       | JaCoCo bundle + area thresholds; Javadoc `failOnWarnings`; compiler `-Xlint:all` + `-Werror`                       |
 | SOLID debt         | **Resolved** — DIP wiring, `AnnotationRegistry`, message strategies in `web/messages/`                             |
-| Auto-config        | **Fixed** — `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`                       |
+| Auto-config        | **Fixed** — `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`                     |
 | Logging            | **`slf4j-api` optional** added; `System.out.println` removed from web layer                                        |
 
 ```mermaid
@@ -69,7 +69,7 @@ flowchart LR
 | 4              | Phase 3             | Test support package                                     |
 | 5              | Phase 4 (remainder) | Medium + Low bugs                                        |
 | 6              | Phase 5             | New tests                                                |
-| 7              | Phase 6             | Javadoc, JaCoCo, compiler lint, CONTRIBUTING, CHANGELOG    |
+| 7              | Phase 6             | Javadoc, JaCoCo, compiler lint, CONTRIBUTING, CHANGELOG  |
 
 ---
 
@@ -353,9 +353,9 @@ public static void assertResolvedMessage(FriendlyMessageResolver resolver,
 
 | Priority     | Location                                                     | Issue                                        | Fix                                                       | Status |
 |--------------|--------------------------------------------------------------|----------------------------------------------|-----------------------------------------------------------|--------|
-| **Critical** | `META-INF.spring/`                                           | Wrong folder — auto-config not discovered    | **Done in Phase 1.9** — verify only                       | ✅     |
-| **High**     | `ConstraintAnnotationMessages` `Min`/`Max`/`DecimalMin`/etc. | NPE when `attrs == null`                     | `Map<String,Object> a = attrs != null ? attrs : Map.of()` | ✅     |
-| **High**     | `ApiExceptionHandler.resolveDtoClassFromBinding`             | NPE when `bindingResult.getTarget()` is null | Guard: use `Object.class` when target is null             | ✅     |
+| **Critical** | `META-INF.spring/`                                           | Wrong folder — auto-config not discovered    | **Done in Phase 1.9** — verify only                       | ✅      |
+| **High**     | `ConstraintAnnotationMessages` `Min`/`Max`/`DecimalMin`/etc. | NPE when `attrs == null`                     | `Map<String,Object> a = attrs != null ? attrs : Map.of()` | ✅      |
+| **High**     | `ApiExceptionHandler.resolveDtoClassFromBinding`             | NPE when `bindingResult.getTarget()` is null | Guard: use `Object.class` when target is null             | ✅      |
 
 ### 4b. Medium + Low (execute after Phase 3) ✅ COMPLETE
 
@@ -363,10 +363,10 @@ public static void assertResolvedMessage(FriendlyMessageResolver resolver,
 
 | Priority   | Location                             | Issue                                                   | Fix                                                                         | Status |
 |------------|--------------------------------------|---------------------------------------------------------|-----------------------------------------------------------------------------|--------|
-| **Medium** | `MessageResourceResolver.getMessage` | Reloads default locale `Properties` on every cache miss | Cache fallback `Properties` in instance field                               | ✅     |
-| **Medium** | `MessageUtils.clearStoredArgs`       | `ThreadLocal` not removed — thread-pool leak            | `ARG_STORAGE.remove()` after `clear()`                                      | ✅     |
-| **Medium** | `AnnotationUtils`                    | Swallows all exceptions silently                        | Narrow to `ReflectiveOperationException`; SLF4J debug; explicit null guards | ✅     |
-| **Low**    | `ValidatorUtils.validateLeapYear`    | No null guard on `date`                                 | `if (date == null) return true;` (non-leap invalid date rejected elsewhere) | ✅     |
+| **Medium** | `MessageResourceResolver.getMessage` | Reloads default locale `Properties` on every cache miss | Cache fallback `Properties` in instance field                               | ✅      |
+| **Medium** | `MessageUtils.clearStoredArgs`       | `ThreadLocal` not removed — thread-pool leak            | `ARG_STORAGE.remove()` after `clear()`                                      | ✅      |
+| **Medium** | `AnnotationUtils`                    | Swallows all exceptions silently                        | Narrow to `ReflectiveOperationException`; SLF4J debug; explicit null guards | ✅      |
+| **Low**    | `ValidatorUtils.validateLeapYear`    | No null guard on `date`                                 | `if (date == null) return true;` (non-leap invalid date rejected elsewhere) | ✅      |
 | **Low**    | `NotEmptyMapValidator`               | Uses `not-empty-collection` key for maps                | Defer unless breaking change acceptable in 1.x                              | ⏸️     |
 
 ### Success criteria
@@ -460,10 +460,10 @@ Rollout: `-Xlint:all` first, then `-Werror`.
 
 ### 6c. JaCoCo coverage (required)
 
-| Metric | Threshold |
-|--------|-----------|
-| Line (bundle) | ≥ 80% |
-| Branch (bundle) | ≥ 70% |
+| Metric          | Threshold |
+|-----------------|-----------|
+| Line (bundle)   | ≥ 80%     |
+| Branch (bundle) | ≥ 70%     |
 
 **Excludes:** `**/annotation/**`, `**/enums/**`, `ValidationLocaleConfig`
 
@@ -551,8 +551,8 @@ No major version bump required for PLAN 1 deliverables.
 | Architecture | SOLID refactor; unified registry; DIP via auto-config              |
 | Tests        | ~115+ tests; fixtures deduplicated; parity + method validation E2E |
 | Bugs         | META-INF, NPE, ThreadLocal, cache — fixed per execution order      |
-| Quality      | Javadoc, JaCoCo gates, compiler lint in CI                           |
-| Docs         | README, CONTRIBUTING, CHANGELOG                                      |
+| Quality      | Javadoc, JaCoCo gates, compiler lint in CI                         |
+| Docs         | README, CONTRIBUTING, CHANGELOG                                    |
 | Publishing   | `mvn clean verify` green; GPG for manual release only              |
 
 ---

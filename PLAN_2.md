@@ -9,13 +9,13 @@
 
 ## Why PLAN 2 Is Separate
 
-| Concern           | PLAN 1                       | PLAN 2                                |
-|-------------------|------------------------------|---------------------------------------|
-| SOLID within code | Refactor classes/packages    | Enforce via Maven module boundaries   |
-| Spring Boot 3.5.x | Compile + CI baseline        | Default for parent BOM                |
-| Spring Boot 4.0.x | Not tested                   | Full CI matrix                        |
+| Concern           | PLAN 1                    | PLAN 2                                                              |
+|-------------------|---------------------------|---------------------------------------------------------------------|
+| SOLID within code | Refactor classes/packages | Enforce via Maven module boundaries                                 |
+| Spring Boot 3.5.x | Compile + CI baseline     | Default for parent BOM                                              |
+| Spring Boot 4.0.x | Not tested                | Full CI matrix                                                      |
 | Artifact layout   | One JAR (legacy monolith) | Four artifacts + parent under `id.xtramile.validator` (all **1.x**) |
-| Version           | `1.x`                        | **Same `1.x`** — no major bump        |
+| Version           | `1.x`                     | **Same `1.x`** — no major bump                                      |
 
 ```mermaid
 flowchart LR
@@ -35,33 +35,35 @@ flowchart LR
 
 ### Artifact mapping
 
-| Before (PLAN 1 monolith)           | After (PLAN 2)                                         | Version                  |
-|------------------------------------|--------------------------------------------------------|--------------------------|
-| `id.xtramile.validator:validator:1.x` | **Deprecated** — final monolith release optional       | `1.x` last monolith      |
-| —                                  | `id.xtramile:validator-core:1.x`                | same `1.x`               |
-| —                                  | `id.xtramile:validator-web:1.x`                 | same `1.x`               |
-| —                                  | `id.xtramile:validator-spring-boot-starter:1.x` | same `1.x` (recommended) |
+**Maven coordinates (implemented):** `groupId` = `id.xtramile.validator`, parent `artifactId` = `validator` (`packaging=pom`).
 
-### Relocation POM (same 1.x line)
+| Coordinate                                                | Role                                 | Published?                  |
+|-----------------------------------------------------------|--------------------------------------|-----------------------------|
+| `id.xtramile.validator:validator:pom:1.x`                 | Parent POM                           | Optional (BOM-style parent) |
+| `id.xtramile.validator:validator-core:1.x`                | Annotations + validators             | **Yes**                     |
+| `id.xtramile.validator:validator-web:1.x`                 | MVC messages + exception handling    | **Yes**                     |
+| `id.xtramile.validator:validator-spring-boot-starter:1.x` | Auto-configuration (**recommended**) | **Yes**                     |
+| `id.xtramile.validator:validator-test-support:1.x`        | Internal test-jar                    | **No**                      |
 
-Publish a **relocation POM** at the old coordinate so existing consumers get a Maven relocation notice:
+### Legacy consumer migration
 
-```xml
-<!-- id.xtramile.validator:validator:1.x (relocation artifact) -->
-<distributionManagement>
-    <relocation>
-        <groupId>id.xtramile</groupId>
-        <artifactId>validator-spring-boot-starter</artifactId>
-        <version>1.x</version>
-        <message>Artifact moved to validator-spring-boot-starter</message>
-    </relocation>
-</distributionManagement>
-```
+| Before                                                 | After (1.x)                                               |
+|--------------------------------------------------------|-----------------------------------------------------------|
+| `id.xtramile:spring-validator:1.x` (monolith)          | `id.xtramile.validator:validator-spring-boot-starter:1.x` |
+| `id.xtramile:spring-validator-core:1.x`                | `id.xtramile.validator:validator-core:1.x`                |
+| `id.xtramile:spring-validator-web:1.x`                 | `id.xtramile.validator:validator-web:1.x`                 |
+| `id.xtramile:spring-validator-spring-boot-starter:1.x` | `id.xtramile.validator:validator-spring-boot-starter:1.x` |
 
-**Tasks:**
-1. Publish final monolith `spring-validator:1.x` (optional) with relocation metadata, **or** publish empty relocation-only POM at same version
-2. Document in `README.md` and `CHANGELOG.md` under `## [1.x]` — **Migration** section
-3. **Do not** bump to `2.0` unless API-breaking changes are introduced later
+Java packages remain `id.xtramile.validator.*` — unchanged.
+
+### Relocation POM (deferred to Central release)
+
+Relocation artifacts at **legacy** `id.xtramile:spring-validator*` coordinates are **not** wired in the parent POM yet. Before first Central publish of `id.xtramile.validator` artifacts, either:
+
+1. Publish empty relocation POMs at old coordinates pointing to the new starter/core/web artifacts, **or**
+2. Rely on README/CHANGELOG migration docs only (current state).
+
+**Do not** bump to `2.0` unless API-breaking changes are introduced later.
 
 ---
 
@@ -72,30 +74,30 @@ Publish a **relocation POM** at the old coordinate so existing consumers get a M
 ### 1a. Target module layout
 
 ```
-validator/                              (parent POM, packaging=pom, version 1.x)
+validator/                              (parent: id.xtramile.validator:validator:pom:1.x)
 ├── pom.xml
 ├── PLAN_1.md
 ├── PLAN_2.md
 ├── README.md
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
-├── config/
-│   ├── checkstyle/
-│   └── spotbugs/
+├── examples/spring-boot-starter-sample/   (smoke consumer, not published)
+├── validator-test-support/              (build first — test-jar)
 ├── validator-core/
 ├── validator-web/
-├── validator-spring-boot-starter/
-└── validator-test-support/
+└── validator-spring-boot-starter/
 ```
+
+`config/checkstyle/` and `config/spotbugs/` — **deferred** (not in parent build yet; Javadoc + JaCoCo active).
 
 ### 1b. Module responsibilities
 
-| Module           | Artifact ID                            | Packages                                       | Dependencies                                                      |
-|------------------|----------------------------------------|------------------------------------------------|-------------------------------------------------------------------|
-| **core**         | `validator-core`                | `annotation/`, `validator/`, `util/`, `enums/` | `jakarta.validation-api`, `emailvalidator`; see **1c** for Spring |
-| **web**          | `validator-web`                 | `web/`, `messages_*.properties`                | `core`, `spring-web` (optional), `spring-context` (optional)      |
-| **starter**      | `validator-spring-boot-starter` | `autoconfigure/`, `config/`                    | `web`, `spring-boot-autoconfigure`, starters (optional)           |
-| **test-support** | `validator-test-support`        | `support/` fixtures                            | `web`, test deps → **test-jar**                                   |
+| Module           | Artifact ID                     | Packages                                       | Dependencies                                                                          |
+|------------------|---------------------------------|------------------------------------------------|---------------------------------------------------------------------------------------|
+| **core**         | `validator-core`                | `annotation/`, `validator/`, `util/`, `enums/` | `jakarta.validation-api`, `emailvalidator`; see **1c** for Spring                     |
+| **web**          | `validator-web`                 | `web/`, `messages_*.properties`                | `core`, `spring-web` (optional), `spring-context` (optional)                          |
+| **starter**      | `validator-spring-boot-starter` | `autoconfigure/`, `config/`                    | `web`, `spring-boot-autoconfigure`, starters (optional)                               |
+| **test-support** | `validator-test-support`        | `ValidatorTestSupport`, `MockMultipartFile`    | `jakarta.validation-api` only (no `core`/`web` — avoids reactor cycle) → **test-jar** |
 
 ### 1c. Cross-validator / `BeanWrapperImpl` placement (resolved)
 
@@ -103,11 +105,11 @@ validator/                              (parent POM, packaging=pom, version 1.x)
 
 **Decision for 1.x (documented):**
 
-| Option                                  | Choice       | Rationale                                                                                         |
-|-----------------------------------------|--------------|---------------------------------------------------------------------------------------------------|
-| A. `spring-beans` optional in `core`    | **Selected** | Minimal move; validators stay with annotations; `spring-beans` marked `<optional>true</optional>` |
-| B. Move cross-validators to `web`       | Rejected     | Couples validation rules to web module                                                            |
-| C. New `spring-validator-spring` module | Deferred     | Overkill for 1.x                                                                                  |
+| Option                               | Choice       | Rationale                                                                                         |
+|--------------------------------------|--------------|---------------------------------------------------------------------------------------------------|
+| A. `spring-beans` optional in `core` | **Selected** | Minimal move; validators stay with annotations; `spring-beans` marked `<optional>true</optional>` |
+| B. Move cross-validators to `web`    | Rejected     | Couples validation rules to web module                                                            |
+| C. New `validator-spring` module     | Deferred     | Overkill for 1.x                                                                                  |
 
 **`core/pom.xml`:**
 
@@ -182,39 +184,43 @@ Generates `META-INF/spring-configuration-metadata.json` for `id.xtramile.validat
 
 ### 1f. `test-support` publish policy
 
-| Item                      | Decision                                                                                        |
-|---------------------------|-------------------------------------------------------------------------------------------------|
-| Publish to Maven Central? | **No** — internal build module only                                                             |
-| Packaging                 | `test-jar` via `maven-jar-plugin` `test-jar` goal                                               |
-| Consumer modules          | `core`, `web`, `starter` tests depend on it with `<type>test-jar</type>`, `<scope>test</scope>` |
-| Version                   | Same `${project.version}` (1.x), not advertised in README consumer docs                         |
+| Item                      | Decision                                                                                                                     |
+|---------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| Publish to Maven Central? | **No** — internal build module only                                                                                          |
+| Packaging                 | `test-jar` via `maven-jar-plugin` `test-jar` goal                                                                            |
+| Consumer modules          | `core` and `web` tests depend on it with `<type>test-jar</type>`, `<scope>test</scope>` (`starter` uses local test fixtures) |
+| Source layout             | `src/test/java` (packaged via `maven-jar-plugin` `test-jar` goal)                                                            |
+| Version                   | Same `${project.version}` (1.x), not advertised in README consumer docs                                                      |
 
 ### 1g. Migration steps (ordered)
 
-| Step | Action                                                                                                          |
-|------|-----------------------------------------------------------------------------------------------------------------|
-| 1    | Create parent POM `spring-validator-parent` (or keep root artifact as parent), `packaging=pom`, version **1.x** |
-| 2    | Extract `validator-core` + move validator/util/enum tests                                                |
-| 3    | Extract `validator-web` + messages + web/integration tests                                               |
-| 4    | Extract `validator-spring-boot-starter` + `META-INF/spring/` + autoconfigure tests                       |
-| 5    | Extract `validator-test-support`; move `support/` from PLAN 1                                            |
-| 6    | Wire test-jar dependencies in child module test scopes                                                          |
-| 7    | Add optional `spring-beans` to `core`; configuration-processor to `starter`                                     |
-| 8    | Configure **multi-module** `central-publishing-maven-plugin` on parent                                          |
-| 9    | Add **relocation POM** for old `spring-validator` coordinate (1.x)                                              |
-| 10   | Update `README.md`, `CHANGELOG.md` migration section                                                            |
-| 11   | `mvn clean verify` from parent — all modules green                                                              |
+| Step | Action                                                                                            |
+|------|---------------------------------------------------------------------------------------------------|
+| 1    | Create parent POM `id.xtramile.validator:validator`, `packaging=pom`, version **1.x**             |
+| 2    | Extract `validator-core` + move validator/util/enum tests                                         |
+| 3    | Extract `validator-web` + messages + web/integration tests                                        |
+| 4    | Extract `validator-spring-boot-starter` + `META-INF/spring/` + autoconfigure tests                |
+| 5    | Extract `validator-test-support`; move `support/` from PLAN 1                                     |
+| 6    | Wire test-jar dependencies in child module test scopes                                            |
+| 7    | Add optional `spring-beans` to `core`; configuration-processor to `starter`                       |
+| 8    | Configure **multi-module** `central-publishing-maven-plugin` on parent                            |
+| 9    | Add **relocation POM** at legacy `id.xtramile:spring-validator*` (deferred until Central release) |
+| 10   | Update `README.md`, `CHANGELOG.md` migration section                                              |
+| 11   | `mvn clean verify` from parent — all modules green                                                |
 
-### 1h. Test placement
+### 1h. Test placement (as implemented)
 
-| Tests                                     | Module                             |
-|-------------------------------------------|------------------------------------|
-| `validator/**/*Test`, `util/*`, `enums/*` | `core/src/test`                    |
-| `web/*`, `integration/*`                  | `web/src/test`                     |
-| `autoconfigure/*`                         | `starter/src/test`                 |
-| `support/*`, `MockMultipartFile`          | `test-support/src/main` (test-jar) |
-
-`MockMultipartFile` moves to `test-support` (used by KYC/file validator tests in `core`).
+| Tests                                                                                  | Module                              | Notes                                                                          |
+|----------------------------------------------------------------------------------------|-------------------------------------|--------------------------------------------------------------------------------|
+| `validator/**/*Test`, `util/*`                                                         | `core/src/test`                     | Includes `DateUtilsTest` (`pluralLabel` cases; was briefly misplaced in `web`) |
+| `enums/*` (except message-key parity)                                                  | `core/src/test`                     |                                                                                |
+| `enums/GroupEnumTest`                                                                  | `web/src/test`                      | Needs `messages_*.properties` on classpath                                     |
+| `web/*`, `integration/*` (no starter)                                                  | `web/src/test`                      | Message/integration tests without `ValidationAutoConfiguration`                |
+| `autoconfigure/*`, `config/*`                                                          | `starter/src/test`                  |                                                                                |
+| `integration/ApiExceptionHandlerWebIntegrationTest`, `MethodValidationIntegrationTest` | `starter/src/test`                  | Moved from `web` to avoid `web` → `starter` reactor cycle                      |
+| `ValidatorTestSupport`, `MockMultipartFile`                                            | `test-support/src/test` (test-jar)  | Consumed by `core` + `web` tests                                               |
+| `ValidationMessageTestSupport`, `LocaleMessageCodesTestSupport`                        | `web/src/test/java/.../support`     | Web-coupled; not in test-jar (avoids cycle)                                    |
+| `AutoConfigurationTestFixtures`                                                        | `starter/src/test/java/.../support` | Starter-coupled; not in test-jar                                               |
 
 ### 1i. JaCoCo — multi-module reporting
 
@@ -242,16 +248,16 @@ Generates `META-INF/spring-configuration-metadata.json` for `id.xtramile.validat
 | Per-module floors                        | If aggregate fails, check `core` ≥85% validator, `web` ≥80%, etc. |
 | After split                              | Run baseline; ratchet if module split temporarily lowers coverage |
 
-Upload `target/site/jacoco-aggregate/` in CI.
+Parent aggregate uses `report-aggregate` + `check-aggregate` with `<inherited>false</inherited>`. Upload `target/site/jacoco-aggregate/` in CI.
 
 ### 1j. Maven Central Publishing (multi-artifact, 1.x)
 
 **Publish these coordinates** (all `${project.version}` = 1.x):
 
-1. `validator-core`
-2. `validator-web`
-3. `validator-spring-boot-starter`
-4. Relocation POM at `spring-validator` (optional final artifact)
+1. `id.xtramile.validator:validator-core`
+2. `id.xtramile.validator:validator-web`
+3. `id.xtramile.validator:validator-spring-boot-starter`
+4. Relocation POMs at legacy `id.xtramile:spring-validator*` (optional, deferred)
 
 **Do not publish:** `validator-test-support`
 
@@ -311,7 +317,7 @@ From repository root:
 mvn clean verify -Dspring-boot.version=3.5.14
 ```
 
-Must run Checkstyle, Javadoc, SpotBugs, JaCoCo aggregate across **all** modules. Child modules do not skip quality plugins individually.
+Must run Javadoc, JaCoCo aggregate across **all** modules (implemented). Checkstyle and SpotBugs — **deferred** (directories planned under `config/`). CI uses `-Dgpg.skip=true`; GPG bound to `-Prelease` profile only.
 
 ### Phase 1 success criteria
 
@@ -320,9 +326,21 @@ Must run Checkstyle, Javadoc, SpotBugs, JaCoCo aggregate across **all** modules.
 - [x] `starter` auto-config via `META-INF/spring/*.imports`
 - [x] All PLAN 1 tests pass in new locations
 - [x] JaCoCo aggregate meets PLAN 1 thresholds (parent `check-aggregate`, `inherited=false`)
-- [x] Relocation POM documented; **no 2.0 bump**
+- [ ] Relocation POM published at legacy coordinates (documented in README; **deferred** until Central release)
+- [x] **No 2.0 bump**
 - [x] `test-support` not published to Central (`maven.deploy.skip`, `central.publishing.skip`)
 - [x] Sample consumer builds and returns friendly validation errors
+
+### Phase 1 — Implementation record (2026-06)
+
+| Item                                                                                        | Status                                      |
+|---------------------------------------------------------------------------------------------|---------------------------------------------|
+| Parent + 4 modules at `id.xtramile.validator:1.x`                                           | Done                                        |
+| `core` optional deps: `spring-beans`, `spring-web`, `jackson-databind`, `slf4j-api`         | Done                                        |
+| `starter` + `spring-boot-configuration-processor` (`-Xlint:-processing` on starter compile) | Done                                        |
+| `examples/spring-boot-starter-sample/` smoke test                                           | Done                                        |
+| `mvn clean verify -Dspring-boot.version=3.5.14 -Dgpg.skip=true`                             | Green                                       |
+| Reactor module order                                                                        | `test-support` → `core` → `web` → `starter` |
 
 ---
 
@@ -404,11 +422,11 @@ Activate in CI: `-Dspring-boot.version=4.0.5` (property override sufficient if c
 
 ### 2g. Fallback escalation
 
-| Level | Solution                                             | When                               |
-|-------|------------------------------------------------------|------------------------------------|
-| 1     | `boot4` profile dependency overrides                 | Modular starter rename             |
-| 2     | `SpringBoot4Configuration` adapter in `starter`      | Bean wiring differs                |
-| 3     | `spring-validator-spring-boot4-starter` extra module | Last resort; still **1.x** version |
+| Level | Solution                                        | When                               |
+|-------|-------------------------------------------------|------------------------------------|
+| 1     | `boot4` profile dependency overrides            | Modular starter rename             |
+| 2     | `SpringBoot4Configuration` adapter in `starter` | Bean wiring differs                |
+| 3     | `validator-spring-boot4-starter` extra module   | Last resort; still **1.x** version |
 
 ### 2h. Documentation (1.x)
 
@@ -417,7 +435,7 @@ README **Supported environments:**
 > - **Version:** 1.x  
 > - **Java:** 17, 21, 25  
 > - **Spring Boot:** 3.5.14+ (3.5.x), 4.0.5+ (4.0.x)  
-> - **Dependency:** `id.xtramile:validator-spring-boot-starter:1.x`
+> - **Dependency:** `id.xtramile.validator:validator-spring-boot-starter:1.x`
 
 ### Phase 2 success criteria
 
@@ -431,16 +449,16 @@ README **Supported environments:**
 
 ## PLAN 2 — Overall Success Criteria
 
-| Category   | Criterion                                                         |
-|------------|-------------------------------------------------------------------|
-| Version    | **1.x** only — relocation POM, no 2.0 bump                        |
-| Modules    | core, web, starter published; test-support internal               |
-| Boot 3     | verify green 3.5.14 × Java 17/21/25                               |
-| Boot 4     | verify green 4.0.5 × Java 17/21/25                                |
-| Consumers  | Jakarta / Web / Boot apps use correct 1.x artifact                |
-| Quality    | Parent `verify` — Checkstyle, Javadoc, JaCoCo aggregate, SpotBugs |
-| Publishing | Central deploy all public 1.x artifacts + relocation              |
-| Smoke      | `examples/spring-boot-starter-sample` passes                      |
+| Category   | Criterion                                                                         |
+|------------|-----------------------------------------------------------------------------------|
+| Version    | **1.x** only — legacy relocation optional, no 2.0 bump                            |
+| Modules    | core, web, starter published; test-support internal                               |
+| Boot 3     | verify green 3.5.14 × Java 17/21/25                                               |
+| Boot 4     | verify green 4.0.5 × Java 17/21/25                                                |
+| Consumers  | Jakarta / Web / Boot apps use correct 1.x artifact                                |
+| Quality    | Parent `verify` — Checkstyle, Javadoc, JaCoCo aggregate, SpotBugs                 |
+| Publishing | Central deploy `validator-core`, `validator-web`, `validator-spring-boot-starter` |
+| Smoke      | `examples/spring-boot-starter-sample` passes                                      |
 
 ---
 
@@ -454,7 +472,7 @@ README **Supported environments:**
 - [x] **P1.6** Migrate tests + `MockMultipartFile`
 - [x] **P1.7** JaCoCo per-module + aggregate on parent
 - [x] **P1.8** Multi-module Central Publishing + release profile + GPG policy
-- [x] **P1.9** Relocation POM `spring-validator` → starter (**1.x**)
+- [ ] **P1.9** Relocation POM at legacy `id.xtramile:spring-validator*` → `id.xtramile.validator` artifacts (deferred; README migration done)
 - [x] **P1.10** README + CHANGELOG migration (no 2.0)
 - [x] **P1.11** Sample consumer in `examples/`
 - [ ] **P2.1** CI 6-job matrix (Java × Boot)
@@ -476,14 +494,14 @@ README **Supported environments:**
 
 ## Relationship to PLAN 1
 
-| PLAN 1 deliverable              | PLAN 2                                       |
-|---------------------------------|----------------------------------------------|
-| SOLID code                      | Split by module                              |
-| `support/`                      | `test-support` module (unpublished)          |
-| `AnnotationRegistry`            | `web` module                                 |
-| META-INF fix                    | `starter` module                             |
-| Quality plugins                 | Parent `pluginManagement` + aggregate JaCoCo |
-| README, CONTRIBUTING, CHANGELOG | Extended for modules + migration at **1.x**  |
-| `-Pquick` profile               | Inherited from parent                        |
+| PLAN 1 deliverable              | PLAN 2                                                                          |
+|---------------------------------|---------------------------------------------------------------------------------|
+| SOLID code                      | Split by module                                                                 |
+| `support/`                      | Split: `test-support` test-jar + module-local fixtures in `web`/`starter` tests |
+| `AnnotationRegistry`            | `web` module                                                                    |
+| META-INF fix                    | `starter` module                                                                |
+| Quality plugins                 | Parent `pluginManagement` + aggregate JaCoCo                                    |
+| README, CONTRIBUTING, CHANGELOG | Extended for modules + migration at **1.x**                                     |
+| `-Pquick` profile               | Inherited from parent                                                           |
 
 **Execute PLAN 1 completely before PLAN 2.**
