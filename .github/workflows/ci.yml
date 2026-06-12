@@ -1,0 +1,53 @@
+name: CI - Test Multiple Java Versions
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+jobs:
+  test-matrix:
+    name: Test Java ${{ matrix.java }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java: [ 8, 11, 17, 21 ]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Verify Java version
+        run: java -version
+
+      - name: Run tests
+        run: mvn clean test
+
+      - name: Check test results
+        if: always()
+        continue-on-error: true
+        run: |
+          if [ -d "target/surefire-reports" ]; then
+            echo "Test reports directory found"
+            REPORT_COUNT=$(find target/surefire-reports -name "*.txt" -o -name "*.xml" 2>/dev/null | wc -l)
+            if [ "$REPORT_COUNT" -gt 0 ]; then
+              echo "Found $REPORT_COUNT test result file(s)"
+              ls -la target/surefire-reports/ || true
+            else
+              echo "Warning: Test reports directory exists but contains no result files"
+            fi
+          else
+            echo "Info: Test reports directory not found (this is normal if tests failed before completion)"
+          fi
+
