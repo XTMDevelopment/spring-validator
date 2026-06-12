@@ -7,128 +7,64 @@ import org.junit.jupiter.api.Test;
 
 import static id.xtramile.validator.integration.ValidationMessageAssertions.assertNoRawValidationKey;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class NetworkValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    public static class CidrDto {
-        @ValidCIDR
-        private final String value;
-
-        public CidrDto(String value) {
-            this.value = value;
+    public record CidrDto(@ValidCIDR String value) {
+            public CidrDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class IpAddressDto {
-        @ValidIPAddress
-        private final String value;
-
-        public IpAddressDto(String value) {
-            this.value = value;
+    public record IpAddressDto(@ValidIPAddress String value) {
+            public IpAddressDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class Ipv4Dto {
-        @ValidIPv4Address
-        private final String value;
-
-        public Ipv4Dto(String value) {
-            this.value = value;
+    public record Ipv4Dto(@ValidIPv4Address String value) {
+            public Ipv4Dto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class Ipv6Dto {
-        @ValidIPv6Address
-        private final String value;
-
-        public Ipv6Dto(String value) {
-            this.value = value;
+    public record Ipv6Dto(@ValidIPv6Address String value) {
+            public Ipv6Dto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class MacAddressDto {
-        @ValidMacAddress
-        private final String value;
-
-        public MacAddressDto(String value) {
-            this.value = value;
+    public record MacAddressDto(@ValidMacAddress String value) {
+            public MacAddressDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class PortIntDto {
-        @ValidPort
-        private final Integer value;
-
-        public PortIntDto(Integer value) {
-            this.value = value;
+    public record PortIntDto(@ValidPort Integer value) {
+            public PortIntDto(Integer value) {
+                this.value = value;
+            }
         }
 
-        public Integer value() {
-            return value;
-        }
-    }
-
-    public static class PortStringDto {
-        @ValidPort
-        private final String value;
-
-        public PortStringDto(String value) {
-            this.value = value;
+    public record PortStringDto(@ValidPort String value) {
+            public PortStringDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class UrlDto {
-        @ValidURL
-        private final String value;
-
-        public UrlDto(String value) {
-            this.value = value;
+    public record UrlDto(@ValidURL String value) {
+            public UrlDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record DomainNameDto(@ValidDomainName String value) {
+            public DomainNameDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class DomainNameDto {
-        @ValidDomainName
-        private final String value;
-
-        public DomainNameDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
 
     @Test
     void cidr_pathB() {
@@ -223,7 +159,7 @@ class NetworkValidatorMessageIntegrationTest {
 
     @Test
     void url_pathB() {
-        UrlDto dto = new UrlDto("http://");
+        UrlDto dto = new UrlDto("https://");
         ConstraintViolation<UrlDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());

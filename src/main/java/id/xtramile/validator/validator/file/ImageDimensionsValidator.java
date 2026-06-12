@@ -59,8 +59,7 @@ public class ImageDimensionsValidator implements ConstraintValidator<ValidImageD
         BufferedImage img;
 
         try {
-            if (value instanceof MultipartFile) {
-                MultipartFile mf = (MultipartFile) value;
+            if (value instanceof MultipartFile mf) {
                 if (mf.isEmpty()) return true;
 
                 try (InputStream in = mf.getInputStream()) {

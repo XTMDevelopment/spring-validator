@@ -30,9 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ValidationWebComponentsCollaborationIntegrationTest {
 
     private static Validator VALIDATOR;
-    private static MessageResourceResolver MESSAGES;
     private static ValidationFieldDisplayNames FIELD_NAMES;
-    private static ValidationMessageArgsBuilder MESSAGE_ARGS_BUILDER;
     private static CompositeConstraintMessageResolver ANNOTATION_MESSAGES;
     private static FriendlyMessageResolver RESOLVER;
 
@@ -41,9 +39,10 @@ class ValidationWebComponentsCollaborationIntegrationTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         VALIDATOR = factory.getValidator();
 
-        MESSAGES = new MessageResourceResolver("en");
+        MessageResourceResolver MESSAGES = new MessageResourceResolver("en");
         FIELD_NAMES = new ValidationFieldDisplayNames();
-        MESSAGE_ARGS_BUILDER = new ValidationMessageArgsBuilder(FIELD_NAMES);
+
+        ValidationMessageArgsBuilder MESSAGE_ARGS_BUILDER = new ValidationMessageArgsBuilder(FIELD_NAMES);
         ANNOTATION_MESSAGES = new CompositeConstraintMessageResolver(MESSAGES, FIELD_NAMES);
         RESOLVER = new FriendlyMessageResolver(MESSAGES, FIELD_NAMES, MESSAGE_ARGS_BUILDER, ANNOTATION_MESSAGES);
     }
@@ -123,43 +122,35 @@ class ValidationWebComponentsCollaborationIntegrationTest {
                 .isEqualTo("Channel label");
     }
 
-    public static class MultiViolationDto {
-        @FieldName("Channel label")
-        @InWhitelist(values = {"sms", "email"})
-        @NotBlank
-        private final String channel;
+    public record MultiViolationDto(
+            @FieldName("Channel label") @InWhitelist(values = {"sms", "email"}) @NotBlank String channel,
+            @FieldName("Code") @NotBlank String code) {
+            public MultiViolationDto(String channel, String code) {
+                this.channel = channel;
+                this.code = code;
+            }
 
-        @FieldName("Code")
-        @NotBlank
-        private final String code;
+            @Override
+            public String channel() {
+                return channel;
+            }
 
-        public MultiViolationDto(String channel, String code) {
-            this.channel = channel;
-            this.code = code;
+            @Override
+            public String code() {
+                return code;
+            }
         }
 
-        public String channel() {
-            return channel;
-        }
+    record NotBlankOnlyDto(@FieldName("Email") @NotBlank String email) {
+            NotBlankOnlyDto(String email) {
+                this.email = email;
+            }
 
-        public String code() {
-            return code;
+            @Override
+            public String email() {
+                return email;
+            }
         }
-    }
-
-    static class NotBlankOnlyDto {
-        @FieldName("Email")
-        @NotBlank
-        private final String email;
-
-        NotBlankOnlyDto(String email) {
-            this.email = email;
-        }
-
-        public String email() {
-            return email;
-        }
-    }
 
     static class MapLikeDto {
         @FieldName("Channel label")

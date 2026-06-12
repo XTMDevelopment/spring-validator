@@ -12,10 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Regression tests for Phase 4 null-safe constraint attribute handling
- * ({@link id.xtramile.validator.web.messages.SpringBuiltinConstraintMessages}).
- */
 class ConstraintAnnotationMessagesNullAttrsTest {
 
     private CompositeConstraintMessageResolver resolver;

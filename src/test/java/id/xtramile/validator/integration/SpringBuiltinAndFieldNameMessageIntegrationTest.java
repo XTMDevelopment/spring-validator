@@ -23,159 +23,126 @@ class SpringBuiltinAndFieldNameMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    public static class NotBlankDto {
-        @FieldName("Borrower ID")
-        @NotBlank
-        private final String borrowerId;
+    public record NotBlankDto(@FieldName("Borrower ID") @NotBlank String borrowerId) {
+            public NotBlankDto(String borrowerId) {
+                this.borrowerId = borrowerId;
+            }
 
-        public NotBlankDto(String borrowerId) {
-            this.borrowerId = borrowerId;
+            @Override
+            public String borrowerId() {
+                return borrowerId;
+            }
         }
 
-        public String borrowerId() {
-            return borrowerId;
-        }
-    }
+    public record NotNullDto(@FieldName("Account ID") @NotNull Integer accountId) {
+            public NotNullDto(Integer accountId) {
+                this.accountId = accountId;
+            }
 
-    public static class NotNullDto {
-        @FieldName("Account ID")
-        @NotNull
-        private final Integer accountId;
-
-        public NotNullDto(Integer accountId) {
-            this.accountId = accountId;
+            @Override
+            public Integer accountId() {
+                return accountId;
+            }
         }
 
-        public Integer accountId() {
-            return accountId;
-        }
-    }
+    public record MinDto(@FieldName("Quantity") @Min(10) int qty) {
+            public MinDto(int qty) {
+                this.qty = qty;
+            }
 
-    public static class MinDto {
-        @FieldName("Quantity")
-        @Min(10)
-        private final int qty;
-
-        public MinDto(int qty) {
-            this.qty = qty;
+            @Override
+            public int qty() {
+                return qty;
+            }
         }
 
-        public int qty() {
-            return qty;
-        }
-    }
+    public record MaxDto(@FieldName("Age") @Max(100) int age) {
+            public MaxDto(int age) {
+                this.age = age;
+            }
 
-    public static class MaxDto {
-        @FieldName("Age")
-        @Max(100)
-        private final int age;
-
-        public MaxDto(int age) {
-            this.age = age;
+            @Override
+            public int age() {
+                return age;
+            }
         }
 
-        public int age() {
-            return age;
-        }
-    }
+    public record SizeDto(@FieldName("Code") @Size(min = 2, max = 5) String code) {
+            public SizeDto(String code) {
+                this.code = code;
+            }
 
-    public static class SizeDto {
-        @FieldName("Code")
-        @Size(min = 2, max = 5)
-        private final String code;
-
-        public SizeDto(String code) {
-            this.code = code;
+            @Override
+            public String code() {
+                return code;
+            }
         }
 
-        public String code() {
-            return code;
-        }
-    }
+    public record EmailDto(@FieldName("Work Email") @Email String email) {
+            public EmailDto(String email) {
+                this.email = email;
+            }
 
-    public static class EmailDto {
-        @FieldName("Work Email")
-        @Email
-        private final String email;
-
-        public EmailDto(String email) {
-            this.email = email;
+            @Override
+            public String email() {
+                return email;
+            }
         }
 
-        public String email() {
-            return email;
-        }
-    }
+    public record PatternDto(@FieldName("PIN") @Pattern(regexp = "\\d+") String pin) {
+            public PatternDto(String pin) {
+                this.pin = pin;
+            }
 
-    public static class PatternDto {
-        @FieldName("PIN")
-        @Pattern(regexp = "\\d+")
-        private final String pin;
-
-        public PatternDto(String pin) {
-            this.pin = pin;
+            @Override
+            public String pin() {
+                return pin;
+            }
         }
 
-        public String pin() {
-            return pin;
-        }
-    }
+    public record DecimalMinDto(@FieldName("Amount") @DecimalMin("10.0") BigDecimal amount) {
+            public DecimalMinDto(BigDecimal amount) {
+                this.amount = amount;
+            }
 
-    public static class DecimalMinDto {
-        @FieldName("Amount")
-        @DecimalMin("10.0")
-        private final BigDecimal amount;
-
-        public DecimalMinDto(BigDecimal amount) {
-            this.amount = amount;
+            @Override
+            public BigDecimal amount() {
+                return amount;
+            }
         }
 
-        public BigDecimal amount() {
-            return amount;
-        }
-    }
+    public record PositiveDto(@FieldName("Score") @Positive Integer score) {
+            public PositiveDto(Integer score) {
+                this.score = score;
+            }
 
-    public static class PositiveDto {
-        @FieldName("Score")
-        @Positive
-        private final Integer score;
-
-        public PositiveDto(Integer score) {
-            this.score = score;
+            @Override
+            public Integer score() {
+                return score;
+            }
         }
 
-        public Integer score() {
-            return score;
-        }
-    }
+    public record NotEmptyDto(@FieldName("Tags") @NotEmpty List<String> tags) {
+            public NotEmptyDto(List<String> tags) {
+                this.tags = tags;
+            }
 
-    public static class NotEmptyDto {
-        @FieldName("Tags")
-        @NotEmpty
-        private final List<String> tags;
-
-        public NotEmptyDto(List<String> tags) {
-            this.tags = tags;
+            @Override
+            public List<String> tags() {
+                return tags;
+            }
         }
 
-        public List<String> tags() {
-            return tags;
-        }
-    }
+    public record DigitsDto(@FieldName("Price") @Digits(integer = 2, fraction = 1) BigDecimal price) {
+            public DigitsDto(BigDecimal price) {
+                this.price = price;
+            }
 
-    public static class DigitsDto {
-        @FieldName("Price")
-        @Digits(integer = 2, fraction = 1)
-        private final BigDecimal price;
-
-        public DigitsDto(BigDecimal price) {
-            this.price = price;
+            @Override
+            public BigDecimal price() {
+                return price;
+            }
         }
-
-        public BigDecimal price() {
-            return price;
-        }
-    }
 
     @Test
     void notBlank_withFieldName() {

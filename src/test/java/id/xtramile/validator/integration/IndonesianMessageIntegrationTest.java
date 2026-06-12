@@ -20,47 +20,28 @@ class IndonesianMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.ID;
 
-    public static class NotBlankDto {
-        @FieldName("ID Peminjam")
-        @NotBlank
-        private final String borrowerId;
+    public record NotBlankDto(@FieldName("ID Peminjam") @NotBlank String borrowerId) {
+            public NotBlankDto(String borrowerId) {
+                this.borrowerId = borrowerId;
+            }
 
-        public NotBlankDto(String borrowerId) {
-            this.borrowerId = borrowerId;
+            @Override
+            public String borrowerId() {
+                return borrowerId;
+            }
         }
 
-        public String borrowerId() {
-            return borrowerId;
-        }
-    }
-
-    public static class ValidUUIDDto {
-        @FieldName("Referensi")
-        @ValidUUID
-        private final String value;
-
-        public ValidUUIDDto(String value) {
-            this.value = value;
+    public record ValidUUIDDto(@FieldName("Referensi") @ValidUUID String value) {
+            public ValidUUIDDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record EmailDto(@FieldName("Email Kerja") @ValidEmail String value) {
+            public EmailDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class EmailDto {
-        @FieldName("Email Kerja")
-        @ValidEmail
-        private final String value;
-
-        public EmailDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
 
     @Test
     void notBlank_withFieldName_resolvesIndonesianMessage() {

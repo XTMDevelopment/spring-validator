@@ -61,14 +61,12 @@ public class DateUtils {
     public static long calculateDistance(LocalDateTime first, LocalDateTime second, DatePrecision precision) {
         Duration duration = Duration.between(first, second);
 
-        switch (precision) {
-            case DAYS: return duration.toDays();
-            case HOURS: return duration.toHours();
-            case MINUTES: return duration.toMinutes();
-            case SECONDS: return duration.toSeconds();
-        }
-
-        return duration.toSeconds();
+        return switch (precision) {
+            case DAYS -> duration.toDays();
+            case HOURS -> duration.toHours();
+            case MINUTES -> duration.toMinutes();
+            case SECONDS -> duration.toSeconds();
+        };
     }
 
     public static boolean isISO8601Pattern(String pattern) {

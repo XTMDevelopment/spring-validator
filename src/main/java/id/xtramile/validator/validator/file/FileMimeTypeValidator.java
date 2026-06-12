@@ -51,13 +51,11 @@ public class FileMimeTypeValidator implements ConstraintValidator<ValidFileMimeT
 
         String mime;
 
-        if (value instanceof String) {
-            String s = (String) value;
+        if (value instanceof String s) {
             if (isBlank(s)) return true;
             mime = s;
 
-        } else if (value instanceof MultipartFile) {
-            MultipartFile mf = (MultipartFile) value;
+        } else if (value instanceof MultipartFile mf) {
             if (mf.isEmpty()) return true;
             mime = mf.getContentType();
 

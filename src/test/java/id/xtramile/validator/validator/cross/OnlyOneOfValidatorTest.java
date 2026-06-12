@@ -10,91 +10,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class OnlyOneOfValidatorTest {
 
     @OnlyOneOf(fields = {"email", "phone"})
-    private static class ContactDummy {
-        private final String email;
-        private final String phone;
-
-        private ContactDummy(String email, String phone) {
-            this.email = email;
-            this.phone = phone;
-        }
-
-        public String email() {
-            return email;
-        }
-
-        public String phone() {
-            return phone;
-        }
+        private record ContactDummy(String email, String phone) {
     }
 
     @OnlyOneOf(fields = {"username", "email", "phone"})
-    private static class UserDummy {
-        private final String username;
-        private final String email;
-        private final String phone;
-
-        private UserDummy(String username, String email, String phone) {
-            this.username = username;
-            this.email = email;
-            this.phone = phone;
-        }
-
-        public String username() {
-            return username;
-        }
-
-        public String email() {
-            return email;
-        }
-
-        public String phone() {
-            return phone;
-        }
+        private record UserDummy(String username, String email, String phone) {
     }
 
     @OnlyOneOf(fields = {"field1", "field2", "field3", "field4"})
-    private static class MultiFieldDummy {
-        private final String field1;
-        private final String field2;
-        private final String field3;
-        private final String field4;
-
-        private MultiFieldDummy(String field1, String field2, String field3, String field4) {
-            this.field1 = field1;
-            this.field2 = field2;
-            this.field3 = field3;
-            this.field4 = field4;
-        }
-
-        public String field1() {
-            return field1;
-        }
-
-        public String field2() {
-            return field2;
-        }
-
-        public String field3() {
-            return field3;
-        }
-
-        public String field4() {
-            return field4;
-        }
+        private record MultiFieldDummy(String field1, String field2, String field3, String field4) {
     }
 
     @OnlyOneOf(fields = {"value"})
-    private static class SingleFieldDummy {
-        private final String value;
-
-        private SingleFieldDummy(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
+        private record SingleFieldDummy(String value) {
     }
 
     private OnlyOneOfValidator validator;

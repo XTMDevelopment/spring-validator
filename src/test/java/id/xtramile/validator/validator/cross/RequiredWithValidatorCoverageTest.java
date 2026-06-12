@@ -13,66 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class RequiredWithValidatorCoverageTest {
 
     @RequiredWith(when = "trigger", require = {"email"})
-    private static class SingleCompanionDummy {
-        private final String trigger;
-        private final String email;
-
-        private SingleCompanionDummy(String trigger, String email) {
-            this.trigger = trigger;
-            this.email = email;
-        }
-
-        public String trigger() {
-            return trigger;
-        }
-
-        public String email() {
-            return email;
-        }
+        private record SingleCompanionDummy(String trigger, String email) {
     }
 
     @RequiredWith(when = "status", require = {"code", "label", "detail"})
-    private static class MultiFieldDummy {
-        private final String status;
-        private final String code;
-        private final String label;
-        private final String detail;
-
-        private MultiFieldDummy(String status, String code, String label, String detail) {
-            this.status = status;
-            this.code = code;
-            this.label = label;
-            this.detail = detail;
-        }
-
-        public String status() {
-            return status;
-        }
-
-        public String code() {
-            return code;
-        }
-
-        public String label() {
-            return label;
-        }
-
-        public String detail() {
-            return detail;
-        }
+        private record MultiFieldDummy(String status, String code, String label, String detail) {
     }
 
     @RequiredWith(when = "active", require = {})
-    private static class EmptyRequireDummy {
-        private final Boolean active;
-
-        private EmptyRequireDummy(Boolean active) {
-            this.active = active;
-        }
-
-        public Boolean active() {
-            return active;
-        }
+        private record EmptyRequireDummy(Boolean active) {
     }
 
     private RequiredWithValidator validator;

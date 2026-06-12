@@ -7,102 +7,52 @@ import org.junit.jupiter.api.Test;
 
 import static id.xtramile.validator.integration.ValidationMessageAssertions.assertNoRawValidationKey;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class LocationValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    public static class CoordinatesDto {
-        @ValidCoordinates
-        private final String value;
-
-        public CoordinatesDto(String value) {
-            this.value = value;
+    public record CoordinatesDto(@ValidCoordinates String value) {
+            public CoordinatesDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class CoordinatesFlipDto {
-        @ValidCoordinates(flipCoordinates = true)
-        private final String value;
-
-        public CoordinatesFlipDto(String value) {
-            this.value = value;
+    public record CoordinatesFlipDto(@ValidCoordinates(flipCoordinates = true) String value) {
+            public CoordinatesFlipDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class LatitudeDto {
-        @ValidLatitude
-        private final String value;
-
-        public LatitudeDto(String value) {
-            this.value = value;
+    public record LatitudeDto(@ValidLatitude String value) {
+            public LatitudeDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class LongitudeDto {
-        @ValidLongitude
-        private final String value;
-
-        public LongitudeDto(String value) {
-            this.value = value;
+    public record LongitudeDto(@ValidLongitude String value) {
+            public LongitudeDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class PostalCodeUnsupportedDto {
-        @ValidPostalCode(country = "US")
-        private final String value;
-
-        public PostalCodeUnsupportedDto(String value) {
-            this.value = value;
+    public record PostalCodeUnsupportedDto(@ValidPostalCode(country = "US") String value) {
+            public PostalCodeUnsupportedDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class PostalCodeBadFormatDto {
-        @ValidPostalCode
-        private final String value;
-
-        public PostalCodeBadFormatDto(String value) {
-            this.value = value;
+    public record PostalCodeBadFormatDto(@ValidPostalCode String value) {
+            public PostalCodeBadFormatDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record RtRwDto(@ValidRTRW String value) {
+            public RtRwDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class RtRwDto {
-        @ValidRTRW
-        private final String value;
-
-        public RtRwDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
 
     @Test
     void coordinates_defaultOrder() {

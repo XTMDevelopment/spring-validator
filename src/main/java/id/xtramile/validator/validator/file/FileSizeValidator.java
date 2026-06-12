@@ -66,13 +66,11 @@ public class FileSizeValidator implements ConstraintValidator<ValidFileSize, Obj
         if (value == null) return true;
 
         long size;
-        if (value instanceof MultipartFile) {
-            MultipartFile mf = (MultipartFile) value;
+        if (value instanceof MultipartFile mf) {
             if (mf.isEmpty()) return true;
             size = mf.getSize();
 
-        } else if (value instanceof byte[]) {
-            byte[] bytes = (byte[]) value;
+        } else if (value instanceof byte[] bytes) {
             if (bytes.length == 0) return true;
             size = bytes.length;
 

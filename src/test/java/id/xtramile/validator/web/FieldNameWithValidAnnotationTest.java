@@ -16,7 +16,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -266,7 +265,7 @@ class FieldNameWithValidAnnotationTest {
                 .filter(v -> v.getPropertyPath().toString().equals("address.street"))
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Expected violation for address.street not found. Violations: " + 
-                    violations.stream().map(v -> v.getPropertyPath().toString()).collect(Collectors.toList())));
+                    violations.stream().map(v -> v.getPropertyPath().toString()).toList()));
 
         String propertyPath = violation.getPropertyPath().toString();
         Class<?> rootClass = UserProfileDto.class;
@@ -292,7 +291,7 @@ class FieldNameWithValidAnnotationTest {
                 .filter(v -> v.getPropertyPath().toString().equals("address.city"))
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Expected violation for address.city not found. Violations: " + 
-                    violations.stream().map(v -> v.getPropertyPath().toString()).collect(Collectors.toList())));
+                    violations.stream().map(v -> v.getPropertyPath().toString()).toList()));
 
         String propertyPath = violation.getPropertyPath().toString();
         Class<?> rootClass = UserProfileDto.class;
@@ -318,7 +317,7 @@ class FieldNameWithValidAnnotationTest {
                 .filter(v -> v.getPropertyPath().toString().equals("contact.email"))
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Expected violation for contact.email not found. Violations: " + 
-                    violations.stream().map(v -> v.getPropertyPath().toString()).collect(Collectors.toList())));
+                    violations.stream().map(v -> v.getPropertyPath().toString()).toList()));
 
         String propertyPath = violation.getPropertyPath().toString();
         Class<?> rootClass = UserProfileDto.class;
@@ -344,7 +343,7 @@ class FieldNameWithValidAnnotationTest {
                 .filter(v -> v.getPropertyPath().toString().equals("contact.phone"))
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Expected violation for contact.phone not found. Violations: " + 
-                    violations.stream().map(v -> v.getPropertyPath().toString()).collect(Collectors.toList())));
+                    violations.stream().map(v -> v.getPropertyPath().toString()).toList()));
 
         String propertyPath = violation.getPropertyPath().toString();
         Class<?> rootClass = UserProfileDto.class;

@@ -20,7 +20,7 @@ public final class ValidationMessageTestSupport {
     private final MessageResourceResolver messages;
     private final FriendlyMessageResolver resolver;
 
-    private ValidationMessageTestSupport(String locale) {
+    private ValidationMessageTestSupport(String locale)  {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
         this.messages = new MessageResourceResolver(locale);

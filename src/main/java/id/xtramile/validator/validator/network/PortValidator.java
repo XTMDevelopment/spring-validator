@@ -39,12 +39,10 @@ public class PortValidator implements ConstraintValidator<ValidPort, Object> {
         int port;
 
         try {
-            if (value instanceof Number) {
-                Number n = (Number) value;
+            if (value instanceof Number n) {
                 port = n.intValue();
 
-            } else if (value instanceof CharSequence) {
-                CharSequence cs = (CharSequence) value;
+            } else if (value instanceof CharSequence cs) {
                 String str = cs.toString().trim();
                 if (isBlank(str)) return true;
 

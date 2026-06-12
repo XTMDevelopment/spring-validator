@@ -70,53 +70,46 @@ public class PasswordValidator implements ConstraintValidator<ValidPassword, Str
         }
 
         boolean isValid;
-        String messageKey;
-        
-        switch (type) {
-            case ANY:
+        String messageKey = switch (type) {
+            case ANY -> {
                 isValid = true;
-                messageKey = "password";
-                break;
-
-            case ALPHANUMERIC:
+                yield "password";
+            }
+            case ALPHANUMERIC -> {
                 isValid = ONLY_ALNUM.matcher(value).matches();
-                messageKey = "password.alphanumeric";
-                break;
-
-            case LETTER_DIGIT:
+                yield "password.alphanumeric";
+            }
+            case LETTER_DIGIT -> {
                 isValid = HAS_LETTER.matcher(value).matches()
                         && HAS_DIGIT.matcher(value).matches();
-                messageKey = "password.letter-digit";
-                break;
-
-            case LETTER_MIXED_CASE:
+                yield "password.letter-digit";
+            }
+            case LETTER_MIXED_CASE -> {
                 isValid = HAS_LOWER.matcher(value).matches()
                         && HAS_UPPER.matcher(value).matches();
-                messageKey = "password.letter-mixed";
-                break;
-
-            case FULL:
+                yield "password.letter-mixed";
+            }
+            case FULL -> {
                 isValid = HAS_LOWER.matcher(value).matches()
                         && HAS_UPPER.matcher(value).matches()
                         && HAS_DIGIT.matcher(value).matches()
                         && HAS_SYMBOL.matcher(value).matches();
-                messageKey = "password.full";
-                break;
-
-            case STRONG_3_OF_4:
+                yield "password.full";
+            }
+            case STRONG_3_OF_4 -> {
                 isValid = countSatisfied(
                         HAS_LOWER.matcher(value).matches(),
                         HAS_UPPER.matcher(value).matches(),
                         HAS_DIGIT.matcher(value).matches(),
                         HAS_SYMBOL.matcher(value).matches()
                 ) >= 3;
-                messageKey = "password.full";
-                break;
-
-            default:
-                isValid = false;
-                messageKey = "password";
+                yield "password.full";
             }
+            default -> {
+                isValid = false;
+                yield "password";
+            }
+        };
 
 
         if (!isValid) {

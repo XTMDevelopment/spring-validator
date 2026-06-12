@@ -194,18 +194,15 @@ public final class DateToleranceEvaluator {
     }
 
     private static ParseResult validateFebruary29LeapYear(TemporalAccessor parsed) {
-        if (parsed instanceof ZonedDateTime) {
-            ZonedDateTime zdt = (ZonedDateTime) parsed;
+        if (parsed instanceof ZonedDateTime zdt) {
             if (zdt.getMonthValue() == 2 && zdt.getDayOfMonth() == 29 && !Year.isLeap(zdt.getYear())) {
                 return ParseResult.LEAP_YEAR_ERROR;
             }
-        } else if (parsed instanceof LocalDateTime) {
-            LocalDateTime ldt = (LocalDateTime) parsed;
+        } else if (parsed instanceof LocalDateTime ldt) {
             if (ldt.getMonthValue() == 2 && ldt.getDayOfMonth() == 29 && !Year.isLeap(ldt.getYear())) {
                 return ParseResult.LEAP_YEAR_ERROR;
             }
-        } else if (parsed instanceof LocalDate) {
-            LocalDate ld = (LocalDate) parsed;
+        } else if (parsed instanceof LocalDate ld) {
             if (ld.getMonthValue() == 2 && ld.getDayOfMonth() == 29 && !Year.isLeap(ld.getYear())) {
                 return ParseResult.LEAP_YEAR_ERROR;
             }

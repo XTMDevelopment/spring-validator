@@ -56,16 +56,14 @@ public class PostalCodeValidator implements ConstraintValidator<ValidPostalCode,
             return false;
         }
 
-        if (value instanceof String) {
-            String s = (String) value;
+        if (value instanceof String s) {
             if (isBlank(s)) {
                 return true;
             }
 
             return pattern.matcher(s.trim()).matches();
 
-        } else if (value instanceof Integer) {
-            Integer num = (Integer) value;
+        } else if (value instanceof Integer num) {
             if (num == 0) {
                 return true;
             }

@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class LocaleMessageCodesTestSupport {
 
-    public static record FormattedMessageCase(String key, Object[] args, String expected) {}
+    public record FormattedMessageCase(String key, Object[] args, String expected) {}
 
     protected abstract String locale();
 

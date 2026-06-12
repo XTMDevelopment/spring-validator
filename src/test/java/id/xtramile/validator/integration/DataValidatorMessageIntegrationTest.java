@@ -12,479 +12,226 @@ import java.util.Set;
 
 import static id.xtramile.validator.integration.ValidationMessageAssertions.assertNoRawValidationKey;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class DataValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    public static class AccountNumberNumbersDto {
-        @ValidAccountNumber()
-        private final String value;
-
-        public AccountNumberNumbersDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class AccountNumberMinDto {
-        @ValidAccountNumber(min = 10)
-        private final String value;
-
-        public AccountNumberMinDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class AccountNumberMaxDto {
-        @ValidAccountNumber(max = 10)
-        private final String value;
-
-        public AccountNumberMaxDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class Base64Dto {
-        @ValidBase64
-        private final String value;
-
-        public Base64Dto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class HexColorShortDto {
-        @ValidHexColor
-        private final String value;
-
-        public HexColorShortDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class HexColorLongDto {
-        @ValidHexColor
-        private final String value;
-
-        public HexColorLongDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class HexColorBaseDto {
-        @ValidHexColor
-        private final String value;
-
-        public HexColorBaseDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class ISOCodeCurrencyDto {
-        @ValidISOCode(ISOType.CURRENCY)
-        private final String value;
-
-        public ISOCodeCurrencyDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class ISOCodeCountryDto {
-        @ValidISOCode(ISOType.COUNTRY_ALPHA2)
-        private final String value;
-
-        public ISOCodeCountryDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class ISOCodeLanguageDto {
-        @ValidISOCode(ISOType.LANGUAGE)
-        private final String value;
-
-        public ISOCodeLanguageDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class JsonDto {
-        @ValidJSON
-        private final String value;
-
-        public JsonDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class NameMinDto {
-        @ValidName(min = 5)
-        private final String value;
-
-        public NameMinDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class NameMaxDto {
-        @ValidName(max = 5)
-        private final String value;
-
-        public NameMaxDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class NameDigitsDto {
-        @ValidName
-        private final String value;
-
-        public NameDigitsDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class NameSymbolDto {
-        @ValidName
-        private final String value;
-
-        public NameSymbolDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class NationalIdBaseDto {
-        @ValidNationalID(country = "US")
-        private final String value;
-
-        public NationalIdBaseDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class NationalIdLengthDto {
-        @ValidNationalID
-        private final String value;
-
-        public NationalIdLengthDto(String value) {
-            this.value = value;
+    public record AccountNumberNumbersDto(@ValidAccountNumber() String value) {
+            public AccountNumberNumbersDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record AccountNumberMinDto(@ValidAccountNumber(min = 10) String value) {
+            public AccountNumberMinDto(String value) {
+                this.value = value;
+            }
         }
-    }
 
-    public static class NationalIdNumbersDto {
-        @ValidNationalID
-        private final String value;
-
-        public NationalIdNumbersDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class PasswordWhitespaceDto {
-        @ValidPassword(type = PasswordType.FULL)
-        private final String value;
-
-        public PasswordWhitespaceDto(String value) {
-            this.value = value;
+    public record AccountNumberMaxDto(@ValidAccountNumber(max = 10) String value) {
+            public AccountNumberMaxDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record Base64Dto(@ValidBase64 String value) {
+            public Base64Dto(String value) {
+                this.value = value;
+            }
         }
-    }
 
-    public static class PasswordMinLengthDto {
-        @ValidPassword(min = 5, type = PasswordType.FULL)
-        private final String value;
-
-        public PasswordMinLengthDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
+    public record HexColorShortDto(@ValidHexColor String value) {
+            public HexColorShortDto(String value) {
+                this.value = value;
+            }
         }
-    }
 
-    public static class PasswordAlphanumericDto {
-        @ValidPassword(min = 5, type = PasswordType.ALPHANUMERIC)
-        private final String value;
-
-        public PasswordAlphanumericDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
+    public record HexColorLongDto(@ValidHexColor String value) {
+            public HexColorLongDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class PasswordLetterDigitDto {
-        @ValidPassword(min = 5, type = PasswordType.LETTER_DIGIT)
-        private final String value;
 
-        public PasswordLetterDigitDto(String value) {
-            this.value = value;
+    public record HexColorBaseDto(@ValidHexColor String value) {
+            public HexColorBaseDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record ISOCodeCurrencyDto(@ValidISOCode(ISOType.CURRENCY) String value) {
+            public ISOCodeCurrencyDto(String value) {
+                this.value = value;
+            }
         }
-    }
 
-    public static class PasswordLetterMixedDto {
-        @ValidPassword(min = 5, type = PasswordType.LETTER_MIXED_CASE)
-        private final String value;
-
-        public PasswordLetterMixedDto(String value) {
-            this.value = value;
+    public record ISOCodeCountryDto(@ValidISOCode(ISOType.COUNTRY_ALPHA2) String value) {
+            public ISOCodeCountryDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record ISOCodeLanguageDto(@ValidISOCode(ISOType.LANGUAGE) String value) {
+            public ISOCodeLanguageDto(String value) {
+                this.value = value;
+            }
         }
-    }
 
-    public static class PasswordFullDto {
-        @ValidPassword(min = 5, type = PasswordType.FULL)
-        private final String value;
-
-        public PasswordFullDto(String value) {
-            this.value = value;
+    public record JsonDto(@ValidJSON String value) {
+            public JsonDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record NameMinDto(@ValidName(min = 5) String value) {
+            public NameMinDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class PinLengthDto {
-        @ValidPIN(length = 5)
-        private final String value;
 
-        public PinLengthDto(String value) {
-            this.value = value;
+    public record NameMaxDto(@ValidName(max = 5) String value) {
+            public NameMaxDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record NameDigitsDto(@ValidName String value) {
+            public NameDigitsDto(String value) {
+                this.value = value;
+            }
         }
-    }
 
-    public static class PinRepetitiveDto {
-        @ValidPIN(maxAllowedRepetitive = 2)
-        private final String value;
-
-        public PinRepetitiveDto(String value) {
-            this.value = value;
+    public record NameSymbolDto(@ValidName String value) {
+            public NameSymbolDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record NationalIdBaseDto(@ValidNationalID(country = "US") String value) {
+            public NationalIdBaseDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class PinSequentialDto {
-        @ValidPIN(maxAllowedSequential = 3)
-        private final String value;
 
-        public PinSequentialDto(String value) {
-            this.value = value;
+    public record NationalIdLengthDto(@ValidNationalID String value) {
+            public NationalIdLengthDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record NationalIdNumbersDto(@ValidNationalID String value) {
+            public NationalIdNumbersDto(String value) {
+                this.value = value;
+            }
         }
-    }
 
-    public static class SlugBaseDto {
-        @ValidSlug
-        private final String value;
-
-        public SlugBaseDto(String value) {
-            this.value = value;
+    public record PasswordWhitespaceDto(@ValidPassword(type = PasswordType.FULL) String value) {
+            public PasswordWhitespaceDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record PasswordMinLengthDto(@ValidPassword(min = 5, type = PasswordType.FULL) String value) {
+            public PasswordMinLengthDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class SlugMinDto {
-        @ValidSlug(min = 3)
-        private final String value;
 
-        public SlugMinDto(String value) {
-            this.value = value;
+    public record PasswordAlphanumericDto(@ValidPassword(min = 5, type = PasswordType.ALPHANUMERIC) String value) {
+            public PasswordAlphanumericDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record PasswordLetterDigitDto(@ValidPassword(min = 5, type = PasswordType.LETTER_DIGIT) String value) {
+            public PasswordLetterDigitDto(String value) {
+                this.value = value;
+            }
         }
-    }
 
-    public static class SlugMaxDto {
-        @ValidSlug(max = 5)
-        private final String value;
-
-        public SlugMaxDto(String value) {
-            this.value = value;
+    public record PasswordLetterMixedDto(@ValidPassword(min = 5, type = PasswordType.LETTER_MIXED_CASE) String value) {
+            public PasswordLetterMixedDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record PasswordFullDto(@ValidPassword(min = 5, type = PasswordType.FULL) String value) {
+            public PasswordFullDto(String value) {
+                this.value = value;
+            }
         }
-    }
 
-    public static class TaxIdBaseDto {
-        @ValidTaxID(country = "US")
-        private final String value;
-
-        public TaxIdBaseDto(String value) {
-            this.value = value;
+    public record PinLengthDto(@ValidPIN(length = 5) String value) {
+            public PinLengthDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record PinRepetitiveDto(@ValidPIN(maxAllowedRepetitive = 2) String value) {
+            public PinRepetitiveDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class TaxIdLengthDto {
-        @ValidTaxID
-        private final String value;
 
-        public TaxIdLengthDto(String value) {
-            this.value = value;
+    public record PinSequentialDto(@ValidPIN(maxAllowedSequential = 3) String value) {
+            public PinSequentialDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record SlugBaseDto(@ValidSlug String value) {
+            public SlugBaseDto(String value) {
+                this.value = value;
+            }
         }
-    }
 
-    public static class TaxIdNumbersDto {
-        @ValidTaxID
-        private final String value;
-
-        public TaxIdNumbersDto(String value) {
-            this.value = value;
+    public record SlugMinDto(@ValidSlug(min = 3) String value) {
+            public SlugMinDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record SlugMaxDto(@ValidSlug(max = 5) String value) {
+            public SlugMaxDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class UsernameBaseDto {
-        @ValidUsername
-        private final String value;
 
-        public UsernameBaseDto(String value) {
-            this.value = value;
+    public record TaxIdBaseDto(@ValidTaxID(country = "US") String value) {
+            public TaxIdBaseDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record TaxIdLengthDto(@ValidTaxID String value) {
+            public TaxIdLengthDto(String value) {
+                this.value = value;
+            }
         }
-    }
 
-    public static class UsernameMinDto {
-        @ValidUsername(min = 8)
-        private final String value;
-
-        public UsernameMinDto(String value) {
-            this.value = value;
+    public record TaxIdNumbersDto(@ValidTaxID String value) {
+            public TaxIdNumbersDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record UsernameBaseDto(@ValidUsername String value) {
+            public UsernameBaseDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class UsernameMaxDto {
-        @ValidUsername(max = 6)
-        private final String value;
 
-        public UsernameMaxDto(String value) {
-            this.value = value;
+    public record UsernameMinDto(@ValidUsername(min = 8) String value) {
+            public UsernameMinDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record UsernameMaxDto(@ValidUsername(max = 6) String value) {
+            public UsernameMaxDto(String value) {
+                this.value = value;
+            }
         }
-    }
 
     @Test
     void accountNumber_numbers() {

@@ -19,120 +19,57 @@ class CommonValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    public static class InWhitelistDto {
-        @InWhitelist(values = {"ACTIVE", "INACTIVE"})
-        private final String value;
-
+    public record InWhitelistDto(@InWhitelist(values = {"ACTIVE", "INACTIVE"}) String value) {
         public InWhitelistDto(String value) {
             this.value = value;
         }
-
-        public String value() {
-            return value;
-        }
     }
 
-    public static class InWhitelistSensitiveDto {
-        @InWhitelist(values = {"ACTIVE", "INACTIVE"}, ignoreCase = false)
-        private final String value;
-
+    public record InWhitelistSensitiveDto(@InWhitelist(values = {"ACTIVE", "INACTIVE"}, ignoreCase = false) String value) {
         public InWhitelistSensitiveDto(String value) {
             this.value = value;
         }
-
-        public String value() {
-            return value;
-        }
     }
 
-    public static class NotInBlacklistDto {
-        @NotInBlacklist(values = {"BANNED", "BLOCKED"})
-        private final String value;
-
+    public record NotInBlacklistDto(@NotInBlacklist(values = {"BANNED", "BLOCKED"}) String value) {
         public NotInBlacklistDto(String value) {
             this.value = value;
         }
-
-        public String value() {
-            return value;
-        }
     }
 
-    public static class NotInBlacklistSensitiveDto {
-        @NotInBlacklist(values = {"BANNED", "BLOCKED"}, ignoreCase = false)
-        private final String value;
-
+    public record NotInBlacklistSensitiveDto(@NotInBlacklist(values = {"BANNED", "BLOCKED"}, ignoreCase = false) String value) {
         public NotInBlacklistSensitiveDto(String value) {
             this.value = value;
         }
-
-        public String value() {
-            return value;
-        }
     }
 
-    public static class ValidEnumDto {
-        @ValidEnum(enumClass = ISOType.class)
-        private final String value;
-
+    public record ValidEnumDto(@ValidEnum(enumClass = ISOType.class) String value) {
         public ValidEnumDto(String value) {
             this.value = value;
         }
-
-        public String value() {
-            return value;
-        }
     }
 
-    public static class ValidEnumSensitiveDto {
-        @ValidEnum(enumClass = ISOType.class, ignoreCase = false)
-        private final String value;
-
+    public record ValidEnumSensitiveDto(@ValidEnum(enumClass = ISOType.class, ignoreCase = false) String value) {
         public ValidEnumSensitiveDto(String value) {
             this.value = value;
         }
-
-        public String value() {
-            return value;
-        }
     }
 
-    public static class UniqueElementsDto {
-        @UniqueElements
-        private final List<String> value;
-
+    public record UniqueElementsDto(@UniqueElements List<String> value) {
         public UniqueElementsDto(List<String> value) {
             this.value = value;
         }
-
-        public List<String> value() {
-            return value;
-        }
     }
 
-    public static class NotEmptyCollectionDto {
-        @NotEmptyCollection
-        private final List<String> value;
-
+    public record NotEmptyCollectionDto(@NotEmptyCollection List<String> value) {
         public NotEmptyCollectionDto(List<String> value) {
             this.value = value;
         }
-
-        public List<String> value() {
-            return value;
-        }
     }
 
-    public static class ValidUUIDDto {
-        @ValidUUID
-        private final String value;
-
+    public record ValidUUIDDto(@ValidUUID String value) {
         public ValidUUIDDto(String value) {
             this.value = value;
-        }
-
-        public String value() {
-            return value;
         }
     }
 

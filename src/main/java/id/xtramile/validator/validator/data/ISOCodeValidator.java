@@ -54,33 +54,28 @@ public class ISOCodeValidator implements ConstraintValidator<ValidISOCode, Strin
         if (isBlank(value)) return true;
 
         boolean isValid;
-        String messageKey;
-
-        switch (type) {
-            case CURRENCY:
+        String messageKey = switch (type) {
+            case CURRENCY -> {
                 isValid = checkCurrency(value);
-                messageKey = "iso-code.currency";
-                break;
-
-            case COUNTRY_ALPHA2:
+                yield "iso-code.currency";
+            }
+            case COUNTRY_ALPHA2 -> {
                 isValid = checkCountryAlpha2(value);
-                messageKey = "iso-code.country";
-                break;
-
-            case COUNTRY_ALPHA3:
+                yield "iso-code.country";
+            }
+            case COUNTRY_ALPHA3 -> {
                 isValid = checkCountryAlpha3(value);
-                messageKey = "iso-code.country";
-                break;
-
-            case LANGUAGE:
+                yield "iso-code.country";
+            }
+            case LANGUAGE -> {
                 isValid = checkLanguage(value);
-                messageKey = "iso-code.language";
-                break;
-
-            default:
+                yield "iso-code.language";
+            }
+            default -> {
                 isValid = false;
-                messageKey = "iso-code";
-        }
+                yield "iso-code";
+            }
+        };
 
         if (!isValid) {
             MessageUtils.buildViolation(context, Group.DATA, messageKey);

@@ -7,6 +7,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Set;
 import java.util.TreeSet;
@@ -38,7 +39,7 @@ class AnnotationRegistryCompletenessTest {
     private Set<Class<?>> findConstraintAnnotations() throws Exception {
         String packagePath = ANNOTATION_BASE_PACKAGE.replace('.', '/');
         Enumeration<URL> resources = getClass().getClassLoader().getResources(packagePath);
-        Set<Class<?>> constraintAnnotations = new TreeSet<>((a, b) -> a.getName().compareTo(b.getName()));
+        Set<Class<?>> constraintAnnotations = new TreeSet<>(Comparator.comparing(Class::getName));
 
         while (resources.hasMoreElements()) {
             URL resource = resources.nextElement();

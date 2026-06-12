@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ValidationAnnotationTypeRegistryTest {
 
-    @SuppressWarnings("ConstantValue")
     @Test
     void resolve_null_returnsNull() {
         assertThat(ValidationAnnotationTypeRegistry.resolve(null)).isNull();

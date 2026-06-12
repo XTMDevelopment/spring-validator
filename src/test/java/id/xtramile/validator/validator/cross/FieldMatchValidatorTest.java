@@ -10,60 +10,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FieldMatchValidatorTest {
 
     @FieldMatch(first = "password", second = "confirmPassword")
-    private static class PasswordMatchDummy {
-        private final String password;
-        private final String confirmPassword;
-
-        private PasswordMatchDummy(String password, String confirmPassword) {
-            this.password = password;
-            this.confirmPassword = confirmPassword;
-        }
-
-        public String password() {
-            return password;
-        }
-
-        public String confirmPassword() {
-            return confirmPassword;
-        }
+        private record PasswordMatchDummy(String password, String confirmPassword) {
     }
 
     @FieldMatch(first = "email", second = "emailConfirmation")
-    private static class EmailMatchDummy {
-        private final String email;
-        private final String emailConfirmation;
-
-        private EmailMatchDummy(String email, String emailConfirmation) {
-            this.email = email;
-            this.emailConfirmation = emailConfirmation;
-        }
-
-        public String email() {
-            return email;
-        }
-
-        public String emailConfirmation() {
-            return emailConfirmation;
-        }
+        private record EmailMatchDummy(String email, String emailConfirmation) {
     }
 
     @FieldMatch(first = "field1", second = "field2")
-    private static class GenericMatchDummy {
-        private final Object field1;
-        private final Object field2;
-
-        private GenericMatchDummy(Object field1, Object field2) {
-            this.field1 = field1;
-            this.field2 = field2;
-        }
-
-        public Object field1() {
-            return field1;
-        }
-
-        public Object field2() {
-            return field2;
-        }
+        private record GenericMatchDummy(Object field1, Object field2) {
     }
 
     private FieldMatchValidator validator;

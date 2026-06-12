@@ -65,56 +65,48 @@ public class InvalidPastFutureDateValidator implements ConstraintValidator<Inval
             }
 
             if (pattern.contains("HH:mm:ss") && !pattern.contains("X") && !pattern.contains("Z")) {
-                return validateDateTimeWithoutTimezone(value, context);
+                LocalDateTime[] parsed = new LocalDateTime[1];
+                ParseResult result = DateToleranceEvaluator.parseLocalDateTimeStrictThenSmart(value, pattern, parsed);
+                return validateParsedValue(
+                        context,
+                        result,
+                        DateToleranceEvaluator.isOutsidePastFutureWindow(parsed[0], toleranceHours)
+                );
             }
 
             if (pattern.matches(".*[yMd].*") && !pattern.contains("H") && !pattern.contains("h")) {
-                return validateDateOnly(value, context);
+                LocalDate[] parsed = new LocalDate[1];
+                ParseResult result = DateToleranceEvaluator.parseLocalDateStrictThenSmart(value, pattern, parsed);
+                return validateParsedValue(
+                        context,
+                        result,
+                        DateToleranceEvaluator.isOutsidePastFutureWindow(parsed[0], toleranceHours)
+                );
             }
 
-            return validateDefault(value, context);
+            ParsedTemporal[] parsed = new ParsedTemporal[1];
+            ParseResult result = DateToleranceEvaluator.parseStrictThenSmart(value, pattern, parsed);
+            return validateParsedValue(
+                    context,
+                    result,
+                    DateToleranceEvaluator.isOutsidePastFutureWindow(parsed[0], toleranceHours)
+            );
         } catch (Exception e) {
             MessageUtils.buildViolation(context, Group.DATETIME, "invalid-past-future-date.pattern", pattern);
             return false;
         }
     }
 
-    private boolean validateDateTimeWithoutTimezone(String value, ConstraintValidatorContext context) {
-        LocalDateTime[] parsed = new LocalDateTime[1];
-        ParseResult result = DateToleranceEvaluator.parseLocalDateTimeStrictThenSmart(value, pattern, parsed);
-        if (result == ParseResult.LEAP_YEAR_ERROR || result == ParseResult.PATTERN_ERROR) {
+    private boolean validateParsedValue(
+            ConstraintValidatorContext context,
+            ParseResult parseResult,
+            boolean outsideWindow
+    ) {
+        if (parseResult == ParseResult.LEAP_YEAR_ERROR || parseResult == ParseResult.PATTERN_ERROR) {
             MessageUtils.buildViolation(context, Group.DATETIME, "invalid-past-future-date.pattern", pattern);
             return false;
         }
-        if (DateToleranceEvaluator.isOutsidePastFutureWindow(parsed[0], toleranceHours)) {
-            MessageUtils.buildViolation(context, Group.DATETIME, "invalid-past-future-date.tolerance", toleranceHours);
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateDateOnly(String value, ConstraintValidatorContext context) {
-        LocalDate[] parsed = new LocalDate[1];
-        ParseResult result = DateToleranceEvaluator.parseLocalDateStrictThenSmart(value, pattern, parsed);
-        if (result == ParseResult.LEAP_YEAR_ERROR || result == ParseResult.PATTERN_ERROR) {
-            MessageUtils.buildViolation(context, Group.DATETIME, "invalid-past-future-date.pattern", pattern);
-            return false;
-        }
-        if (DateToleranceEvaluator.isOutsidePastFutureWindow(parsed[0], toleranceHours)) {
-            MessageUtils.buildViolation(context, Group.DATETIME, "invalid-past-future-date.tolerance", toleranceHours);
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateDefault(String value, ConstraintValidatorContext context) {
-        ParsedTemporal[] parsed = new ParsedTemporal[1];
-        ParseResult result = DateToleranceEvaluator.parseStrictThenSmart(value, pattern, parsed);
-        if (result == ParseResult.LEAP_YEAR_ERROR || result == ParseResult.PATTERN_ERROR) {
-            MessageUtils.buildViolation(context, Group.DATETIME, "invalid-past-future-date.pattern", pattern);
-            return false;
-        }
-        if (DateToleranceEvaluator.isOutsidePastFutureWindow(parsed[0], toleranceHours)) {
+        if (outsideWindow) {
             MessageUtils.buildViolation(context, Group.DATETIME, "invalid-past-future-date.tolerance", toleranceHours);
             return false;
         }

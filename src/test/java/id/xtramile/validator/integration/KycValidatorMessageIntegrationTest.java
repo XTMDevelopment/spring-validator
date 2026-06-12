@@ -19,113 +19,65 @@ class KycValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    public static class IDImageDto {
-        @ValidIDImage(maxMB = 5, minWidth = 200, minHeight = 200, maxWidth = 4096, maxHeight = 4096,
-                mimeAllowed = {"image/png", "image/jpeg"})
-        private final MultipartFile value;
-
-        public IDImageDto(MultipartFile value) {
-            this.value = value;
+    public record IDImageDto(
+            @ValidIDImage(maxMB = 5, minWidth = 200, minHeight = 200, maxWidth = 4096, maxHeight = 4096,
+                    mimeAllowed = {"image/png", "image/jpeg"}) MultipartFile value) {
+            public IDImageDto(MultipartFile value) {
+                this.value = value;
+            }
         }
 
-        public MultipartFile value() {
-            return value;
-        }
-    }
-
-    public static class IDImageSmallSizeDto {
-        @ValidIDImage(maxMB = 1, minWidth = 1, minHeight = 1, maxWidth = 4096, maxHeight = 4096,
-                mimeAllowed = {"image/png", "image/jpeg"})
-        private final MultipartFile value;
-
-        public IDImageSmallSizeDto(MultipartFile value) {
-            this.value = value;
+    public record IDImageSmallSizeDto(
+            @ValidIDImage(maxMB = 1, minWidth = 1, minHeight = 1, maxWidth = 4096, maxHeight = 4096,
+                    mimeAllowed = {"image/png", "image/jpeg"}) MultipartFile value) {
+            public IDImageSmallSizeDto(MultipartFile value) {
+                this.value = value;
+            }
         }
 
-        public MultipartFile value() {
-            return value;
-        }
-    }
-
-    public static class IDImageWrongMimeDto {
-        @ValidIDImage(maxMB = 5, minWidth = 1, minHeight = 1, maxWidth = 4096, maxHeight = 4096,
-                mimeAllowed = {"image/png"})
-        private final MultipartFile value;
-
-        public IDImageWrongMimeDto(MultipartFile value) {
-            this.value = value;
+    public record IDImageWrongMimeDto(
+            @ValidIDImage(maxMB = 5, minWidth = 1, minHeight = 1, maxWidth = 4096, maxHeight = 4096,
+                    mimeAllowed = {"image/png"}) MultipartFile value) {
+            public IDImageWrongMimeDto(MultipartFile value) {
+                this.value = value;
+            }
         }
 
-        public MultipartFile value() {
-            return value;
-        }
-    }
-
-    public static class IDImageWrongDimensionDto {
-        @ValidIDImage(maxMB = 5, minWidth = 300, minHeight = 300, maxWidth = 4096, maxHeight = 4096,
-                mimeAllowed = {"image/png", "image/jpeg"})
-        private final MultipartFile value;
-
-        public IDImageWrongDimensionDto(MultipartFile value) {
-            this.value = value;
+    public record IDImageWrongDimensionDto(
+            @ValidIDImage(maxMB = 5, minWidth = 300, minHeight = 300, maxWidth = 4096, maxHeight = 4096,
+                    mimeAllowed = {"image/png", "image/jpeg"}) MultipartFile value) {
+            public IDImageWrongDimensionDto(MultipartFile value) {
+                this.value = value;
+            }
         }
 
-        public MultipartFile value() {
-            return value;
-        }
-    }
-
-    public static class SelfieImageDto {
-        @ValidSelfieImage(minWidth = 200, minHeight = 200, mimeAllowed = {"image/png", "image/jpeg"})
-        private final MultipartFile value;
-
-        public SelfieImageDto(MultipartFile value) {
-            this.value = value;
+    public record SelfieImageDto(
+            @ValidSelfieImage(minWidth = 200, minHeight = 200, mimeAllowed = {"image/png", "image/jpeg"}) MultipartFile value) {
+            public SelfieImageDto(MultipartFile value) {
+                this.value = value;
+            }
         }
 
-        public MultipartFile value() {
-            return value;
-        }
-    }
-
-    public static class SelfieImageSmallSizeDto {
-        @ValidSelfieImage(maxMB = 1, minWidth = 1, minHeight = 1, mimeAllowed = {"image/png", "image/jpeg"})
-        private final MultipartFile value;
-
-        public SelfieImageSmallSizeDto(MultipartFile value) {
-            this.value = value;
+    public record SelfieImageSmallSizeDto(
+            @ValidSelfieImage(maxMB = 1, minWidth = 1, minHeight = 1, mimeAllowed = {"image/png", "image/jpeg"}) MultipartFile value) {
+            public SelfieImageSmallSizeDto(MultipartFile value) {
+                this.value = value;
+            }
         }
 
-        public MultipartFile value() {
-            return value;
-        }
-    }
-
-    public static class SelfieImageWrongMimeDto {
-        @ValidSelfieImage(minWidth = 1, minHeight = 1, mimeAllowed = {"image/png"})
-        private final MultipartFile value;
-
-        public SelfieImageWrongMimeDto(MultipartFile value) {
-            this.value = value;
+    public record SelfieImageWrongMimeDto(
+            @ValidSelfieImage(minWidth = 1, minHeight = 1, mimeAllowed = {"image/png"}) MultipartFile value) {
+            public SelfieImageWrongMimeDto(MultipartFile value) {
+                this.value = value;
+            }
         }
 
-        public MultipartFile value() {
-            return value;
+    public record SelfieImageWrongDimensionDto(
+            @ValidSelfieImage(minWidth = 300, minHeight = 300, mimeAllowed = {"image/png", "image/jpeg"}) MultipartFile value) {
+            public SelfieImageWrongDimensionDto(MultipartFile value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class SelfieImageWrongDimensionDto {
-        @ValidSelfieImage(minWidth = 300, minHeight = 300, mimeAllowed = {"image/png", "image/jpeg"})
-        private final MultipartFile value;
-
-        public SelfieImageWrongDimensionDto(MultipartFile value) {
-            this.value = value;
-        }
-
-        public MultipartFile value() {
-            return value;
-        }
-    }
 
     /** Creates a minimal valid PNG image with the given dimensions. */
     private static byte[] createPng(int width, int height) throws IOException {

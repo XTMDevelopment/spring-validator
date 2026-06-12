@@ -148,8 +148,7 @@ public class InvalidFutureDateValidator implements ConstraintValidator<InvalidFu
                     LocalDate::from
             );
 
-            if (parsed instanceof ZonedDateTime) {
-                ZonedDateTime zdt = (ZonedDateTime) parsed;
+            if (parsed instanceof ZonedDateTime zdt) {
                 ZonedDateTime now = ZonedDateTime.now();
                 ZonedDateTime maxAllowed = now.plusHours(toleranceHours);
 
@@ -160,8 +159,7 @@ public class InvalidFutureDateValidator implements ConstraintValidator<InvalidFu
 
                 return true;
 
-            } else if (parsed instanceof LocalDateTime) {
-                LocalDateTime ldt = (LocalDateTime) parsed;
+            } else if (parsed instanceof LocalDateTime ldt) {
                 LocalDateTime now = LocalDateTime.now();
                 LocalDateTime maxAllowed = now.plusHours(toleranceHours);
 
@@ -172,8 +170,7 @@ public class InvalidFutureDateValidator implements ConstraintValidator<InvalidFu
 
                 return true;
 
-            } else if (parsed instanceof LocalDate) {
-                LocalDate ld = (LocalDate) parsed;
+            } else if (parsed instanceof LocalDate ld) {
 
                 if (ld.isAfter(LocalDate.now())) {
                     MessageUtils.buildViolation(context, Group.DATETIME, "invalid-future-date");

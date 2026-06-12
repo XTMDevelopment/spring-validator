@@ -57,13 +57,11 @@ public class FileExtensionValidator implements ConstraintValidator<ValidFileExte
 
         String fileName;
 
-        if (value instanceof String) {
-            String s = (String) value;
+        if (value instanceof String s) {
             if (isBlank(s)) return true;
             fileName = s;
 
-        } else if (value instanceof MultipartFile) {
-            MultipartFile mf = (MultipartFile) value;
+        } else if (value instanceof MultipartFile mf) {
             if (mf.isEmpty()) return true;
             fileName = mf.getOriginalFilename();
 

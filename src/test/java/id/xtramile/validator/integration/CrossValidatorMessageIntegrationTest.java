@@ -12,98 +12,23 @@ class CrossValidatorMessageIntegrationTest {
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
     @FieldMatch(first = "password", second = "confirmPassword")
-    public static class FieldMatchDto {
-        private final String password;
-        private final String confirmPassword;
-
-        public FieldMatchDto(String password, String confirmPassword) {
-            this.password = password;
-            this.confirmPassword = confirmPassword;
-        }
-
-        public String password() {
-            return password;
-        }
-
-        public String confirmPassword() {
-            return confirmPassword;
-        }
+        public record FieldMatchDto(String password, String confirmPassword) {
     }
 
     @AtLeastOneOf(fields = {"email", "phone"})
-    public static class AtLeastOneDto {
-        private final String email;
-        private final String phone;
-
-        public AtLeastOneDto(String email, String phone) {
-            this.email = email;
-            this.phone = phone;
-        }
-
-        public String email() {
-            return email;
-        }
-
-        public String phone() {
-            return phone;
-        }
+        public record AtLeastOneDto(String email, String phone) {
     }
 
     @DifferentFrom(field = "newEmail", other = "currentEmail")
-    public static class DifferentFromDto {
-        private final String currentEmail;
-        private final String newEmail;
-
-        public DifferentFromDto(String currentEmail, String newEmail) {
-            this.currentEmail = currentEmail;
-            this.newEmail = newEmail;
-        }
-
-        public String currentEmail() {
-            return currentEmail;
-        }
-
-        public String newEmail() {
-            return newEmail;
-        }
+        public record DifferentFromDto(String currentEmail, String newEmail) {
     }
 
     @OnlyOneOf(fields = {"email", "phone"})
-    public static class OnlyOneDto {
-        private final String email;
-        private final String phone;
-
-        public OnlyOneDto(String email, String phone) {
-            this.email = email;
-            this.phone = phone;
-        }
-
-        public String email() {
-            return email;
-        }
-
-        public String phone() {
-            return phone;
-        }
+        public record OnlyOneDto(String email, String phone) {
     }
 
     @RequiredWith(when = "token", require = {"email"})
-    public static class RequiredWithDto {
-        private final String token;
-        private final String email;
-
-        public RequiredWithDto(String token, String email) {
-            this.token = token;
-            this.email = email;
-        }
-
-        public String token() {
-            return token;
-        }
-
-        public String email() {
-            return email;
-        }
+        public record RequiredWithDto(String token, String email) {
     }
 
     @Test

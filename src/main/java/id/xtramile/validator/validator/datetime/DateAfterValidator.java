@@ -68,10 +68,7 @@ public class DateAfterValidator implements ConstraintValidator<DateAfter, Object
         Object secondValue = wrapper.getPropertyValue(second);
 
         if (firstValue == null || secondValue == null) return true;
-        if (!(firstValue instanceof String) || !(secondValue instanceof String)) return true;
-
-        String firstStr = (String) firstValue;
-        String secondStr = (String) secondValue;
+        if (!(firstValue instanceof String firstStr) || !(secondValue instanceof String secondStr)) return true;
 
         if (isBlank(firstStr) || isBlank(secondStr)) return true;
 

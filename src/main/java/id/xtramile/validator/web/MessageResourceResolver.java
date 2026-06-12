@@ -17,12 +17,12 @@ public class MessageResourceResolver {
 
     private final Properties properties;
     private final Properties fallbackProperties;
-    private final String locale;
 
     public MessageResourceResolver(String locale) {
-        this.locale = locale != null ? locale.toLowerCase() : DEFAULT_LOCALE;
-        this.properties = loadProperties(this.locale);
-        this.fallbackProperties = this.locale.equals(DEFAULT_LOCALE) ? null : loadProperties(DEFAULT_LOCALE);
+        String loc = locale != null ? locale.toLowerCase() : DEFAULT_LOCALE;
+
+        this.properties = loadProperties(loc);
+        this.fallbackProperties = loc.equals(DEFAULT_LOCALE) ? null : loadProperties(DEFAULT_LOCALE);
     }
 
     public String getMessage(String key, Object... args) {

@@ -11,83 +11,41 @@ class ContactValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    public static class PhoneNumberDto {
-        @ValidPhoneNumber
-        private final String value;
-
-        public PhoneNumberDto(String value) {
-            this.value = value;
+    public record PhoneNumberDto(@ValidPhoneNumber String value) {
+            public PhoneNumberDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class ContactNumberDto {
-        @ValidContactNumber
-        private final String value;
-
-        public ContactNumberDto(String value) {
-            this.value = value;
+    public record ContactNumberDto(@ValidContactNumber String value) {
+            public ContactNumberDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class EmailDto {
-        @ValidEmail
-        private final String value;
-
-        public EmailDto(String value) {
-            this.value = value;
+    public record EmailDto(@ValidEmail String value) {
+            public EmailDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class OtpDto {
-        @ValidOtp
-        private final String value;
-
-        public OtpDto(String value) {
-            this.value = value;
+    public record OtpDto(@ValidOtp String value) {
+            public OtpDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class EmailDomainDto {
-        @ValidEmailDomain(allowed = {"gmail.com", "yahoo.com"})
-        private final String value;
-
-        public EmailDomainDto(String value) {
-            this.value = value;
+    public record EmailDomainDto(@ValidEmailDomain(allowed = {"gmail.com", "yahoo.com"}) String value) {
+            public EmailDomainDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record EmailDomainSensitiveDto(@ValidEmailDomain(allowed = {"Gmail.com"}, ignoreCase = false) String value) {
+            public EmailDomainSensitiveDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class EmailDomainSensitiveDto {
-        @ValidEmailDomain(allowed = {"Gmail.com"}, ignoreCase = false)
-        private final String value;
-
-        public EmailDomainSensitiveDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
 
     @Test
     void phoneNumber_pathB() {

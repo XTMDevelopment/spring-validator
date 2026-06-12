@@ -12,249 +12,100 @@ class DateTimeValidatorMessageIntegrationTest {
 
     private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
-    public static class DateTimeDto {
-        @ValidDateTime
-        private final String value;
-
-        public DateTimeDto(String value) {
-            this.value = value;
+    public record DateTimeDto(@ValidDateTime String value) {
+            public DateTimeDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class DateDto {
-        @ValidDate
-        private final String value;
-
-        public DateDto(String value) {
-            this.value = value;
+    public record DateDto(@ValidDate String value) {
+            public DateDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class TimeDto {
-        @ValidTime
-        private final String value;
-
-        public TimeDto(String value) {
-            this.value = value;
+    public record TimeDto(@ValidTime String value) {
+            public TimeDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class ISO8601Dto {
-        @ValidISO8601
-        private final String value;
-
-        public ISO8601Dto(String value) {
-            this.value = value;
+    public record ISO8601Dto(@ValidISO8601 String value) {
+            public ISO8601Dto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class PastDateDto {
-        @ValidPastDate
-        private final String value;
-
-        public PastDateDto(String value) {
-            this.value = value;
+    public record PastDateDto(@ValidPastDate String value) {
+            public PastDateDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class FutureDateDto {
-        @ValidFutureDate
-        private final String value;
-
-        public FutureDateDto(String value) {
-            this.value = value;
+    public record FutureDateDto(@ValidFutureDate String value) {
+            public FutureDateDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class InvalidPastDateWithToleranceDto {
-        @InvalidPastDate(tolerance = 1)
-        private final String value;
-
-        public InvalidPastDateWithToleranceDto(String value) {
-            this.value = value;
+    public record InvalidPastDateWithToleranceDto(@InvalidPastDate(tolerance = 1) String value) {
+            public InvalidPastDateWithToleranceDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class InvalidPastDatePatternDto {
-        @InvalidPastDate
-        private final String value;
-
-        public InvalidPastDatePatternDto(String value) {
-            this.value = value;
+    public record InvalidPastDatePatternDto(@InvalidPastDate String value) {
+            public InvalidPastDatePatternDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class InvalidFutureDateDto {
-        @InvalidFutureDate(pattern = "yyyy-MM-dd")
-        private final String value;
-
-        public InvalidFutureDateDto(String value) {
-            this.value = value;
+    public record InvalidFutureDateDto(@InvalidFutureDate(pattern = "yyyy-MM-dd") String value) {
+            public InvalidFutureDateDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class InvalidFutureDatePatternDto {
-        @InvalidFutureDate(pattern = "yyyy-MM-dd")
-        private final String value;
-
-        public InvalidFutureDatePatternDto(String value) {
-            this.value = value;
+    public record InvalidFutureDatePatternDto(@InvalidFutureDate(pattern = "yyyy-MM-dd") String value) {
+            public InvalidFutureDatePatternDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class InvalidFutureDateTimeToleranceDto {
-        @InvalidFutureDate(pattern = "yyyy-MM-dd HH:mm:ss")
-        private final String value;
-
-        public InvalidFutureDateTimeToleranceDto(String value) {
-            this.value = value;
+    public record InvalidFutureDateTimeToleranceDto(@InvalidFutureDate(pattern = "yyyy-MM-dd HH:mm:ss") String value) {
+            public InvalidFutureDateTimeToleranceDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
-        }
-    }
-
-    public static class InvalidPastFutureDateDto {
-        @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 24)
-        private final String value;
-
-        public InvalidPastFutureDateDto(String value) {
-            this.value = value;
+    public record InvalidPastFutureDateDto(
+            @InvalidPastFutureDate(pattern = "yyyy-MM-dd", toleranceHours = 24) String value) {
+            public InvalidPastFutureDateDto(String value) {
+                this.value = value;
+            }
         }
 
-        public String value() {
-            return value;
+    public record InvalidPastFutureDatePatternDto(
+            @InvalidPastFutureDate(pattern = "yyyy-MM-dd HH:mm:ss", toleranceHours = 1) String value) {
+            public InvalidPastFutureDatePatternDto(String value) {
+                this.value = value;
+            }
         }
-    }
-
-    public static class InvalidPastFutureDatePatternDto {
-        @InvalidPastFutureDate(pattern = "yyyy-MM-dd HH:mm:ss", toleranceHours = 1)
-        private final String value;
-
-        public InvalidPastFutureDatePatternDto(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
 
     @DateBefore(first = "startDate", second = "endDate")
-    public static class DateBeforeDto {
-        private final String startDate;
-        private final String endDate;
-
-        public DateBeforeDto(String startDate, String endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-        public String startDate() {
-            return startDate;
-        }
-
-        public String endDate() {
-            return endDate;
-        }
+        public record DateBeforeDto(String startDate, String endDate) {
     }
 
     @DateBefore(first = "startDate", second = "endDate", maxDistance = 5, precision = DatePrecision.DAYS)
-    public static class DateBeforeDistanceDto {
-        private final String startDate;
-        private final String endDate;
-
-        public DateBeforeDistanceDto(String startDate, String endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-        public String startDate() {
-            return startDate;
-        }
-
-        public String endDate() {
-            return endDate;
-        }
+        public record DateBeforeDistanceDto(String startDate, String endDate) {
     }
 
     @DateAfter(first = "endDate", second = "startDate")
-    public static class DateAfterDto {
-        private final String startDate;
-        private final String endDate;
-
-        public DateAfterDto(String startDate, String endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-        public String startDate() {
-            return startDate;
-        }
-
-        public String endDate() {
-            return endDate;
-        }
+        public record DateAfterDto(String startDate, String endDate) {
     }
 
     @DateAfter(first = "endDate", second = "startDate", maxDistance = 5, precision = DatePrecision.DAYS)
-    public static class DateAfterDistanceDto {
-        private final String startDate;
-        private final String endDate;
-
-        public DateAfterDistanceDto(String startDate, String endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-        public String startDate() {
-            return startDate;
-        }
-
-        public String endDate() {
-            return endDate;
-        }
+        public record DateAfterDistanceDto(String startDate, String endDate) {
     }
 
     @Test

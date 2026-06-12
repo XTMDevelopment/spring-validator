@@ -73,8 +73,7 @@ public class FutureDateValidator implements ConstraintValidator<ValidFutureDate,
                         LocalDate::from
                 );
 
-                if (parsed instanceof ZonedDateTime) {
-                    ZonedDateTime zdt = (ZonedDateTime) parsed;
+                if (parsed instanceof ZonedDateTime zdt) {
 
                     if (zdt.getMonthValue() == 2 && zdt.getDayOfMonth() == 29) {
                         if (!Year.isLeap(zdt.getYear())) {
@@ -89,8 +88,7 @@ public class FutureDateValidator implements ConstraintValidator<ValidFutureDate,
                     }
                     return true;
 
-                } else if (parsed instanceof LocalDateTime) {
-                    LocalDateTime ldt = (LocalDateTime) parsed;
+                } else if (parsed instanceof LocalDateTime ldt) {
 
                     if (ldt.getMonthValue() == 2 && ldt.getDayOfMonth() == 29) {
                         if (!Year.isLeap(ldt.getYear())) {
@@ -105,8 +103,7 @@ public class FutureDateValidator implements ConstraintValidator<ValidFutureDate,
                     }
                     return true;
 
-                } else if (parsed instanceof LocalDate) {
-                    LocalDate ld = (LocalDate) parsed;
+                } else if (parsed instanceof LocalDate ld) {
 
                     if (ld.getMonthValue() == 2 && ld.getDayOfMonth() == 29) {
                         if (!Year.isLeap(ld.getYear())) {

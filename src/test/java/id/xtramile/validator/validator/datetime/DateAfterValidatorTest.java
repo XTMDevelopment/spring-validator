@@ -11,117 +11,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class DateAfterValidatorTest {
 
     @DateAfter(first = "endDate", second = "startDate")
-    private static class DateAfterDummy {
-        private final String startDate;
-        private final String endDate;
-
-        private DateAfterDummy(String startDate, String endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-        public String startDate() {
-            return startDate;
-        }
-
-        public String endDate() {
-            return endDate;
-        }
+        private record DateAfterDummy(String startDate, String endDate) {
     }
 
     @DateAfter(first = "endDate", second = "startDate", maxDistance = 30, precision = DatePrecision.DAYS)
-    private static class DateAfterWithDistanceDummy {
-        private final String startDate;
-        private final String endDate;
-
-        private DateAfterWithDistanceDummy(String startDate, String endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-        public String startDate() {
-            return startDate;
-        }
-
-        public String endDate() {
-            return endDate;
-        }
+        private record DateAfterWithDistanceDummy(String startDate, String endDate) {
     }
 
     @DateAfter(first = "endDate", second = "startDate", maxDistance = 24, precision = DatePrecision.HOURS)
-    private static class DateAfterWithHoursDummy {
-        private final String startDate;
-        private final String endDate;
-
-        private DateAfterWithHoursDummy(String startDate, String endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-        public String startDate() {
-            return startDate;
-        }
-
-        public String endDate() {
-            return endDate;
-        }
+        private record DateAfterWithHoursDummy(String startDate, String endDate) {
     }
 
     @DateAfter(first = "endDate", second = "startDate", maxDistance = 60, precision = DatePrecision.MINUTES)
-    private static class DateAfterWithMinutesDummy {
-        private final String startDate;
-        private final String endDate;
-
-        private DateAfterWithMinutesDummy(String startDate, String endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-        public String startDate() {
-            return startDate;
-        }
-
-        public String endDate() {
-            return endDate;
-        }
+        private record DateAfterWithMinutesDummy(String startDate, String endDate) {
     }
 
     @DateAfter(first = "endDate", second = "startDate", maxDistance = 3600, precision = DatePrecision.SECONDS)
-    private static class DateAfterWithSecondsDummy {
-        private final String startDate;
-        private final String endDate;
-
-        private DateAfterWithSecondsDummy(String startDate, String endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-        public String startDate() {
-            return startDate;
-        }
-
-        public String endDate() {
-            return endDate;
-        }
+        private record DateAfterWithSecondsDummy(String startDate, String endDate) {
     }
 
     @DateAfter(first = "endDate", second = "startDate", pattern = "dd/MM/yyyy HH:mm:ss")
-    private static class DateAfterCustomPatternDummy {
-        private final String startDate;
-        private final String endDate;
-
-        private DateAfterCustomPatternDummy(String startDate, String endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-        public String startDate() {
-            return startDate;
-        }
-
-        public String endDate() {
-            return endDate;
-        }
+        private record DateAfterCustomPatternDummy(String startDate, String endDate) {
     }
 
     private DateAfterValidator validator;
@@ -270,22 +180,7 @@ public class DateAfterValidatorTest {
     void testNonStringFields() {
         // Non-string fields should be considered valid (validator returns true for non-strings)
         @DateAfter(first = "field1", second = "field2")
-        class NonStringDummy {
-            private final Integer field1;
-            private final Integer field2;
-
-            public NonStringDummy(Integer field1, Integer field2) {
-                this.field1 = field1;
-                this.field2 = field2;
-            }
-
-            public Integer field1() {
-                return field1;
-            }
-
-            public Integer field2() {
-                return field2;
-            }
+                record NonStringDummy(Integer field1, Integer field2) {
         }
         
         validator.initialize(NonStringDummy.class.getAnnotation(DateAfter.class));

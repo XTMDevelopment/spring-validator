@@ -54,32 +54,27 @@ class ValidationFieldDisplayNamesNestedPathTest {
         assertThat(resolved).contains("Email Address");
     }
 
-    static class NestedRootDto {
-        @Valid
-        private final InnerDto inner;
+    record NestedRootDto(@Valid InnerDto inner) {
+            NestedRootDto(InnerDto inner) {
+                this.inner = inner;
+            }
 
-        NestedRootDto(InnerDto inner) {
-            this.inner = inner;
+            @Override
+            public InnerDto inner() {
+                return inner;
+            }
         }
 
-        public InnerDto inner() {
-            return inner;
-        }
-    }
+    record InnerDto(@FieldName("Email Address") @NotBlank String email) {
+            InnerDto(String email) {
+                this.email = email;
+            }
 
-    static class InnerDto {
-        @FieldName("Email Address")
-        @NotBlank
-        private final String email;
-
-        InnerDto(String email) {
-            this.email = email;
+            @Override
+            public String email() {
+                return email;
+            }
         }
-
-        public String email() {
-            return email;
-        }
-    }
 
     static class NestedSizeRootDto {
         @Valid

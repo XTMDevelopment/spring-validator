@@ -12,22 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NotEmptyCollectionValidatorTest {
 
-    private static class Person {
-        private final String name;
-        private final int age;
-
-        private Person(String name, int age) {
-            this.name = name;
-            this.age = age;
-        }
-
-        public String name() {
-            return name;
-        }
-
-        public int age() {
-            return age;
-        }
+    private record Person(String name, int age) {
     }
 
     private static class NotEmptyCollectionDummy {
