@@ -11,11 +11,25 @@ import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
 
+/**
+ * Shared date parsing and tolerance checks for datetime validators.
+ * <p>
+ * Parses values with strict formatting first, then falls back to smart resolution.
+ * Leap-year validation is applied on the smart path for February 29 values.
+ */
 public final class DateToleranceEvaluator {
 
     private DateToleranceEvaluator() {
     }
 
+    /**
+     * Parses a temporal value using strict then smart formatting.
+     *
+     * @param value   the input string
+     * @param pattern the date-time pattern
+     * @param out     single-element output holder for the parsed temporal
+     * @return parse outcome
+     */
     public static ParseResult parseStrictThenSmart(String value, String pattern, ParsedTemporal[] out) {
         try {
             TemporalAccessor parsed = strictFormatter(pattern).parseBest(
@@ -46,6 +60,14 @@ public final class DateToleranceEvaluator {
         }
     }
 
+    /**
+     * Parses a {@link LocalDateTime} using strict then smart formatting.
+     *
+     * @param value   the input string
+     * @param pattern the date-time pattern
+     * @param out     single-element output holder
+     * @return parse outcome
+     */
     public static ParseResult parseLocalDateTimeStrictThenSmart(String value, String pattern, LocalDateTime[] out) {
         try {
             out[0] = LocalDateTime.parse(value, strictFormatter(pattern));
@@ -64,6 +86,14 @@ public final class DateToleranceEvaluator {
         }
     }
 
+    /**
+     * Parses a {@link LocalDate} using strict then smart formatting.
+     *
+     * @param value   the input string
+     * @param pattern the date pattern
+     * @param out     single-element output holder
+     * @return parse outcome
+     */
     public static ParseResult parseLocalDateStrictThenSmart(String value, String pattern, LocalDate[] out) {
         try {
             out[0] = LocalDate.parse(value, strictFormatter(pattern));
@@ -82,6 +112,14 @@ public final class DateToleranceEvaluator {
         }
     }
 
+    /**
+     * Returns whether the parsed value is older than the allowed past tolerance.
+     *
+     * @param parsed             parsed temporal value
+     * @param toleranceDays      allowed days in the past
+     * @param truncateToSeconds  whether to truncate current time to seconds
+     * @return {@code true} when the value is too far in the past
+     */
     public static boolean isTooFarInPast(ParsedTemporal parsed, int toleranceDays, boolean truncateToSeconds) {
         if (parsed.zonedDateTime != null) {
             ZonedDateTime now = truncateToSeconds
@@ -101,6 +139,12 @@ public final class DateToleranceEvaluator {
         return true;
     }
 
+    /**
+     * Returns whether the parsed value is strictly before the current instant or date.
+     *
+     * @param parsed parsed temporal value
+     * @return {@code true} when before now
+     */
     public static boolean isStrictlyBeforeNow(ParsedTemporal parsed) {
         if (parsed.zonedDateTime != null) {
             return parsed.zonedDateTime.isBefore(ZonedDateTime.now());
@@ -114,6 +158,13 @@ public final class DateToleranceEvaluator {
         return false;
     }
 
+    /**
+     * Returns whether a parsed temporal falls outside the past tolerance window up to now.
+     *
+     * @param parsed          parsed temporal value
+     * @param toleranceHours  allowed hours in the past
+     * @return {@code true} when outside the allowed window
+     */
     public static boolean isOutsidePastFutureWindow(ParsedTemporal parsed, int toleranceHours) {
         if (parsed.zonedDateTime != null) {
             ZonedDateTime now = ZonedDateTime.now();
@@ -133,12 +184,26 @@ public final class DateToleranceEvaluator {
         return true;
     }
 
+    /**
+     * Returns whether a {@link LocalDateTime} falls outside the past tolerance window up to now.
+     *
+     * @param dateTime         value to check
+     * @param toleranceHours   allowed hours in the past
+     * @return {@code true} when outside the allowed window
+     */
     public static boolean isOutsidePastFutureWindow(LocalDateTime dateTime, int toleranceHours) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime minAllowed = now.minusHours(toleranceHours);
         return dateTime.isBefore(minAllowed) || dateTime.isAfter(now);
     }
 
+    /**
+     * Returns whether a {@link LocalDate} falls outside the past tolerance window up to today.
+     *
+     * @param date             value to check
+     * @param toleranceHours   allowed hours in the past (converted to whole days)
+     * @return {@code true} when outside the allowed window
+     */
     public static boolean isOutsidePastFutureWindow(LocalDate date, int toleranceHours) {
         LocalDate today = LocalDate.now();
         LocalDate minAllowed = today.minusDays(toleranceHours / 24);
@@ -176,12 +241,17 @@ public final class DateToleranceEvaluator {
         return ParseResult.SUCCESS;
     }
 
+    /** Outcome of a parse attempt. */
     public enum ParseResult {
+        /** Parsing succeeded. */
         SUCCESS,
+        /** The value does not match the pattern. */
         PATTERN_ERROR,
+        /** February 29 is not valid for the parsed year. */
         LEAP_YEAR_ERROR
     }
 
+    /** Holder for one of the supported parsed temporal types. */
     public static final class ParsedTemporal {
         private final ZonedDateTime zonedDateTime;
         private final LocalDateTime localDateTime;
@@ -193,6 +263,12 @@ public final class DateToleranceEvaluator {
             this.localDate = localDate;
         }
 
+        /**
+         * Wraps a parsed {@link TemporalAccessor} into a {@link ParsedTemporal}.
+         *
+         * @param parsed parsed accessor
+         * @return wrapped temporal holder
+         */
         public static ParsedTemporal from(TemporalAccessor parsed) {
             if (parsed instanceof ZonedDateTime) {
                 return new ParsedTemporal((ZonedDateTime) parsed, null, null);
@@ -206,6 +282,11 @@ public final class DateToleranceEvaluator {
             return new ParsedTemporal(null, null, null);
         }
 
+        /**
+         * Returns whether a supported temporal type was parsed.
+         *
+         * @return {@code true} when a temporal value is present
+         */
         public boolean isRecognized() {
             return zonedDateTime != null || localDateTime != null || localDate != null;
         }

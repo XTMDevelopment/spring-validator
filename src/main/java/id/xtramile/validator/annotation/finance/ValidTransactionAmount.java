@@ -29,25 +29,46 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = TransactionAmountValidator.class)
 public @interface ValidTransactionAmount {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * Inclusive minimum amount (default 0L).
+     *
+     * @return the inclusive minimum amount (default 0L)
      */
     long min() default 0L;
 
     /**
      * Inclusive maximum amount (default Long.MAX_VALUE for no maximum limit).
+     *
+     * @return the inclusive maximum amount (default Long.MAX_VALUE for no maximum limit)
      */
     long max() default Long.MAX_VALUE;
 
     /**
      * If true, value may be zero. If false, zero values are rejected even if
      * they meet the minimum requirement.
+     *
+     * @return the they meet the minimum requirement
      */
     boolean allowZero() default true;
 }

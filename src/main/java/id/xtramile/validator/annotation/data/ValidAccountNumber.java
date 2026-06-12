@@ -28,19 +28,38 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AccountNumberValidator.class)
 public @interface ValidAccountNumber {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * Minimum account number length.
+     *
+     * @return Minimum account number length
      */
     int min() default 8;
 
     /**
      * Maximum account number length.
+     *
+     * @return Maximum account number length
      */
     int max() default 20;
 }

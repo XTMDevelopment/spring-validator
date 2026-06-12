@@ -38,14 +38,31 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = ISOCodeValidator.class)
 public @interface ValidISOCode {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The ISO standard type to validate against.
+     *
+     * @return the ISO standard type to validate against
      */
     ISOType value();
 }

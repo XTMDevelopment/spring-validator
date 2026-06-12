@@ -28,14 +28,31 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = DateValidator.class)
 public @interface ValidDate {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The date pattern to use for parsing.
+     *
+     * @return the date pattern to use for parsing
      */
     String pattern() default "yyyy-MM-dd";
 }

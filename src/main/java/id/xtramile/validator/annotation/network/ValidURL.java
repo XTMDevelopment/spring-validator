@@ -28,14 +28,31 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = URLValidator.class)
 public @interface ValidURL {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * Whether to enforce HTTPS-only URLs.
+     *
+     * @return the whether to enforce HTTPS-only URLs
      */
     boolean httpsOnly() default false;
 }

@@ -28,14 +28,31 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = Base64Validator.class)
 public @interface ValidBase64 {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * Whether to use URL-safe Base64 alphabet.
+     *
+     * @return the whether to use URL-safe Base64 alphabet
      */
     boolean urlSafe() default false;
 }

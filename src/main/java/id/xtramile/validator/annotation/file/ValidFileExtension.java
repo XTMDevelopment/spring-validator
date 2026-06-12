@@ -30,19 +30,38 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = FileExtensionValidator.class)
 public @interface ValidFileExtension {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The list of allowed file extensions.
+     *
+     * @return the list of allowed file extensions
      */
     String[] allowed();
 
     /**
      * Whether the comparison should be case-insensitive.
+     *
+     * @return the whether the comparison should be case-insensitive
      */
     boolean ignoreCase() default true;
 }

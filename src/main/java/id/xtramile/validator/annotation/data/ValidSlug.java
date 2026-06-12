@@ -30,17 +30,36 @@ import java.lang.annotation.*;
 public @interface ValidSlug {
     /**
      * Minimum slug length.
+     *
+     * @return the minimum slug length
      */
     int min() default 1;
 
     /**
      * Maximum slug length.
+     *
+     * @return the maximum slug length
      */
     int max() default 100;
 
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 }

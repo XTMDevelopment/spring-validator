@@ -38,8 +38,8 @@ class ConstraintAnnotationMessagesTest {
     void resolveFromAnnotation_springNotBlank() {
         Map<String, Object> attrs = new HashMap<>();
         attrs.put("message", "{jakarta.validation.constraints.NotBlank.message}");
-        attrs.put("groups", new Class[0]);
-        attrs.put("payload", new Class[0]);
+        attrs.put("groups", new Class<?>[0]);
+        attrs.put("payload", new Class<?>[0]);
 
         String out = resolver.resolveFromAnnotation("Username", NotBlank.class, attrs, Object.class);
         assertThat(out).isEqualTo("Username is required");
@@ -51,8 +51,8 @@ class ConstraintAnnotationMessagesTest {
         attrs.put("values", new String[]{"on", "off"});
         attrs.put("ignoreCase", true);
         attrs.put("message", "{friendly.default}");
-        attrs.put("groups", new Class[0]);
-        attrs.put("payload", new Class[0]);
+        attrs.put("groups", new Class<?>[0]);
+        attrs.put("payload", new Class<?>[0]);
 
         String out = resolver.resolveFromAnnotation("Mode", InWhitelist.class, attrs, Object.class);
         assertThat(out).isEqualTo("Mode must be one of: off, on");
@@ -63,8 +63,8 @@ class ConstraintAnnotationMessagesTest {
         Map<String, Object> attrs = new HashMap<>();
         attrs.put("pattern", "MM/dd/yyyy");
         attrs.put("message", "{friendly.default}");
-        attrs.put("groups", new Class[0]);
-        attrs.put("payload", new Class[0]);
+        attrs.put("groups", new Class<?>[0]);
+        attrs.put("payload", new Class<?>[0]);
 
         String out = resolver.resolveFromAnnotation("Birth", ValidDate.class, attrs, Object.class);
         assertThat(out).isEqualTo("Birth must be a valid date in format: MM/dd/yyyy");
@@ -79,8 +79,8 @@ class ConstraintAnnotationMessagesTest {
         attrs.put("maxDistance", -1L);
         attrs.put("precision", DatePrecision.DAYS);
         attrs.put("message", "{friendly.default}");
-        attrs.put("groups", new Class[0]);
-        attrs.put("payload", new Class[0]);
+        attrs.put("groups", new Class<?>[0]);
+        attrs.put("payload", new Class<?>[0]);
 
         String out = resolver.resolveFromAnnotation("ignored", DateBefore.class, attrs, DateBeforeDto.class);
         assertThat(out).isEqualTo("Period start must be before Period end");
@@ -108,8 +108,8 @@ class ConstraintAnnotationMessagesTest {
         attrs.put("min", 2);
         attrs.put("max", 10);
         attrs.put("message", "{jakarta.validation.constraints.Size.message}");
-        attrs.put("groups", new Class[0]);
-        attrs.put("payload", new Class[0]);
+        attrs.put("groups", new Class<?>[0]);
+        attrs.put("payload", new Class<?>[0]);
 
         String out = resolver.resolveFromAnnotation("Nick", Size.class, attrs, Object.class);
         assertThat(out).isEqualTo("Nick must be between 2 and 10 characters");

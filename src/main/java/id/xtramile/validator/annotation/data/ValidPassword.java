@@ -40,19 +40,38 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PasswordValidator.class)
 public @interface ValidPassword {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * Minimum password length required.
+     *
+     * @return the minimum password length required
      */
     int min() default 8;
 
     /**
      * Password strength policy type.
+     *
+     * @return the password strength policy type
      */
     PasswordType type() default PasswordType.FULL;
 }

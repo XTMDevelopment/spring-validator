@@ -32,30 +32,53 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = NameValidator.class)
 public @interface ValidName {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * Symbols allowed in the name (default: apostrophe, space, dot).
+     *
+     * @return the symbols allowed in the name (default: apostrophe, space, dot)
      */
     String[] allowedSymbols() default {"'", " ", "."};
 
     /**
      * Minimum name length.
+     *
+     * @return the minimum name length
      */
     int min() default 3;
 
     /**
      * Maximum name length.
+     *
+     * @return the maximum name length
      */
     int max() default 100;
 
     /**
      * Whether digits (0-9) are allowed in the name.
      * Default is false, meaning only letters and allowed symbols are permitted.
+     *
+     * @return the default is false, meaning only letters and allowed symbols are permitted
      */
     boolean allowDigits() default false;
 }

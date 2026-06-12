@@ -28,19 +28,38 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = DifferentFromValidator.class)
 public @interface DifferentFrom {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The field to check for difference.
+     *
+     * @return the field to check for difference
      */
     String field();
 
     /**
      * The other field to compare against.
+     *
+     * @return the other field to compare against
      */
     String other();
 }

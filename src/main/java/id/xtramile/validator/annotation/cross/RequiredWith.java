@@ -30,19 +30,38 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = RequiredWithValidator.class)
 public @interface RequiredWith {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The field that, when present, makes the rule pass.
+     *
+     * @return the field that, when present, makes the rule pass
      */
     String when();
 
     /**
      * The fields that must be present when "when" field is absent.
+     *
+     * @return the fields that must be present when "when" field is absent
      */
     String[] require();
 }

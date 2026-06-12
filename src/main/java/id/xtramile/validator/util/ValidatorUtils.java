@@ -14,12 +14,22 @@ public class ValidatorUtils {
     private ValidatorUtils() {
     }
 
-    /** Returns whether the string is null or blank. */
+    /**
+     * Returns whether the string is null or blank.
+     *
+     * @param str the string to check
+     * @return {@code true} when {@code str} is null or blank
+     */
     public static boolean isBlank(String str) {
         return str == null || str.isBlank();
     }
 
-    /** Returns whether the value is non-null and non-empty (for strings, collections, maps, arrays). */
+    /**
+     * Returns whether the value is non-null and non-empty (for strings, collections, maps, arrays).
+     *
+     * @param v the value to check
+     * @return {@code true} when present and non-empty
+     */
     public static boolean isPresent(Object v) {
         if (v == null) return false;
 
@@ -42,17 +52,32 @@ public class ValidatorUtils {
         return true;
     }
 
-    /** Converts megabytes to bytes; returns {@code -1} for negative input. */
+    /**
+     * Converts megabytes to bytes.
+     *
+     * @param mb megabytes to convert
+     * @return bytes, or {@code -1} for negative input
+     */
     public static long mbToBytes(long mb) {
         return mb < 0 ? -1 : mb * 1024L * 1024L;
     }
 
-    /** Formats a byte count as a human-readable size string. */
+    /**
+     * Formats a byte count as a human-readable size string.
+     *
+     * @param bytes byte count to format
+     * @return formatted size string
+     */
     public static String formatFileSize(long bytes) {
         return formatFileSizeRecursive(bytes, 0);
     }
 
-    /** Returns whether a date string with Feb 29 falls in a leap year. */
+    /**
+     * Returns whether a date string with Feb 29 falls in a leap year.
+     *
+     * @param date date string to inspect
+     * @return {@code false} when Feb 29 is present in a non-leap year
+     */
     public static boolean validateLeapYear(String date) {
         if (date == null) {
             return true;
@@ -75,7 +100,12 @@ public class ValidatorUtils {
         return true;
     }
 
-    /** Validates day-of-month against month length and leap-year rules. */
+    /**
+     * Validates day-of-month against month length and leap-year rules.
+     *
+     * @param date date to validate
+     * @return {@code true} when day-of-month is valid for the month/year
+     */
     public static boolean validateDateComponents(LocalDate date) {
         if (date.getMonthValue() == 2 && date.getDayOfMonth() == 29) {
             int year = date.getYear();
@@ -87,13 +117,24 @@ public class ValidatorUtils {
         return date.getDayOfMonth() <= getDaysInMonth(date.getYear(), date.getMonthValue());
     }
 
-    /** Validates date components of a {@link LocalDateTime}. */
+    /**
+     * Validates date components of a {@link LocalDateTime}.
+     *
+     * @param dateTime date-time to validate
+     * @return {@code true} when date components are valid
+     */
     public static boolean validateDateTimeComponents(LocalDateTime dateTime) {
         LocalDate date = dateTime.toLocalDate();
         return validateDateComponents(date);
     }
 
-    /** Returns the number of days in the given month of the given year. */
+    /**
+     * Returns the number of days in the given month of the given year.
+     *
+     * @param year  calendar year
+     * @param month month number (1–12)
+     * @return days in the month, or {@code 0} for invalid month
+     */
     public static int getDaysInMonth(int year, int month) {
         return switch (month) {
             case 1, 3, 5, 7, 8, 10, 12 -> 31;
@@ -103,7 +144,12 @@ public class ValidatorUtils {
         };
     }
 
-    /** Performs basic structural email validation. */
+    /**
+     * Performs basic structural email validation.
+     *
+     * @param email email address to validate
+     * @return {@code true} when structurally valid
+     */
     public static boolean validateEmail(String email) {
         if (!email.contains("@")) return false;
 

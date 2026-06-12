@@ -34,20 +34,39 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = InvalidFutureDateValidator.class)
 public @interface InvalidFutureDate {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The number of hours allowed after the current time before the date is considered invalid.
+     *
+     * @return the allowed future-hour tolerance
      */
     int toleranceHours() default 0;
 
     /**
      * The date pattern to use for parsing.
      * Default is ISO 8601 format with timezone: yyyy-MM-dd'T'HH:mm:ssX
+     *
+     * @return the date pattern
      */
     String pattern() default "yyyy-MM-dd'T'HH:mm:ssX";
 }

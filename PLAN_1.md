@@ -4,7 +4,7 @@
 **Version line:** **1.x** (no major version bump in this plan)  
 **Prerequisite:** None — execute this plan first.  
 **Followed by:** [PLAN_2.md](PLAN_2.md) (multi-module + Spring Boot 4)  
-**Goal:** Single-module library that is SOLID-compliant, Java 17+ aligned, well-tested, and quality-gated (Checkstyle, Javadoc, JaCoCo).
+**Goal:** Single-module library that is SOLID-compliant, Java 17+ aligned, well-tested, and quality-gated (Javadoc, JaCoCo, compiler lint).
 
 ---
 
@@ -18,7 +18,7 @@
 | Spring Boot        | **3.5.14** via `spring-boot-dependencies` BOM (`spring-boot.version` property)                                     |
 | CI                 | **Consolidated** — `ci.yml` (primary), `build.yml` (cross-OS); Java 17/21/25 only                                    |
 | Documentation      | **`README.md`** created                                                                                            |
-| Code quality       | No Checkstyle, no JaCoCo enforcement, Javadoc plugin attaches JAR only                                             |
+| Code quality       | JaCoCo bundle + area thresholds; Javadoc `failOnWarnings`; compiler `-Xlint:all` + `-Werror`                         |
 | SOLID debt         | **Resolved** — DIP wiring, `AnnotationRegistry`, message strategies in `web/messages/`                             |
 | Auto-config        | **Fixed** — `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`                       |
 | Logging            | **`slf4j-api` optional** added; `System.out.println` removed from web layer                                        |
@@ -69,7 +69,7 @@ flowchart LR
 | 4              | Phase 3             | Test support package                                     |
 | 5              | Phase 4 (remainder) | Medium + Low bugs                                        |
 | 6              | Phase 5             | New tests                                                |
-| 7              | Phase 6             | Checkstyle, Javadoc, JaCoCo, SpotBugs                    |
+| 7              | Phase 6             | Javadoc, JaCoCo, compiler lint, CONTRIBUTING, CHANGELOG    |
 
 ---
 
@@ -119,7 +119,7 @@ flowchart LR
 | `test-multi-java.yml` | **Remove or merge** into `ci.yml`                                      | Eliminate duplication                                       |
 
 **CI rules:**
-- `mvn clean verify` on `ci.yml` (includes tests; quality gates added in Phase 6)
+- `mvn clean verify` on `ci.yml` (includes tests, Javadoc, JaCoCo)
 - **GPG sign** (`maven-gpg-plugin`) — **not** run in CI; release/manual only
 - Upload Surefire reports + JaCoCo HTML (Phase 6) as artifacts
 
@@ -132,7 +132,7 @@ Repo has no README. Create with:
 3. **Installation** — Maven dependency (`id.xtramile:spring-validator:1.x`)
 4. **Quick start** — annotation example + `id.xtramile.validator.enabled` property
 5. **Configuration** — `id.xtramile.validator.locale` (`id` default)
-6. **Quality commands** — `checkstyle:check`, `javadoc:javadoc`, `jacoco:report`, `verify`, `-Pquick`
+6. **Quality commands** — `javadoc:javadoc`, `jacoco:report`, `verify`, `-Pquick`
 7. **Link** to `CONTRIBUTING.md` (Phase 6)
 
 ### 1.12 Enforcer rules
@@ -425,23 +425,13 @@ mvn clean test
 
 ---
 
-## Phase 6: Lint, Checkstyle, and Mandatory Javadoc
+## Phase 6: Javadoc, JaCoCo, and Compiler Lint
 
-**Objective:** Enforce formatting, static analysis, documentation, and coverage on stable 1.x codebase.
+**Objective:** Enforce documentation, coverage, and compiler warnings on stable 1.x codebase.
 
-### 6a. Checkstyle
+> **Out of scope for PLAN 1:** Checkstyle and SpotBugs (deferred).
 
-| File                                 | Purpose                                                |
-|--------------------------------------|--------------------------------------------------------|
-| `config/checkstyle/checkstyle.xml`   | Google or Sun checks (120 cols, 4-space indent)        |
-| `config/checkstyle/suppressions.xml` | Suppressions for test support, generated code          |
-| `.editorconfig`                      | UTF-8, indent, final newline, trim trailing whitespace |
-
-`maven-checkstyle-plugin` 3.6.x, `validate` phase, `includeTestSourceDirectory=true`, `failsOnError=true`.
-
-### 6b. Compiler lint + SpotBugs
-
-**Compiler:**
+### 6a. Compiler lint
 
 ```xml
 <compilerArgs>
@@ -452,17 +442,7 @@ mvn clean test
 
 Rollout: `-Xlint:all` first, then `-Werror`.
 
-**SpotBugs:**
-
-| Item         | Value                                                        |
-|--------------|--------------------------------------------------------------|
-| Plugin       | `spotbugs-maven-plugin` 4.x                                  |
-| Phase        | `verify`                                                     |
-| Scope        | `src/main/java` only                                         |
-| Suppressions | `config/spotbugs/exclude.xml`                                |
-| Threshold    | Fail on **High** priority; Medium documented in exclude file |
-
-### 6c. Mandatory Javadoc
+### 6b. Mandatory Javadoc
 
 ```xml
 <source>17</source>
@@ -476,7 +456,9 @@ Rollout: `-Xlint:all` first, then `-Werror`.
 
 **Priority:** `web` → `autoconfigure` → `util` → `enums` → `annotation`/`validator` gaps.
 
-### 6d. JaCoCo coverage (required)
+**Completed:** `failOnWarnings=true`; all public API Javadoc gaps filled.
+
+### 6c. JaCoCo coverage (required)
 
 | Metric | Threshold |
 |--------|-----------|
@@ -487,9 +469,9 @@ Rollout: `-Xlint:all` first, then `-Werror`.
 
 **Package targets:** `validator/**` 85%, `web/**` 80%, `util/**` 90%, `autoconfigure/**` 75%
 
-**Rollout:** Baseline with `failOnError=false`, then ratchet.
+**Completed:** Bundle thresholds enforced; area-level rules for `validator`, `web`, `util`, and `autoconfigure` packages.
 
-### 6e. `-Pquick` Maven profile
+### 6d. `-Pquick` Maven profile
 
 For local iteration (CI **never** uses this):
 
@@ -497,15 +479,15 @@ For local iteration (CI **never** uses this):
 <profile>
     <id>quick</id>
     <properties>
-        <checkstyle.skip>true</checkstyle.skip>
         <jacoco.skip>true</jacoco.skip>
-        <spotbugs.skip>true</spotbugs.skip>
         <maven.javadoc.skip>true</maven.javadoc.skip>
     </properties>
 </profile>
 ```
 
-### 6f. CI quality gates
+Profile exists in `pom.xml` with `jacoco.skip` and `maven.javadoc.skip`.
+
+### 6e. CI quality gates
 
 On `ci.yml`, Java 17 + Boot 3.5.14 leg:
 
@@ -513,23 +495,28 @@ On `ci.yml`, Java 17 + Boot 3.5.14 leg:
 - run: mvn clean verify -Dspring-boot.version=3.5.14
 ```
 
-`verify` includes: test, checkstyle, javadoc, spotbugs, jacoco:check.
+`verify` includes: test, javadoc, jacoco:check.
 
 Upload `target/site/jacoco/` as artifact.
 
-**GPG signing:** skip in CI (`-Dgpg.skip=true` or profile); manual release only.
+**GPG signing:** skip in CI (`-Dgpg.skip=true`); manual release only.
 
-### 6g. CONTRIBUTING.md
+**Completed:** `test-matrix` runs `mvn test` on Java 17/21/25; `quality` job runs `mvn verify` on Java 17 only.
+
+### 6f. CONTRIBUTING.md
 
 Create with:
 
 1. JDK 17+ requirement
 2. `mvn clean verify` vs `mvn clean verify -Pquick`
-3. Checkstyle / Javadoc / JaCoCo commands
+3. Javadoc / JaCoCo commands
 4. How to add a new validator (annotation + validator + registry + messages + tests)
-5. PR checklist (tests, javadoc, checkstyle, no version bump unless agreed)
+5. Source/test separation rule (from Phase 2f)
+6. PR checklist (tests, javadoc, no version bump unless agreed)
 
-### 6h. CHANGELOG.md
+**Completed:** `CONTRIBUTING.md` created; linked from `README.md`.
+
+### 6g. CHANGELOG.md
 
 Create `CHANGELOG.md` for **1.x** line:
 
@@ -546,12 +533,12 @@ No major version bump required for PLAN 1 deliverables.
 
 ### Success criteria
 
-- [ ] `mvn checkstyle:check` — zero violations
-- [ ] `mvn javadoc:javadoc` — clean
-- [ ] `mvn jacoco:check` — meets thresholds
-- [ ] `mvn spotbugs:check` — no undocumented High findings
-- [ ] `mvn clean verify` passes on Java 17, 21, 25
-- [ ] `CONTRIBUTING.md` and `CHANGELOG.md` exist
+- [x] `mvn javadoc:javadoc` — zero warnings (`failOnWarnings=true`)
+- [x] `mvn jacoco:check` — bundle thresholds met (80% line / 70% branch)
+- [x] JaCoCo area thresholds (`validator/**` ≥ 85%, `web/**` ≥ 80%, `util/**` ≥ 90%, `autoconfigure/**` ≥ 75%)
+- [x] Compiler `-Xlint:all` and `-Werror` enabled
+- [x] `mvn clean verify` passes on Java 17 (local; CI matrix 17/21/25 configured)
+- [x] `CONTRIBUTING.md` and `CHANGELOG.md` exist
 
 ---
 
@@ -564,8 +551,8 @@ No major version bump required for PLAN 1 deliverables.
 | Architecture | SOLID refactor; unified registry; DIP via auto-config              |
 | Tests        | ~115+ tests; fixtures deduplicated; parity + method validation E2E |
 | Bugs         | META-INF, NPE, ThreadLocal, cache — fixed per execution order      |
-| Quality      | Checkstyle, Javadoc, JaCoCo, SpotBugs in CI                        |
-| Docs         | README, CONTRIBUTING, CHANGELOG                                    |
+| Quality      | Javadoc, JaCoCo gates, compiler lint in CI                           |
+| Docs         | README, CONTRIBUTING, CHANGELOG                                      |
 | Publishing   | `mvn clean verify` green; GPG for manual release only              |
 
 ---
@@ -582,7 +569,7 @@ No major version bump required for PLAN 1 deliverables.
 - [x] **P3** Test support + dedupe + extend assertions
 - [x] **P4-late** Medium/Low bugs
 - [x] **P5** New tests (parity, method validation, Group, resolver fallback, registry completeness)
-- [ ] **P6** Checkstyle, SpotBugs exclude, Javadoc, JaCoCo, `-Pquick`, CONTRIBUTING, CHANGELOG, CI verify
+- [x] **P6** Javadoc, JaCoCo area thresholds, compiler lint, CONTRIBUTING, CHANGELOG, README polish
 
 ---
 

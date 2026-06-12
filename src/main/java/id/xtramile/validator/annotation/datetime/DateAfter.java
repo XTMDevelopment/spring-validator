@@ -38,24 +38,45 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = DateAfterValidator.class)
 public @interface DateAfter {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The name of the first date field (must be after the second).
+     *
+     * @return the name of the first date field (must be after the second)
      */
     String first();
 
     /**
      * The name of the second date field (must be before the first).
+     *
+     * @return the name of the second date field (must be before the first)
      */
     String second();
 
     /**
      * The date-time pattern to use for parsing both fields.
+     *
+     * @return the date-time pattern to use for parsing both fields
      */
     String pattern() default "yyyy-MM-dd HH:mm:ss";
 
@@ -63,12 +84,16 @@ public @interface DateAfter {
      * The maximum distance allowed between the two dates.
      * If set to -1 (default), no distance check is performed.
      * The unit is determined by the precision parameter.
+     *
+     * @return the maximum allowed distance, or {@code -1} to skip the check
      */
     long maxDistance() default -1;
 
     /**
      * The precision type for calculating the distance between dates.
      * Only used when maxDistance is set to a positive value.
+     *
+     * @return the distance precision unit
      */
     DatePrecision precision() default DatePrecision.DAYS;
 }

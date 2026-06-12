@@ -278,7 +278,7 @@ class DefaultErrorEnvelopeBuilderTest {
         assertThat(errorsArray).hasSize(100);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
     void shouldBeThreadSafe() throws InterruptedException {
         // Given

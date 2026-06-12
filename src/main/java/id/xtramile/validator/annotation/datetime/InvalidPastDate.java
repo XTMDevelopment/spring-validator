@@ -28,19 +28,38 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = InvalidPastDateValidator.class)
 public @interface InvalidPastDate {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
 
     /**
      * The number of past days allowed before the date is considered invalid.
+     *
+     * @return the allowed past-day tolerance
      */
     int tolerance() default 0;
 
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The date pattern to use for parsing.
+     *
+     * @return the date pattern
      */
     String pattern() default "yyyy-MM-dd";
 }

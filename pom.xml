@@ -92,6 +92,10 @@
                 <version>3.13.0</version>
                 <configuration>
                     <release>${maven.compiler.release}</release>
+                    <compilerArgs>
+                        <arg>-Xlint:all</arg>
+                        <arg>-Werror</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -142,6 +146,7 @@
                     <doclint>all</doclint>
                     <show>public</show>
                     <failOnError>true</failOnError>
+                    <failOnWarnings>true</failOnWarnings>
                 </configuration>
                 <executions>
                     <execution>
@@ -197,6 +202,58 @@
                                             <counter>BRANCH</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>0.70</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <includes>
+                                        <include>id.xtramile.validator.validator.*</include>
+                                    </includes>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.85</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <includes>
+                                        <include>id.xtramile.validator.web.*</include>
+                                    </includes>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.80</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <includes>
+                                        <include>id.xtramile.validator.util.*</include>
+                                    </includes>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.90</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <includes>
+                                        <include>id.xtramile.validator.autoconfigure.*</include>
+                                    </includes>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.75</minimum>
                                         </limit>
                                     </limits>
                                 </rule>

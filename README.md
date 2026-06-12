@@ -65,20 +65,16 @@ id.xtramile.validator.locale=en
 ## Quality Commands
 
 ```bash
-# Full build with tests
+# Full build: tests, Javadoc, JaCoCo checks
 mvn clean verify
 
 # Run tests only
 mvn clean test
 
-# Skip quality gates for local iteration (available after Phase 6)
+# Skip Javadoc and JaCoCo enforcement for faster local iteration
 mvn clean verify -Pquick
-```
 
-Additional quality commands (enabled in Phase 6):
-
-```bash
-mvn checkstyle:check
+# Individual reports
 mvn javadoc:javadoc
 mvn jacoco:report
 ```
