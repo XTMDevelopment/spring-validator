@@ -20,6 +20,12 @@ mvn install -DskipTests -Dgpg.skip=true
 mvn -f examples/spring-boot-starter-sample/pom.xml test
 ```
 
+Against Spring Boot 4.0.x (after `mvn install` from the repository root):
+
+```bash
+mvn -f examples/spring-boot-starter-sample/pom.xml test -Dspring-boot.version=4.0.5
+```
+
 ### Run the app
 
 ```bash

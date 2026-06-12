@@ -1,6 +1,5 @@
 package id.xtramile.validator.validator.file;
 
-import org.springframework.lang.NonNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -22,7 +21,6 @@ public class MockMultipartFile implements MultipartFile {
     }
 
     @Override
-    @NonNull
     public String getName() {
         return name;
     }
@@ -48,19 +46,17 @@ public class MockMultipartFile implements MultipartFile {
     }
 
     @Override
-    @NonNull
     public byte[] getBytes() {
         return content.clone();
     }
 
     @Override
-    @NonNull
     public InputStream getInputStream() {
         return new ByteArrayInputStream(content);
     }
 
     @Override
-    public void transferTo(@NonNull File dest) throws IllegalStateException {
+    public void transferTo(File dest) throws IllegalStateException {
         throw new UnsupportedOperationException("transferTo not supported in mock");
     }
 }

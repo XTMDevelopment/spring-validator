@@ -4,19 +4,21 @@ import id.xtramile.validator.annotation.common.FieldName;
 import id.xtramile.validator.autoconfigure.ValidationAutoConfiguration;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.nullValue;
@@ -25,12 +27,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = ApiExceptionHandlerWebIntegrationTest.TestApplication.class)
-@AutoConfigureMockMvc
 @TestPropertySource(properties = "id.xtramile.validator.locale=id")
 class ApiExceptionHandlerWebIntegrationTest {
 
     @Autowired
+    private WebApplicationContext webApplicationContext;
+
     private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUpMockMvc() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
 
     @Test
     void postInvalidDto_returns400WithFriendlyErrorEnvelope() throws Exception {

@@ -332,6 +332,12 @@
 
     <profiles>
         <profile>
+            <id>boot4</id>
+            <properties>
+                <spring-boot.version>4.0.5</spring-boot.version>
+            </properties>
+        </profile>
+        <profile>
             <id>quick</id>
             <properties>
                 <jacoco.skip>true</jacoco.skip>

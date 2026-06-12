@@ -6,6 +6,11 @@ All notable changes to the **1.x** line of `id.xtramile.validator` are documente
 
 ### Added
 
+- Spring Boot **4.0.5+** compatibility verified on the same **1.x** artifacts (`validator-spring-boot-starter` works with Boot 3.5.x and 4.0.x)
+- CI matrix: Java 17/21/25 × Spring Boot 3.5.14/4.0.5 (6 jobs)
+- `SpringBoot4AutoConfigurationIntegrationTest` in `validator-spring-boot-starter`
+- Parent `-Pboot4` profile (`spring-boot.version=4.0.5`) for local Boot 4 verification
+- Sample consumer smoke tests on Boot 3.5.14 and 4.0.5 in CI quality job
 - Multi-module Maven layout at **1.x** under `id.xtramile.validator`:
   - `validator` — parent POM (`packaging=pom`)
   - `validator-core` — annotations, validators, utilities, enums
@@ -27,6 +32,7 @@ All notable changes to the **1.x** line of `id.xtramile.validator` are documente
 
 ### Changed
 
+- Web integration tests and sample consumer use manual `MockMvcBuilders` setup instead of `@AutoConfigureMockMvc` (Boot 4 modularized test autoconfigure)
 - **Migration (1.x):** Maven `groupId` is `id.xtramile.validator`; use `validator-spring-boot-starter` for Spring Boot apps (replaces `id.xtramile:spring-validator*` artifacts)
 - Monolith `src/` split into `validator-core`, `validator-web`, `validator-spring-boot-starter`, and `validator-test-support` modules
 - Boot-dependent integration tests (`ApiExceptionHandlerWebIntegrationTest`, `MethodValidationIntegrationTest`) live in `validator-spring-boot-starter`
@@ -38,6 +44,7 @@ All notable changes to the **1.x** line of `id.xtramile.validator` are documente
 
 ### Fixed
 
+- `MockMultipartFile` test fixture: removed deprecated `org.springframework.lang.NonNull` (fails `-Werror` on Spring Framework 7 / Boot 4)
 - `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` path for auto-configuration discovery
 - NPE in constraint message resolution when annotation attributes are null (`Min`/`Max`/etc.)
 - NPE in `ApiExceptionHandler` when `BindingResult.getTarget()` is null

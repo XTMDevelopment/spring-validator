@@ -8,8 +8,9 @@ Indonesian-friendly Jakarta Bean Validation library for Spring Boot applications
 ## Requirements
 
 - **Version:** 1.x
-- **Java 17+** (tested on 17, 21, and 25)
-- **Spring Boot 3.5.14+** (3.5.x)
+- **Java:** 17, 21, 25
+- **Spring Boot:** 3.5.14+ (3.5.x), 4.0.5+ (4.0.x)
+- **Dependency:** `id.xtramile.validator:validator-spring-boot-starter:1.x`
 
 ## Installation
 
@@ -134,6 +135,10 @@ See [examples/README.md](examples/README.md) for details.
 ```bash
 # Full multi-module build: tests, Javadoc, JaCoCo aggregate checks
 mvn clean verify -Dspring-boot.version=3.5.14 -Dgpg.skip=true
+
+# Verify Spring Boot 4.0.x compatibility (same 1.x artifacts)
+mvn clean verify -Dspring-boot.version=4.0.5 -Dgpg.skip=true
+# or: mvn clean verify -Pboot4 -Dgpg.skip=true
 
 # Single module (with dependencies)
 mvn clean verify -pl validator-web -am -Dgpg.skip=true
