@@ -9,10 +9,20 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 
+/**
+ * Date and time parsing and comparison utilities for validators.
+ */
 public class DateUtils {
     private DateUtils() {
     }
 
+    /**
+     * Parses a date-time string using strict then smart resolution.
+     *
+     * @param dateStr the input date-time string
+     * @param pattern the {@link DateTimeFormatter} pattern
+     * @return the parsed value, or {@code null} if invalid
+     */
     public static LocalDateTime parseDateTime(String dateStr, String pattern) {
         try {
             if (dateStr.contains("24:") || dateStr.contains(":60:") || dateStr.contains(":60")) {
@@ -59,6 +69,14 @@ public class DateUtils {
         }
     }
 
+    /**
+     * Calculates the distance between two date-times in the given precision unit.
+     *
+     * @param first     the earlier or reference date-time
+     * @param second    the other date-time
+     * @param precision the unit of measurement
+     * @return the signed distance in the given unit
+     */
     public static long calculateDistance(LocalDateTime first, LocalDateTime second, DatePrecision precision) {
         Duration duration = Duration.between(first, second);
 
@@ -70,6 +88,12 @@ public class DateUtils {
         };
     }
 
+    /**
+     * Returns whether a pattern resembles an ISO-8601 date-time format.
+     *
+     * @param pattern the formatter pattern to check
+     * @return {@code true} if the pattern contains ISO-8601 components
+     */
     public static boolean isISO8601Pattern(String pattern) {
         return pattern.contains("yyyy") && pattern.contains("MM") && pattern.contains("dd") &&
                 (pattern.contains("'T'") || pattern.contains("T")) &&
@@ -77,6 +101,12 @@ public class DateUtils {
                 (pattern.contains("X") || pattern.contains("Z") || pattern.contains("'Z'"));
     }
 
+    /**
+     * Returns a lowercase plural label for a precision enum constant.
+     *
+     * @param precision the precision enum value
+     * @return the plural label (e.g. {@code "days"})
+     */
     public static String pluralLabel(Enum<?> precision) {
         if (precision == null) {
             return "days";

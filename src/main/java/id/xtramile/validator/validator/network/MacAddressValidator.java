@@ -16,6 +16,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * with 6 pairs of hexadecimal digits separated by colons or hyphens.
  *
  * <p>The validator performs the following operations:
+ * <ul>
  * <li>Accepts null/blank values as valid</li>
  * <li>Validates 6 pairs of hexadecimal digits</li>
  * <li>Supports colon (:) and hyphen (-) separators</li>

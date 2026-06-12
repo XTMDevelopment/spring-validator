@@ -22,6 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Registry mapping validation annotation types to their simple names and message groups.
+ */
 public final class AnnotationRegistry {
 
     private static final Map<String, Class<?>> BY_NAME;
@@ -144,6 +147,12 @@ public final class AnnotationRegistry {
         byName.put(simpleName, type);
     }
 
+    /**
+     * Resolves an annotation class by its simple name (e.g. {@code "ValidEmail"}).
+     *
+     * @param simpleName the annotation simple name
+     * @return the annotation type, or {@code null} if unknown
+     */
     public static Class<?> resolve(String simpleName) {
         if (simpleName == null) {
             return null;
@@ -151,25 +160,56 @@ public final class AnnotationRegistry {
         return BY_NAME.get(simpleName);
     }
 
+    /**
+     * Returns the registry entry for the given annotation type.
+     *
+     * @param annotationType the annotation class
+     * @return the entry, or {@code null} if not registered
+     */
     public static Entry get(Class<?> annotationType) {
         return BY_CLASS.get(annotationType);
     }
 
+    /**
+     * Returns the message group for the given annotation type.
+     *
+     * @param annotationType the annotation class
+     * @return the message group, or {@code null} if not registered
+     */
     public static Group getGroup(Class<?> annotationType) {
         Entry entry = get(annotationType);
         return entry != null ? entry.messageGroup() : null;
     }
 
+    /**
+     * Returns the registered simple name for the given annotation type.
+     *
+     * @param annotationType the annotation class
+     * @return the simple name, or {@code null} if not registered
+     */
     public static String getSimpleName(Class<?> annotationType) {
         Entry entry = get(annotationType);
         return entry != null ? entry.simpleName() : null;
     }
 
+    /**
+     * Checks whether the annotation belongs to the given message group.
+     *
+     * @param annotationType the annotation class
+     * @param group          the message group to check
+     * @return {@code true} if the annotation is in the group
+     */
     public static boolean isInGroup(Class<?> annotationType, Group group) {
         Entry entry = get(annotationType);
         return entry != null && entry.messageGroup() == group;
     }
 
+    /**
+     * Returns all registered annotation types in the given message group.
+     *
+     * @param group the message group
+     * @return an unmodifiable set of annotation classes
+     */
     public static Set<Class<?>> getAnnotationTypes(Group group) {
         return BY_CLASS.values().stream()
                 .filter(entry -> entry.messageGroup() == group)
@@ -177,6 +217,13 @@ public final class AnnotationRegistry {
                 .collect(java.util.stream.Collectors.toUnmodifiableSet());
     }
 
+    /**
+     * A registered validation annotation and its metadata.
+     *
+     * @param simpleName     the annotation simple name
+     * @param annotationType the annotation class
+     * @param messageGroup   the message group for localization
+     */
     public record Entry(String simpleName, Class<?> annotationType, Group messageGroup) {
     }
 }

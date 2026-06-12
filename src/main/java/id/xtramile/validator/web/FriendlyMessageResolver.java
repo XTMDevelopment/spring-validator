@@ -8,6 +8,9 @@ import org.springframework.validation.FieldError;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Resolves user-friendly validation messages from constraint violations and field errors.
+ */
 public class FriendlyMessageResolver {
 
     private static final String VALIDATION_DEFAULT = "validation.default";
@@ -17,6 +20,14 @@ public class FriendlyMessageResolver {
     private final ValidationMessageArgsBuilder messageArgsBuilder;
     private final CompositeConstraintMessageResolver annotationMessages;
 
+    /**
+     * Creates a resolver with explicit collaborators.
+     *
+     * @param messageResolver    loads localized message templates
+     * @param fieldNames         resolves display names for DTO fields
+     * @param messageArgsBuilder builds message format arguments
+     * @param annotationMessages resolves messages by annotation type
+     */
     public FriendlyMessageResolver(
             MessageResourceResolver messageResolver,
             ValidationFieldDisplayNames fieldNames,
@@ -28,6 +39,11 @@ public class FriendlyMessageResolver {
         this.annotationMessages = annotationMessages;
     }
 
+    /**
+     * Creates a resolver with default collaborators derived from the message resolver.
+     *
+     * @param messageResolver loads localized message templates
+     */
     public FriendlyMessageResolver(MessageResourceResolver messageResolver) {
         this(messageResolver, defaultCollaborators(messageResolver));
     }
@@ -50,6 +66,14 @@ public class FriendlyMessageResolver {
         );
     }
 
+    /**
+     * Resolves a friendly message for a constraint violation.
+     *
+     * @param v         the constraint violation
+     * @param field     property path or field name
+     * @param dtoClass  the validated root bean class
+     * @return the resolved message
+     */
     public String resolve(ConstraintViolation<?> v, String field, Class<?> dtoClass) {
         String template = v.getMessageTemplate();
 
@@ -80,6 +104,13 @@ public class FriendlyMessageResolver {
         return annotationMessages.resolveFromAnnotation(displayName, type, attrs, dtoClass);
     }
 
+    /**
+     * Resolves a friendly message for a Spring {@link FieldError}.
+     *
+     * @param err       the field error from binding validation
+     * @param dtoClass  the validated DTO class
+     * @return the resolved message
+     */
     public String resolve(FieldError err, Class<?> dtoClass) {
         String field = err.getField();
         String defaultMessage = err.getDefaultMessage();

@@ -42,3 +42,12 @@ jobs:
           path: target/surefire-reports/
           retention-days: 7
           if-no-files-found: ignore
+
+      - name: Upload JaCoCo report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-java-${{ matrix.java }}
+          path: target/site/jacoco/
+          retention-days: 7
+          if-no-files-found: ignore

@@ -6,6 +6,9 @@ import id.xtramile.validator.web.ValidationFieldDisplayNames;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Delegates constraint message resolution to group-specific resolvers.
+ */
 public class CompositeConstraintMessageResolver {
 
     private static final String VALIDATION_DEFAULT = "validation.default";
@@ -13,6 +16,12 @@ public class CompositeConstraintMessageResolver {
     private final MessageResourceResolver messageResolver;
     private final List<ConstraintMessageResolver> resolvers;
 
+    /**
+     * Creates a composite resolver with all built-in group resolvers.
+     *
+     * @param messageResolver loads localized message templates
+     * @param fieldNames      resolves display names for cross-field constraints
+     */
     public CompositeConstraintMessageResolver(MessageResourceResolver messageResolver, ValidationFieldDisplayNames fieldNames) {
         this.messageResolver = messageResolver;
         this.resolvers = List.of(
@@ -30,6 +39,15 @@ public class CompositeConstraintMessageResolver {
         );
     }
 
+    /**
+     * Resolves a message for the given constraint annotation and attributes.
+     *
+     * @param field          display name of the validated field
+     * @param annotationType the constraint annotation class
+     * @param attrs          constraint annotation attributes
+     * @param dtoClass       the validated DTO class
+     * @return the resolved message, or a default validation message
+     */
     public String resolveFromAnnotation(String field, Class<?> annotationType, Map<String, Object> attrs, Class<?> dtoClass) {
         if (annotationType == null) {
             return messageResolver.getMessage(VALIDATION_DEFAULT, field);

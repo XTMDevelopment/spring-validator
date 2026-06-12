@@ -6,8 +6,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Default {@link ErrorEnvelopeBuilder} using {@link ResponseType} codes and bilingual messages.
+ */
 public class DefaultErrorEnvelopeBuilder implements ErrorEnvelopeBuilder {
 
+    /** {@inheritDoc} */
     @Override
     public Map<String, Object> validation(List<String> errors) {
         ResponseType validationError = ResponseType.VALIDATION_FAILED;
@@ -19,6 +23,7 @@ public class DefaultErrorEnvelopeBuilder implements ErrorEnvelopeBuilder {
         return body;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<String, Object> unknown(String cause, String error) {
         ResponseType unknownError = ResponseType.UNKNOWN_ERROR;

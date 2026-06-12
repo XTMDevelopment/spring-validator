@@ -7,14 +7,19 @@ import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * Shared validation helpers for string, collection, date, and file checks.
+ */
 public class ValidatorUtils {
     private ValidatorUtils() {
     }
 
+    /** Returns whether the string is null or blank. */
     public static boolean isBlank(String str) {
         return str == null || str.isBlank();
     }
 
+    /** Returns whether the value is non-null and non-empty (for strings, collections, maps, arrays). */
     public static boolean isPresent(Object v) {
         if (v == null) return false;
 
@@ -37,14 +42,17 @@ public class ValidatorUtils {
         return true;
     }
 
+    /** Converts megabytes to bytes; returns {@code -1} for negative input. */
     public static long mbToBytes(long mb) {
         return mb < 0 ? -1 : mb * 1024L * 1024L;
     }
 
+    /** Formats a byte count as a human-readable size string. */
     public static String formatFileSize(long bytes) {
         return formatFileSizeRecursive(bytes, 0);
     }
 
+    /** Returns whether a date string with Feb 29 falls in a leap year. */
     public static boolean validateLeapYear(String date) {
         if (date == null) {
             return true;
@@ -67,6 +75,7 @@ public class ValidatorUtils {
         return true;
     }
 
+    /** Validates day-of-month against month length and leap-year rules. */
     public static boolean validateDateComponents(LocalDate date) {
         if (date.getMonthValue() == 2 && date.getDayOfMonth() == 29) {
             int year = date.getYear();
@@ -78,11 +87,13 @@ public class ValidatorUtils {
         return date.getDayOfMonth() <= getDaysInMonth(date.getYear(), date.getMonthValue());
     }
 
+    /** Validates date components of a {@link LocalDateTime}. */
     public static boolean validateDateTimeComponents(LocalDateTime dateTime) {
         LocalDate date = dateTime.toLocalDate();
         return validateDateComponents(date);
     }
 
+    /** Returns the number of days in the given month of the given year. */
     public static int getDaysInMonth(int year, int month) {
         return switch (month) {
             case 1, 3, 5, 7, 8, 10, 12 -> 31;
@@ -92,6 +103,7 @@ public class ValidatorUtils {
         };
     }
 
+    /** Performs basic structural email validation. */
     public static boolean validateEmail(String email) {
         if (!email.contains("@")) return false;
 
@@ -112,6 +124,14 @@ public class ValidatorUtils {
                 !localPart.startsWith(".") && !localPart.endsWith(".");
     }
 
+    /**
+     * Validates that an ISO-8601 date-time is not beyond now plus the tolerance.
+     *
+     * @param value           the date-time string
+     * @param pattern         optional parse pattern
+     * @param toleranceHours  allowed hours into the future
+     * @return {@code true} if within the allowed window
+     */
     @SuppressWarnings("DuplicatedCode")
     public static boolean validateISO8601ForFutureDate(String value, String pattern, int toleranceHours) {
         try {
@@ -136,6 +156,14 @@ public class ValidatorUtils {
         }
     }
 
+    /**
+     * Validates that an ISO-8601 date-time falls within the past tolerance window up to now.
+     *
+     * @param value           the date-time string
+     * @param pattern         optional parse pattern
+     * @param toleranceHours  allowed hours into the past
+     * @return {@code true} if within the allowed window
+     */
     @SuppressWarnings("DuplicatedCode")
     public static boolean validateISO8601ForPastFutureDate(String value, String pattern, int toleranceHours) {
         try {
