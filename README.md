@@ -1,23 +1,36 @@
-# Spring Validator
+# Validator
 
 Indonesian-friendly Jakarta Bean Validation library for Spring Boot applications. Provides custom constraint annotations, localized validation messages (Indonesian and English), and Spring MVC integration for user-friendly error responses.
 
+**Maven coordinates:** `id.xtramile.validator`
+
 ## Requirements
 
+- **Version:** 1.x
 - **Java 17+** (tested on 17, 21, and 25)
-- **Spring Boot 3.5.x**
+- **Spring Boot 3.5.14+** (3.5.x)
 
 ## Installation
 
-Add the dependency to your `pom.xml`:
+Add the Spring Boot starter (recommended) to your `pom.xml`:
 
 ```xml
 <dependency>
-    <groupId>id.xtramile</groupId>
-    <artifactId>spring-validator</artifactId>
+    <groupId>id.xtramile.validator</groupId>
+    <artifactId>validator-spring-boot-starter</artifactId>
     <version>1.0</version>
 </dependency>
 ```
+
+### Module layout (1.x)
+
+| Artifact | Purpose |
+|----------|---------|
+| `validator-spring-boot-starter` | **Recommended** — auto-configuration + validation + web integration |
+| `validator-core` | Annotations and validators only (no Spring Boot) |
+| `validator-web` | Message resolution and `ApiExceptionHandler` (Spring MVC) |
+
+Cross-field validators (`@FieldMatch`, `@AtLeastOneOf`, etc.) require Spring Beans on the classpath; the starter provides this automatically.
 
 Auto-configuration is registered via `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` and loads when Spring Boot is on the classpath.
 
@@ -62,11 +75,23 @@ Example:
 id.xtramile.validator.locale=en
 ```
 
+## Migration from `spring-validator` artifacts
+
+If you previously used `id.xtramile:spring-validator*` coordinates, switch to `id.xtramile.validator`:
+
+| Before | After |
+|--------|-------|
+| `id.xtramile:spring-validator-spring-boot-starter` | `id.xtramile.validator:validator-spring-boot-starter` |
+| `id.xtramile:spring-validator-core` | `id.xtramile.validator:validator-core` |
+| `id.xtramile:spring-validator-web` | `id.xtramile.validator:validator-web` |
+
+Java packages (`id.xtramile.validator.*`) are unchanged.
+
 ## Quality Commands
 
 ```bash
-# Full build: tests, Javadoc, JaCoCo checks
-mvn clean verify
+# Full multi-module build: tests, Javadoc, JaCoCo aggregate checks
+mvn clean verify -Dspring-boot.version=3.5.14
 
 # Run tests only
 mvn clean test

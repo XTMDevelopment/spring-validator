@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: surefire-reports-java-${{ matrix.java }}
-          path: target/surefire-reports/
+          path: "**/target/surefire-reports/"
           retention-days: 7
           if-no-files-found: ignore
 
@@ -66,6 +66,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-java-17
-          path: target/site/jacoco/
+          path: target/site/jacoco-aggregate/
           retention-days: 7
           if-no-files-found: ignore

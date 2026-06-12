@@ -1,6 +1,6 @@
 # Contributing to Spring Validator
 
-Thank you for contributing to **spring-validator**. This guide covers local setup, quality gates, and how to add a new constraint.
+Thank you for contributing to **Validator** (`id.xtramile.validator`). This guide covers local setup, quality gates, and how to add a new constraint.
 
 ## Requirements
 

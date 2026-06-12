@@ -1,11 +1,18 @@
 # Changelog
 
-All notable changes to the **1.x** line of `spring-validator` are documented here.
+All notable changes to the **1.x** line of `id.xtramile.validator` are documented here.
 
 ## [Unreleased]
 
 ### Added
 
+- Multi-module Maven layout at **1.x** under `id.xtramile.validator`:
+  - `validator-core` — annotations, validators, utilities
+  - `validator-web` — localized messages and MVC exception handling
+  - `validator-spring-boot-starter` — auto-configuration (recommended consumer dependency)
+  - `validator-test-support` — internal test-jar (not published to Maven Central)
+- Sample consumer at `examples/spring-boot-starter-sample/`
+- JaCoCo aggregate reporting on the parent POM
 - `AnnotationRegistry` as the single source of truth for constraint metadata
 - `ConstraintMessageResolver` SPI with category-specific message strategies
 - Test support package (`ValidationMessageTestSupport`, `ValidatorTestSupport`, and related fixtures)
@@ -18,6 +25,7 @@ All notable changes to the **1.x** line of `spring-validator` are documented her
 
 ### Changed
 
+- **Migration (1.x):** Maven `groupId` is `id.xtramile.validator`; use `validator-spring-boot-starter` for Spring Boot apps (replaces `id.xtramile:spring-validator*` artifacts)
 - Dependencies injected via `ValidationAutoConfiguration` (DIP)
 - CI consolidated to `ci.yml` (primary) and `build.yml` (cross-OS smoke)
 - Java 17 minimum; Spring Boot versions managed via BOM (`3.5.14`)

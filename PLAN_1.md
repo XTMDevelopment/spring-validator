@@ -1,6 +1,6 @@
 # PLAN 1 — Core Refactor & Quality (Group 1)
 
-**Project:** Spring Validator (`id.xtramile:spring-validator`)  
+**Project:** Validator (`id.xtramile.validator`)  
 **Version line:** **1.x** (no major version bump in this plan)  
 **Prerequisite:** None — execute this plan first.  
 **Followed by:** [PLAN_2.md](PLAN_2.md) (multi-module + Spring Boot 4)  
@@ -129,7 +129,7 @@ Repo has no README. Create with:
 
 1. **Project description** — Indonesian-friendly Jakarta Bean Validation library for Spring
 2. **Requirements** — Java 17+, Spring Boot 3.5.x (Boot 4 in PLAN 2)
-3. **Installation** — Maven dependency (`id.xtramile:spring-validator:1.x`)
+3. **Installation** — Maven dependency (`id.xtramile.validator:validator-spring-boot-starter:1.x`)
 4. **Quick start** — annotation example + `id.xtramile.validator.enabled` property
 5. **Configuration** — `id.xtramile.validator.locale` (`id` default)
 6. **Quality commands** — `javadoc:javadoc`, `jacoco:report`, `verify`, `-Pquick`
