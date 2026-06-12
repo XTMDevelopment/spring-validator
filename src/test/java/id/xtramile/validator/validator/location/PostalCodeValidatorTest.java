@@ -1,6 +1,7 @@
 package id.xtramile.validator.validator.location;
 
 import id.xtramile.validator.annotation.location.ValidPostalCode;
+import id.xtramile.validator.support.ValidatorTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,23 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PostalCodeValidatorTest {
-
-    private static class PostalCodeDummy {
-        @ValidPostalCode
-        String defaultPostalCode;
-
-        @ValidPostalCode()
-        String indonesiaPostalCode;
-
-        @ValidPostalCode(country = "MY")
-        String malaysiaPostalCode;
-
-        @ValidPostalCode()
-        Integer intIndonesiaPostalCode;
-
-        @ValidPostalCode(country = "US")
-        String unsupportedCountry;
-    }
 
     private PostalCodeValidator validator;
 
@@ -42,6 +26,7 @@ public class PostalCodeValidatorTest {
     @BeforeEach
     void setUp() {
         validator = new PostalCodeValidator();
+        ValidatorTestSupport.initializeValidator(validator, PostalCodeDummy.class, "defaultPostalCode", ValidPostalCode.class);
     }
 
     @Test
@@ -198,5 +183,22 @@ public class PostalCodeValidatorTest {
         assertTrue(validator.isValid("55161", null)); // Yogyakarta postal code
         assertTrue(validator.isValid("80234", null)); // Bali postal code
         assertTrue(validator.isValid("60111", null)); // Surabaya postal code
+    }
+
+    private static class PostalCodeDummy {
+        @ValidPostalCode
+        String defaultPostalCode;
+
+        @ValidPostalCode()
+        String indonesiaPostalCode;
+
+        @ValidPostalCode(country = "MY")
+        String malaysiaPostalCode;
+
+        @ValidPostalCode()
+        Integer intIndonesiaPostalCode;
+
+        @ValidPostalCode(country = "US")
+        String unsupportedCountry;
     }
 }

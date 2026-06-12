@@ -12,29 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PasswordValidatorTest {
 
-    private static class PasswordDummy {
-        @ValidPassword
-        String defaultPassword;
-
-        @ValidPassword(min = 6, type = PasswordType.ANY)
-        String anyPassword;
-
-        @ValidPassword(type = PasswordType.ALPHANUMERIC)
-        String alphanumericPassword;
-
-        @ValidPassword(min = 10, type = PasswordType.LETTER_DIGIT)
-        String letterDigitPassword;
-
-        @ValidPassword(min = 12, type = PasswordType.LETTER_MIXED_CASE)
-        String mixedCasePassword;
-
-        @ValidPassword(type = PasswordType.FULL)
-        String fullPassword;
-
-        @ValidPassword(min = 6, type = PasswordType.STRONG_3_OF_4)
-        String strongPassword;
-    }
-
     private PasswordValidator validator;
 
     private static ValidPassword getAnnotation(String fieldName) {
@@ -170,5 +147,28 @@ public class PasswordValidatorTest {
         assertTrue(validator.isValid("Password123!", null));
         assertFalse(validator.isValid("Password123", null)); // no symbol
         assertFalse(validator.isValid("Pas123!", null)); // too short
+    }
+
+    private static class PasswordDummy {
+        @ValidPassword
+        String defaultPassword;
+
+        @ValidPassword(min = 6, type = PasswordType.ANY)
+        String anyPassword;
+
+        @ValidPassword(type = PasswordType.ALPHANUMERIC)
+        String alphanumericPassword;
+
+        @ValidPassword(min = 10, type = PasswordType.LETTER_DIGIT)
+        String letterDigitPassword;
+
+        @ValidPassword(min = 12, type = PasswordType.LETTER_MIXED_CASE)
+        String mixedCasePassword;
+
+        @ValidPassword(type = PasswordType.FULL)
+        String fullPassword;
+
+        @ValidPassword(min = 6, type = PasswordType.STRONG_3_OF_4)
+        String strongPassword;
     }
 }

@@ -24,21 +24,42 @@ import java.lang.annotation.*;
  * @see InWhitelistValidator
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = InWhitelistValidator.class)
 public @interface InWhitelist {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
+
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
+
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * The list of allowed values to validate against.
+     *
+     * @return the list of allowed values to validate against
      */
     String[] values();
 
     /**
      * Whether the comparison should be case-insensitive.
+     *
+     * @return Whether the comparison should be case-insensitive
      */
     boolean ignoreCase() default true;
 }

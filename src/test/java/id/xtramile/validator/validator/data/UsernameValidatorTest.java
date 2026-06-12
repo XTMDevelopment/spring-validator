@@ -11,14 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UsernameValidatorTest {
 
-    private static class UsernameDummy {
-        @ValidUsername
-        String defaultUsername;
-
-        @ValidUsername(min = 3, max = 10)
-        String customUsername;
-    }
-
     private UsernameValidator validator;
 
     private static ValidUsername getAnnotation(String fieldName) {
@@ -101,5 +93,13 @@ public class UsernameValidatorTest {
         assertTrue(validator.isValid("a1b2", null)); // minimum valid
         assertTrue(validator.isValid("a1b2c3d4e5f6g7h8i9j0", null)); // exactly 20 chars
         assertFalse(validator.isValid("a1b2c3d4e5f6g7h8i9j0k", null)); // 21 chars
+    }
+
+    private static class UsernameDummy {
+        @ValidUsername
+        String defaultUsername;
+
+        @ValidUsername(min = 3, max = 10)
+        String customUsername;
     }
 }

@@ -11,24 +11,41 @@ import java.lang.annotation.*;
  * <p>
  * Null/blank values are considered valid. This validator ensures the CIDR notation
  * follows the correct format for network address and subnet mask.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidCIDR
  * private String networkRange; // e.g., 192.168.1.0/24
- * 
+ *
  * @ValidCIDR
  * private String subnet; // e.g., 10.0.0.0/8
  * }</pre>
- * 
+ *
  * @see CIDRValidator
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = CIDRValidator.class)
 public @interface ValidCIDR {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
+
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
+
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 }

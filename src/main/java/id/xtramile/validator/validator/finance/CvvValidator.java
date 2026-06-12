@@ -14,7 +14,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates CVV (Card Verification Value) codes for credit/debit cards.
  * This validator ensures the CVV follows the standard format with optional
  * support for 4-digit CVVs (American Express).
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -22,7 +22,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Optionally supports 4-digit CVV format</li>
  * <li>Uses regex pattern matching for validation</li>
  * </ul>
- * 
+ *
  * @see ValidCVV
  */
 public class CvvValidator implements ConstraintValidator<ValidCVV, String> {
@@ -30,6 +30,7 @@ public class CvvValidator implements ConstraintValidator<ValidCVV, String> {
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidCVV annotation instance
      */
     @Override
@@ -39,7 +40,8 @@ public class CvvValidator implements ConstraintValidator<ValidCVV, String> {
 
     /**
      * Validates the CVV code format.
-     * @param value the CVV string to validate
+     *
+     * @param value   the CVV string to validate
      * @param context the constraint validator context
      * @return true if the CVV is valid or is null/blank
      */

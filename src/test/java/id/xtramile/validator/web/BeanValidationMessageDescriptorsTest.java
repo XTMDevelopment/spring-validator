@@ -66,7 +66,7 @@ class BeanValidationMessageDescriptorsTest {
     @Test
     void shouldResolveFieldErrorUsingConstraintDefaults_trueWhenMessageAttrMissingOrNotString() {
         Map<String, Object> noMessage = new HashMap<>();
-        noMessage.put("groups", new Class[0]);
+        noMessage.put("groups", new Class<?>[0]);
         assertThat(BeanValidationMessageDescriptors.shouldResolveFieldErrorUsingConstraintDefaults(noMessage)).isTrue();
 
         Map<String, Object> intMessage = new HashMap<>();

@@ -11,14 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AccountNumberValidatorTest {
 
-    private static class AccountNumberDummy {
-        @ValidAccountNumber
-        String defaultAccountNumber;
-
-        @ValidAccountNumber(min = 10, max = 15)
-        String customAccountNumber;
-    }
-
     private AccountNumberValidator validator;
 
     private static ValidAccountNumber getAnnotation(String fieldName) {
@@ -81,5 +73,13 @@ public class AccountNumberValidatorTest {
 
         assertFalse(validator.isValid("123456789", null)); // too short (9 < 10)
         assertFalse(validator.isValid("1234567890123456", null)); // too long (16 > 15)
+    }
+
+    private static class AccountNumberDummy {
+        @ValidAccountNumber
+        String defaultAccountNumber;
+
+        @ValidAccountNumber(min = 10, max = 15)
+        String customAccountNumber;
     }
 }

@@ -9,63 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FieldMatchValidatorTest {
 
-    @FieldMatch(first = "password", second = "confirmPassword")
-    private static class PasswordMatchDummy {
-        private final String password;
-        private final String confirmPassword;
-
-        private PasswordMatchDummy(String password, String confirmPassword) {
-            this.password = password;
-            this.confirmPassword = confirmPassword;
-        }
-
-        public String password() {
-            return password;
-        }
-
-        public String confirmPassword() {
-            return confirmPassword;
-        }
-    }
-
-    @FieldMatch(first = "email", second = "emailConfirmation")
-    private static class EmailMatchDummy {
-        private final String email;
-        private final String emailConfirmation;
-
-        private EmailMatchDummy(String email, String emailConfirmation) {
-            this.email = email;
-            this.emailConfirmation = emailConfirmation;
-        }
-
-        public String email() {
-            return email;
-        }
-
-        public String emailConfirmation() {
-            return emailConfirmation;
-        }
-    }
-
-    @FieldMatch(first = "field1", second = "field2")
-    private static class GenericMatchDummy {
-        private final Object field1;
-        private final Object field2;
-
-        private GenericMatchDummy(Object field1, Object field2) {
-            this.field1 = field1;
-            this.field2 = field2;
-        }
-
-        public Object field1() {
-            return field1;
-        }
-
-        public Object field2() {
-            return field2;
-        }
-    }
-
     private FieldMatchValidator validator;
 
     @BeforeEach
@@ -203,7 +146,7 @@ public class FieldMatchValidatorTest {
     @Test
     void testEmailMatchValidation() {
         validator.initialize(EmailMatchDummy.class.getAnnotation(FieldMatch.class));
-        
+
         assertTrue(validator.isValid(new EmailMatchDummy("test@example.com", "test@example.com"), null)); // Matching emails
         assertTrue(validator.isValid(new EmailMatchDummy(null, null), null)); // Both null
         assertFalse(validator.isValid(new EmailMatchDummy("test@example.com", "test@example.org"), null)); // Different emails
@@ -253,5 +196,17 @@ public class FieldMatchValidatorTest {
         assertTrue(validator.isValid(new PasswordMatchDummy("\n", "\n"), null)); // Both newlines
         assertFalse(validator.isValid(new PasswordMatchDummy("   ", "test"), null)); // Whitespace vs text
         assertFalse(validator.isValid(new PasswordMatchDummy("test", "   "), null)); // Text vs whitespace
+    }
+
+    @FieldMatch(first = "password", second = "confirmPassword")
+    private record PasswordMatchDummy(String password, String confirmPassword) {
+    }
+
+    @FieldMatch(first = "email", second = "emailConfirmation")
+    private record EmailMatchDummy(String email, String emailConfirmation) {
+    }
+
+    @FieldMatch(first = "field1", second = "field2")
+    private record GenericMatchDummy(Object field1, Object field2) {
     }
 }

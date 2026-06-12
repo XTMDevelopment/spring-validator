@@ -10,9 +10,9 @@ import java.lang.annotation.*;
 /**
  * Password policy validator with configurable strength requirements.
  * <p>
- * Rejects any whitespace. Length must be >= min (Unicode-aware). 
+ * Rejects any whitespace. Length must be >= min (Unicode-aware).
  * Strength policy is selected by type. Null/blank values are considered valid.
- * 
+ *
  * <p>Password strength types:
  * <ul>
  * <li>ANY: length >= min; any non-whitespace characters</li>
@@ -22,35 +22,56 @@ import java.lang.annotation.*;
  * <li>FULL: lowercase + uppercase + digit + symbol (any non-alphanumeric), all required; length >= min</li>
  * <li>STRONG_3_OF_4: at least 3 of these 4 classes: lowercase, uppercase, digit, symbol; length >= min</li>
  * </ul>
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidPassword(min = 10, type = PasswordType.FULL)
  * private String password; // Strong policy: lower+upper+digit+symbol, min length 10
- * 
+ *
  * @ValidPassword(min = 8, type = PasswordType.ALPHANUMERIC)
  * private String pinLikePassword; // Alphanumeric only, min 8
  * }</pre>
- * 
+ *
  * @see PasswordValidator
  * @see PasswordType
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PasswordValidator.class)
 public @interface ValidPassword {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
+
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
+
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * Minimum password length required.
+     *
+     * @return the minimum password length required
      */
     int min() default 8;
-    
+
     /**
      * Password strength policy type.
+     *
+     * @return the password strength policy type
      */
     PasswordType type() default PasswordType.FULL;
 }

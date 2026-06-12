@@ -15,7 +15,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isPresent;
  * Validates that exactly one of the specified fields is present (not null/empty).
  * This validator ensures mutual exclusivity between fields, allowing only one
  * field from the list to have a value.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null beans as valid</li>
@@ -23,7 +23,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isPresent;
  * <li>Returns true if exactly one field is present</li>
  * <li>Adds violation to appropriate field based on count</li>
  * </ul>
- * 
+ *
  * @see OnlyOneOf
  */
 public class OnlyOneOfValidator implements ConstraintValidator<OnlyOneOf, Object> {
@@ -31,6 +31,7 @@ public class OnlyOneOfValidator implements ConstraintValidator<OnlyOneOf, Object
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the OnlyOneOf annotation instance
      */
     @Override
@@ -40,7 +41,8 @@ public class OnlyOneOfValidator implements ConstraintValidator<OnlyOneOf, Object
 
     /**
      * Validates that exactly one of the specified fields is present.
-     * @param bean the object to validate
+     *
+     * @param bean    the object to validate
      * @param context the constraint validator context
      * @return true if exactly one field is present or bean is null
      */

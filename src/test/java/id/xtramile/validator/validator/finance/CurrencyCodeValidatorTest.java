@@ -11,11 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CurrencyCodeValidatorTest {
 
-    private static class CurrencyCodeDummy {
-        @ValidCurrencyCode
-        String defaultCurrency;
-    }
-
     private CurrencyCodeValidator validator;
 
     private static ValidCurrencyCode getAnnotation(String fieldName) {
@@ -177,5 +172,10 @@ public class CurrencyCodeValidatorTest {
         assertFalse(validator.isValid("€UR", null)); // Euro sign
         assertFalse(validator.isValid("£BP", null)); // Pound sign
         assertFalse(validator.isValid("¥PY", null)); // Yen sign
+    }
+
+    private static class CurrencyCodeDummy {
+        @ValidCurrencyCode
+        String defaultCurrency;
     }
 }

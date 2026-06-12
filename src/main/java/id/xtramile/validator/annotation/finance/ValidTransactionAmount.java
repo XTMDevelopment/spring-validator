@@ -12,16 +12,16 @@ import java.lang.annotation.*;
  * Null values are considered valid. This validator ensures monetary amounts
  * meet specified constraints for financial transactions, typically used for large
  * amounts (e.g., 500,000 to 5,000,000,000).
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidTransactionAmount(min = 500_000L, max = 5_000_000_000L)
  * private Long amount; // e.g., 1_000_000L
- * 
+ *
  * @ValidTransactionAmount(min = 1_000_000L, allowZero = false)
  * private Long transferAmount; // must be positive and non-zero
  * }</pre>
- * 
+ *
  * @see TransactionAmountValidator
  */
 @Documented
@@ -29,23 +29,46 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = TransactionAmountValidator.class)
 public @interface ValidTransactionAmount {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
+
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
+
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * Inclusive minimum amount (default 0L).
+     *
+     * @return the inclusive minimum amount (default 0L)
      */
     long min() default 0L;
 
     /**
      * Inclusive maximum amount (default Long.MAX_VALUE for no maximum limit).
+     *
+     * @return the inclusive maximum amount (default Long.MAX_VALUE for no maximum limit)
      */
     long max() default Long.MAX_VALUE;
 
     /**
      * If true, value may be zero. If false, zero values are rejected even if
      * they meet the minimum requirement.
+     *
+     * @return the they meet the minimum requirement
      */
     boolean allowZero() default true;
 }

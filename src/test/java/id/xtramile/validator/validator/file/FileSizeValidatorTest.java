@@ -12,23 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FileSizeValidatorTest {
 
-    private static class FileSizeDummy {
-        @ValidFileSize(minBytes = 100, maxBytes = 1000)
-        String defaultSize;
-
-        @ValidFileSize(maxBytes = 500)
-        String smallFile;
-
-        @ValidFileSize(minBytes = 1000)
-        String largeFile;
-
-        @ValidFileSize(maxMB = 1)
-        String oneMBFile;
-
-        @ValidFileSize(maxMB = 5)
-        String fiveMBFile;
-    }
-
     private FileSizeValidator validator;
 
     private static ValidFileSize getAnnotation(String fieldName) {
@@ -179,5 +162,22 @@ public class FileSizeValidatorTest {
 
         assertTrue(validator.isValid(exactlyOneMB, null));
         assertFalse(validator.isValid(overOneMB, null));
+    }
+
+    private static class FileSizeDummy {
+        @ValidFileSize(minBytes = 100, maxBytes = 1000)
+        String defaultSize;
+
+        @ValidFileSize(maxBytes = 500)
+        String smallFile;
+
+        @ValidFileSize(minBytes = 1000)
+        String largeFile;
+
+        @ValidFileSize(maxMB = 1)
+        String oneMBFile;
+
+        @ValidFileSize(maxMB = 5)
+        String fiveMBFile;
     }
 }

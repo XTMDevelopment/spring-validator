@@ -11,17 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NameValidatorTest {
 
-    private static class NameDummy {
-        @ValidName
-        String defaultName;
-
-        @ValidName(min = 2, max = 10, allowedSymbols = {".", "'", "-"})
-        String customName;
-
-        @ValidName(allowDigits = true)
-        String nameWithDigits;
-    }
-
     private NameValidator validator;
 
     private static ValidName getAnnotation(String fieldName) {
@@ -112,9 +101,20 @@ public class NameValidatorTest {
         assertTrue(validator.isValid("Test1Name", null));
         assertTrue(validator.isValid("O'Connor2", null));
         assertTrue(validator.isValid("A.B.123", null));
-        
+
         // Still validates length and other constraints
         assertFalse(validator.isValid("A1", null)); // too short
         assertFalse(validator.isValid("A".repeat(101) + "1", null)); // too long
+    }
+
+    private static class NameDummy {
+        @ValidName
+        String defaultName;
+
+        @ValidName(min = 2, max = 10, allowedSymbols = {".", "'", "-"})
+        String customName;
+
+        @ValidName(allowDigits = true)
+        String nameWithDigits;
     }
 }

@@ -11,24 +11,41 @@ import java.lang.annotation.*;
  * <p>
  * This validator ensures the string follows the standard UUID format (8-4-4-4-12 hexadecimal digits).
  * Null/blank values are considered valid.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidUUID
  * private String requestId; // e.g., 550e8400-e29b-41d4-a716-446655440000
- * 
+ *
  * @ValidUUID
  * private String sessionId; // e.g., 6ba7b810-9dad-11d1-80b4-00c04fd430c8
  * }</pre>
- * 
+ *
  * @see UUIDValidator
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = UUIDValidator.class)
 public @interface ValidUUID {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
+
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
+
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 }

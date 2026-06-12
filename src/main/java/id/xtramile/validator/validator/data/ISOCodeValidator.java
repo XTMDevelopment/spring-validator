@@ -19,7 +19,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates common ISO codes depending on the selected type.
  * This validator ensures the string follows the correct ISO standard format
  * for currency codes, country codes, or language codes.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -27,7 +27,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Validates country codes against ISO 3166-1 standard</li>
  * <li>Validates language codes against ISO 639 standard</li>
  * </ul>
- * 
+ *
  * @see ValidISOCode
  * @see ISOType
  */
@@ -36,6 +36,7 @@ public class ISOCodeValidator implements ConstraintValidator<ValidISOCode, Strin
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidISOCode annotation instance
      */
     @Override
@@ -45,7 +46,8 @@ public class ISOCodeValidator implements ConstraintValidator<ValidISOCode, Strin
 
     /**
      * Validates the ISO code against the configured standard.
-     * @param value the ISO code string to validate
+     *
+     * @param value   the ISO code string to validate
      * @param context the constraint validator context
      * @return true if the code is valid according to the ISO standard or is null/blank
      */
@@ -54,33 +56,28 @@ public class ISOCodeValidator implements ConstraintValidator<ValidISOCode, Strin
         if (isBlank(value)) return true;
 
         boolean isValid;
-        String messageKey;
-
-        switch (type) {
-            case CURRENCY:
+        String messageKey = switch (type) {
+            case CURRENCY -> {
                 isValid = checkCurrency(value);
-                messageKey = "iso-code.currency";
-                break;
-
-            case COUNTRY_ALPHA2:
+                yield "iso-code.currency";
+            }
+            case COUNTRY_ALPHA2 -> {
                 isValid = checkCountryAlpha2(value);
-                messageKey = "iso-code.country";
-                break;
-
-            case COUNTRY_ALPHA3:
+                yield "iso-code.country";
+            }
+            case COUNTRY_ALPHA3 -> {
                 isValid = checkCountryAlpha3(value);
-                messageKey = "iso-code.country";
-                break;
-
-            case LANGUAGE:
+                yield "iso-code.country";
+            }
+            case LANGUAGE -> {
                 isValid = checkLanguage(value);
-                messageKey = "iso-code.language";
-                break;
-
-            default:
+                yield "iso-code.language";
+            }
+            default -> {
                 isValid = false;
-                messageKey = "iso-code";
-        }
+                yield "iso-code";
+            }
+        };
 
         if (!isValid) {
             MessageUtils.buildViolation(context, Group.DATA, messageKey);

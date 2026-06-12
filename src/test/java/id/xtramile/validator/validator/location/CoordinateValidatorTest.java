@@ -1,6 +1,7 @@
 package id.xtramile.validator.validator.location;
 
 import id.xtramile.validator.annotation.location.ValidCoordinates;
+import id.xtramile.validator.support.ValidatorTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,14 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CoordinateValidatorTest {
-
-    private static class CoordinateDummy {
-        @ValidCoordinates
-        String defaultCoordinates;
-
-        @ValidCoordinates(flipCoordinates = true)
-        String flippedCoordinates;
-    }
 
     private CoordinateValidator validator;
 
@@ -33,6 +26,7 @@ public class CoordinateValidatorTest {
     @BeforeEach
     void setUp() {
         validator = new CoordinateValidator();
+        ValidatorTestSupport.initializeValidator(validator, CoordinateDummy.class, "defaultCoordinates", ValidCoordinates.class);
     }
 
     @Test
@@ -172,5 +166,13 @@ public class CoordinateValidatorTest {
         assertTrue(validator.isValid("2.3522,48.8566", null)); // Paris (flipped)
         assertTrue(validator.isValid("139.6503,35.6762", null)); // Tokyo (flipped)
         assertTrue(validator.isValid("-0.1278,51.5074", null)); // London (flipped)
+    }
+
+    private static class CoordinateDummy {
+        @ValidCoordinates
+        String defaultCoordinates;
+
+        @ValidCoordinates(flipCoordinates = true)
+        String flippedCoordinates;
     }
 }

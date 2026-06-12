@@ -11,11 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EmailValidatorTest {
 
-    private static class EmailDummy {
-        @ValidEmail
-        String emailField;
-    }
-
     private EmailValidator validator;
 
     private static ValidEmail getAnnotation(String fieldName) {
@@ -158,5 +153,10 @@ public class EmailValidatorTest {
 
         // Invalid special characters
         assertFalse(validator.isValid("user name@gmail.com", null)); // space
+    }
+
+    private static class EmailDummy {
+        @ValidEmail
+        String emailField;
     }
 }

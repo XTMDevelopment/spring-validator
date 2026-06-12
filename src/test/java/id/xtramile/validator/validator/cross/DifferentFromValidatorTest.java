@@ -9,63 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DifferentFromValidatorTest {
 
-    @DifferentFrom(field = "username", other = "email")
-    private static class UserDifferentDummy {
-        private final String username;
-        private final String email;
-
-        private UserDifferentDummy(String username, String email) {
-            this.username = username;
-            this.email = email;
-        }
-
-        public String username() {
-            return username;
-        }
-
-        public String email() {
-            return email;
-        }
-    }
-
-    @DifferentFrom(field = "password", other = "confirmPassword")
-    private static class PasswordDifferentDummy {
-        private final String password;
-        private final String confirmPassword;
-
-        private PasswordDifferentDummy(String password, String confirmPassword) {
-            this.password = password;
-            this.confirmPassword = confirmPassword;
-        }
-
-        public String password() {
-            return password;
-        }
-
-        public String confirmPassword() {
-            return confirmPassword;
-        }
-    }
-
-    @DifferentFrom(field = "field1", other = "field2")
-    private static class GenericDifferentDummy {
-        private final Object field1;
-        private final Object field2;
-
-        private GenericDifferentDummy(Object field1, Object field2) {
-            this.field1 = field1;
-            this.field2 = field2;
-        }
-
-        public Object field1() {
-            return field1;
-        }
-
-        public Object field2() {
-            return field2;
-        }
-    }
-
     private DifferentFromValidator validator;
 
     @BeforeEach
@@ -289,5 +232,17 @@ public class DifferentFromValidatorTest {
         String longString2 = "verylongstringthatexceedsnormallimitsandmightcauseproblems2";
         assertTrue(validator.isValid(new UserDifferentDummy(longString1, longString2), null)); // Different long strings
         assertFalse(validator.isValid(new UserDifferentDummy(longString1, longString1), null)); // Same long strings
+    }
+
+    @DifferentFrom(field = "username", other = "email")
+    private record UserDifferentDummy(String username, String email) {
+    }
+
+    @DifferentFrom(field = "password", other = "confirmPassword")
+    private record PasswordDifferentDummy(String password, String confirmPassword) {
+    }
+
+    @DifferentFrom(field = "field1", other = "field2")
+    private record GenericDifferentDummy(Object field1, Object field2) {
     }
 }

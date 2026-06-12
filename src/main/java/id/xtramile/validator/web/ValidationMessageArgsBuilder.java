@@ -9,12 +9,35 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 import java.util.*;
 
+/**
+ * Builds message-format arguments from constraint annotation attributes.
+ */
 public class ValidationMessageArgsBuilder {
 
     private final ValidationFieldDisplayNames fieldNames;
 
-    ValidationMessageArgsBuilder(ValidationFieldDisplayNames fieldNames) {
+    /**
+     * Creates a builder that uses the given field display name resolver.
+     *
+     * @param fieldNames resolves display names for cross-field message arguments
+     */
+    public ValidationMessageArgsBuilder(ValidationFieldDisplayNames fieldNames) {
         this.fieldNames = fieldNames;
+    }
+
+    /**
+     * Joins string values in sorted order with comma separators.
+     *
+     * @param values the values to join
+     * @return the joined string, or empty if null or empty
+     */
+    public static String joinSortedComma(String[] values) {
+        if (values == null || values.length == 0) {
+            return "";
+        }
+        String[] copy = Arrays.copyOf(values, values.length);
+        Arrays.sort(copy);
+        return String.join(", ", copy);
     }
 
     Map<String, Object> constraintAttributesForFieldError(Class<?> dtoClass, String fieldName, Class<?> annotationType) {
@@ -45,6 +68,15 @@ public class ValidationMessageArgsBuilder {
         return AnnotationUtils.getAnnotationAttributes(dtoClass, fieldName, annotationType);
     }
 
+    /**
+     * Builds message-format arguments for a validation template and constraint attributes.
+     *
+     * @param fieldName display name of the validated field
+     * @param attrs     constraint annotation attributes
+     * @param template  the validation message template key
+     * @param dtoClass  the validated DTO class
+     * @return format arguments for the message template
+     */
     public Object[] buildMessageArgs(String fieldName, Map<String, Object> attrs, String template, Class<?> dtoClass) {
         Object[] storedArgs = MessageUtils.getStoredArgs(template);
 
@@ -225,14 +257,5 @@ public class ValidationMessageArgsBuilder {
         }
 
         return null;
-    }
-
-    public static String joinSortedComma(String[] values) {
-        if (values == null || values.length == 0) {
-            return "";
-        }
-        String[] copy = Arrays.copyOf(values, values.length);
-        Arrays.sort(copy);
-        return String.join(", ", copy);
     }
 }

@@ -11,14 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PinValidatorTest {
 
-    private static class PinDummy {
-        @ValidPIN
-        String defaultPin;
-
-        @ValidPIN(length = 4, maxAllowedRepetitive = 2, maxAllowedSequential = 2)
-        String customPin;
-    }
-
     private PinValidator validator;
 
     private static ValidPIN getAnnotation(String fieldName) {
@@ -95,5 +87,13 @@ public class PinValidatorTest {
         assertFalse(validator.isValid("12345", null)); // too long
         assertFalse(validator.isValid("1111", null)); // too many repetitions (4 > 2)
         assertFalse(validator.isValid("1234", null)); // too many sequential (4 > 2)
+    }
+
+    private static class PinDummy {
+        @ValidPIN
+        String defaultPin;
+
+        @ValidPIN(length = 4, maxAllowedRepetitive = 2, maxAllowedSequential = 2)
+        String customPin;
     }
 }

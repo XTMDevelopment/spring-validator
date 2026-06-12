@@ -11,17 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CardNumberValidatorTest {
 
-    private static class CardNumberDummy {
-        @ValidCardNumber
-        String defaultCard;
-
-        @ValidCardNumber()
-        String stripSeparatorsCard;
-
-        @ValidCardNumber(stripSeparators = false)
-        String noStripCard;
-    }
-
     private CardNumberValidator validator;
 
     private static ValidCardNumber getAnnotation(String fieldName) {
@@ -102,7 +91,7 @@ public class CardNumberValidatorTest {
 
         // Test minimum length (12 digits) - using valid Luhn numbers
         assertTrue(validator.isValid("400000000002", null)); // Valid 12-digit number
-        // Test maximum length (19 digits) - using valid Luhn numbers  
+        // Test maximum length (19 digits) - using valid Luhn numbers
         assertTrue(validator.isValid("4000000000000000006", null)); // Valid 19-digit number
     }
 
@@ -113,7 +102,7 @@ public class CardNumberValidatorTest {
         // Test numbers that should pass Luhn algorithm
         assertTrue(validator.isValid("4111111111111111", null)); // Valid test number
         assertTrue(validator.isValid("4000000000000002", null)); // Valid test number
-        
+
         // Test numbers that should fail Luhn algorithm
         assertFalse(validator.isValid("4111111111111112", null)); // Invalid test number
         assertFalse(validator.isValid("4000000000000001", null)); // Invalid test number
@@ -133,5 +122,16 @@ public class CardNumberValidatorTest {
 
         assertTrue(validator.isValid("", null));
         assertTrue(validator.isValid("   ", null));
+    }
+
+    private static class CardNumberDummy {
+        @ValidCardNumber
+        String defaultCard;
+
+        @ValidCardNumber()
+        String stripSeparatorsCard;
+
+        @ValidCardNumber(stripSeparators = false)
+        String noStripCard;
     }
 }

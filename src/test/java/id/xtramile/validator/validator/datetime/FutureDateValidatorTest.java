@@ -15,17 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FutureDateValidatorTest {
 
-    private static class FutureDateDummy {
-        @ValidFutureDate
-        String defaultFutureDate;
-
-        @ValidFutureDate(pattern = "dd/MM/yyyy")
-        String customPatternFutureDate;
-
-        @ValidFutureDate(pattern = "yyyy-MM-dd HH:mm:ss")
-        String dateTimeFutureDate;
-    }
-
     private FutureDateValidator validator;
 
     private static ValidFutureDate getAnnotation(String fieldName) {
@@ -231,17 +220,17 @@ public class FutureDateValidatorTest {
             @ValidFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         ValidFutureDate annotation = f.getAnnotation(ValidFutureDate.class);
         validator.initialize(annotation);
-        
+
         ZonedDateTime future = ZonedDateTime.now().plusDays(1);
         ZonedDateTime past = ZonedDateTime.now().minusDays(1);
-        
+
         String futureStr = future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         String pastStr = past.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
-        
+
         assertTrue(validator.isValid(futureStr, null));
         assertFalse(validator.isValid(pastStr, null));
     }
@@ -252,18 +241,18 @@ public class FutureDateValidatorTest {
             @ValidFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         ValidFutureDate annotation = f.getAnnotation(ValidFutureDate.class);
         validator.initialize(annotation);
-        
+
         // Test valid leap year in future
         ZonedDateTime validLeap = ZonedDateTime.of(2028, 2, 29, 10, 30, 0, 0, ZonedDateTime.now().getZone());
         if (validLeap.isAfter(ZonedDateTime.now())) {
             String validLeapStr = validLeap.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
             assertTrue(validator.isValid(validLeapStr, null));
         }
-        
+
         // Test invalid leap year
         assertFalse(validator.isValid("2023-02-29T10:30:00+07:00", null));
     }
@@ -271,13 +260,13 @@ public class FutureDateValidatorTest {
     @Test
     void testStrictParsingWithLocalDateTimeLeapYear() {
         validator.initialize(getAnnotation("dateTimeFutureDate"));
-        
+
         // Test valid leap year in future
         LocalDateTime validLeap = LocalDateTime.of(2028, 2, 29, 10, 30, 0);
         if (validLeap.isAfter(LocalDateTime.now())) {
             assertTrue(validator.isValid(validLeap.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
         }
-        
+
         // Test invalid leap year
         assertFalse(validator.isValid("2023-02-29 10:30:00", null));
     }
@@ -285,13 +274,13 @@ public class FutureDateValidatorTest {
     @Test
     void testStrictParsingWithLocalDateLeapYear() {
         validator.initialize(getAnnotation("defaultFutureDate"));
-        
+
         // Test valid leap year in future
         LocalDate validLeap = LocalDate.of(2028, 2, 29);
         if (validLeap.isAfter(LocalDate.now())) {
             assertTrue(validator.isValid(validLeap.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
         }
-        
+
         // Test invalid leap year
         assertFalse(validator.isValid("2023-02-29", null));
     }
@@ -299,10 +288,10 @@ public class FutureDateValidatorTest {
     @Test
     void testStrictParsingWithLocalDateTime() {
         validator.initialize(getAnnotation("dateTimeFutureDate"));
-        
+
         LocalDateTime future = LocalDateTime.now().plusDays(1);
         LocalDateTime past = LocalDateTime.now().minusDays(1);
-        
+
         assertTrue(validator.isValid(future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
         assertFalse(validator.isValid(past.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
     }
@@ -310,10 +299,10 @@ public class FutureDateValidatorTest {
     @Test
     void testStrictParsingWithLocalDate() {
         validator.initialize(getAnnotation("defaultFutureDate"));
-        
+
         LocalDate future = LocalDate.now().plusDays(1);
         LocalDate past = LocalDate.now().minusDays(1);
-        
+
         assertTrue(validator.isValid(future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
         assertFalse(validator.isValid(past.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
     }
@@ -321,7 +310,7 @@ public class FutureDateValidatorTest {
     @Test
     void testUnsupportedTemporalType() {
         validator.initialize(getAnnotation("defaultFutureDate"));
-        
+
         // Test when parseBest returns unsupported type
         assertFalse(validator.isValid("invalid", null));
     }
@@ -329,7 +318,7 @@ public class FutureDateValidatorTest {
     @Test
     void testExceptionHandling() {
         validator.initialize(getAnnotation("defaultFutureDate"));
-        
+
         // Test exception handling
         assertFalse(validator.isValid("completely-invalid", null));
     }
@@ -337,7 +326,7 @@ public class FutureDateValidatorTest {
     @Test
     void testBoundaryConditionExactlyNow() {
         validator.initialize(getAnnotation("dateTimeFutureDate"));
-        
+
         // Test exactly at now (should be invalid - not future)
         LocalDateTime now = LocalDateTime.now();
         assertFalse(validator.isValid(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
@@ -346,7 +335,7 @@ public class FutureDateValidatorTest {
     @Test
     void testDateTimeParseException() {
         validator.initialize(getAnnotation("defaultFutureDate"));
-        
+
         // Test DateTimeParseException handling
         assertFalse(validator.isValid("invalid-format", null));
     }
@@ -357,11 +346,11 @@ public class FutureDateValidatorTest {
             @ValidFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         ValidFutureDate annotation = f.getAnnotation(ValidFutureDate.class);
         validator.initialize(annotation);
-        
+
         ZonedDateTime past = ZonedDateTime.now().minusDays(1);
         String pastStr = past.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         assertFalse(validator.isValid(pastStr, null));
@@ -373,11 +362,11 @@ public class FutureDateValidatorTest {
             @ValidFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         ValidFutureDate annotation = f.getAnnotation(ValidFutureDate.class);
         validator.initialize(annotation);
-        
+
         ZonedDateTime future = ZonedDateTime.now().plusDays(1);
         String futureStr = future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         assertTrue(validator.isValid(futureStr, null));
@@ -386,7 +375,7 @@ public class FutureDateValidatorTest {
     @Test
     void testStrictParsingLocalDateTimePast() {
         validator.initialize(getAnnotation("dateTimeFutureDate"));
-        
+
         LocalDateTime past = LocalDateTime.now().minusDays(1);
         assertFalse(validator.isValid(past.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
     }
@@ -394,7 +383,7 @@ public class FutureDateValidatorTest {
     @Test
     void testStrictParsingLocalDateTimeFuture() {
         validator.initialize(getAnnotation("dateTimeFutureDate"));
-        
+
         LocalDateTime future = LocalDateTime.now().plusDays(1);
         assertTrue(validator.isValid(future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), null));
     }
@@ -402,7 +391,7 @@ public class FutureDateValidatorTest {
     @Test
     void testStrictParsingLocalDatePast() {
         validator.initialize(getAnnotation("defaultFutureDate"));
-        
+
         LocalDate past = LocalDate.now().minusDays(1);
         assertFalse(validator.isValid(past.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
     }
@@ -410,7 +399,7 @@ public class FutureDateValidatorTest {
     @Test
     void testStrictParsingLocalDateFuture() {
         validator.initialize(getAnnotation("defaultFutureDate"));
-        
+
         LocalDate future = LocalDate.now().plusDays(1);
         assertTrue(validator.isValid(future.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
     }
@@ -421,11 +410,11 @@ public class FutureDateValidatorTest {
             @ValidFutureDate(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
             String field;
         }
-        
+
         Field f = TestDummy.class.getDeclaredField("field");
         ValidFutureDate annotation = f.getAnnotation(ValidFutureDate.class);
         validator.initialize(annotation);
-        
+
         // Test with valid leap year in future
         ZonedDateTime futureLeap = ZonedDateTime.of(2028, 2, 29, 10, 30, 0, 0, ZonedDateTime.now().getZone());
         if (futureLeap.isAfter(ZonedDateTime.now())) {
@@ -437,7 +426,7 @@ public class FutureDateValidatorTest {
     @Test
     void testStrictParsingLocalDateTimeValidLeapYearFuture() {
         validator.initialize(getAnnotation("dateTimeFutureDate"));
-        
+
         // Test with valid leap year in future
         LocalDateTime futureLeap = LocalDateTime.of(2028, 2, 29, 10, 30, 0);
         if (futureLeap.isAfter(LocalDateTime.now())) {
@@ -448,11 +437,22 @@ public class FutureDateValidatorTest {
     @Test
     void testStrictParsingLocalDateValidLeapYearFuture() {
         validator.initialize(getAnnotation("defaultFutureDate"));
-        
+
         // Test with valid leap year in future
         LocalDate futureLeap = LocalDate.of(2028, 2, 29);
         if (futureLeap.isAfter(LocalDate.now())) {
             assertTrue(validator.isValid(futureLeap.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), null));
         }
+    }
+
+    private static class FutureDateDummy {
+        @ValidFutureDate
+        String defaultFutureDate;
+
+        @ValidFutureDate(pattern = "dd/MM/yyyy")
+        String customPatternFutureDate;
+
+        @ValidFutureDate(pattern = "yyyy-MM-dd HH:mm:ss")
+        String dateTimeFutureDate;
     }
 }

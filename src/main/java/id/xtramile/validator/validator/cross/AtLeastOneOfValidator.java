@@ -15,7 +15,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isPresent;
  * Validates that at least one of the specified fields is present (not null/empty).
  * This validator ensures that at least one field from the list has a value,
  * providing flexible validation for optional field groups.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null beans as valid</li>
@@ -23,7 +23,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isPresent;
  * <li>Returns true if any field is present</li>
  * <li>Adds violation to the first field if none are present</li>
  * </ul>
- * 
+ *
  * @see AtLeastOneOf
  */
 public class AtLeastOneOfValidator implements ConstraintValidator<AtLeastOneOf, Object> {
@@ -31,6 +31,7 @@ public class AtLeastOneOfValidator implements ConstraintValidator<AtLeastOneOf, 
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the AtLeastOneOf annotation instance
      */
     @Override
@@ -40,7 +41,8 @@ public class AtLeastOneOfValidator implements ConstraintValidator<AtLeastOneOf, 
 
     /**
      * Validates that at least one of the specified fields is present.
-     * @param bean the object to validate
+     *
+     * @param bean    the object to validate
      * @param context the constraint validator context
      * @return true if at least one field is present or bean is null
      */

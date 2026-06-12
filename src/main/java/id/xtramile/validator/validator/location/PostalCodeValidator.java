@@ -15,7 +15,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates postal codes for specific countries using regex patterns.
  * This validator ensures the postal code follows the correct format
  * for the specified country with predefined validation rules.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -23,19 +23,19 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Trims whitespace before validation</li>
  * <li>Returns false for unsupported countries</li>
  * </ul>
- * 
+ *
  * @see ValidPostalCode
  */
 public class PostalCodeValidator implements ConstraintValidator<ValidPostalCode, Object> {
-    private String country;
-
     private static final Map<String, Pattern> RULES = Map.of(
             "ID", Pattern.compile("^[0-9]{5}$"),
             "MY", Pattern.compile("^[0-9]{5}$")
     );
+    private String country;
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidPostalCode annotation instance
      */
     @Override
@@ -45,7 +45,8 @@ public class PostalCodeValidator implements ConstraintValidator<ValidPostalCode,
 
     /**
      * Validates the postal code against the country-specific pattern.
-     * @param value the postal code string to validate
+     *
+     * @param value   the postal code string to validate
      * @param context the constraint validator context
      * @return true if the postal code is valid or is null/blank
      */
@@ -56,16 +57,14 @@ public class PostalCodeValidator implements ConstraintValidator<ValidPostalCode,
             return false;
         }
 
-        if (value instanceof String) {
-            String s = (String) value;
+        if (value instanceof String s) {
             if (isBlank(s)) {
                 return true;
             }
 
             return pattern.matcher(s.trim()).matches();
 
-        } else if (value instanceof Integer) {
-            Integer num = (Integer) value;
+        } else if (value instanceof Integer num) {
             if (num == 0) {
                 return true;
             }

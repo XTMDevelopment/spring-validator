@@ -11,24 +11,41 @@ import java.lang.annotation.*;
  * <p>
  * This validator is specifically designed for Indonesian phone numbers in MSISDN format.
  * Null/blank values are considered valid.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidPhoneNumber
  * private String msisdn; // e.g., 6281234567890
- * 
+ *
  * @ValidPhoneNumber
  * private String phoneNumber; // e.g., 62812345678901
  * }</pre>
- * 
+ *
  * @see PhoneNumberValidator
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PhoneNumberValidator.class)
 public @interface ValidPhoneNumber {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
+
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
+
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 }

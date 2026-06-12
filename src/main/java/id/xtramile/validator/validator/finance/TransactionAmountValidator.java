@@ -12,7 +12,7 @@ import jakarta.validation.ConstraintValidatorContext;
  * Validates monetary transaction amounts as Long values with configurable min/max bounds.
  * This validator ensures the amount meets financial transaction requirements
  * for large monetary values.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null values as valid</li>
@@ -20,7 +20,7 @@ import jakarta.validation.ConstraintValidatorContext;
  * <li>Validates zero amount handling based on allowZero flag</li>
  * <li>Rejects negative amounts</li>
  * </ul>
- * 
+ *
  * @see ValidTransactionAmount
  */
 public class TransactionAmountValidator implements ConstraintValidator<ValidTransactionAmount, Long> {
@@ -30,6 +30,7 @@ public class TransactionAmountValidator implements ConstraintValidator<ValidTran
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidTransactionAmount annotation instance
      */
     @Override
@@ -41,7 +42,8 @@ public class TransactionAmountValidator implements ConstraintValidator<ValidTran
 
     /**
      * Validates the transaction amount against the configured constraints.
-     * @param value the Long amount to validate
+     *
+     * @param value   the Long amount to validate
      * @param context the constraint validator context
      * @return true if the amount is valid or is null
      */

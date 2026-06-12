@@ -1,5 +1,6 @@
 package id.xtramile.validator.web;
 
+import id.xtramile.validator.web.messages.CompositeConstraintMessageResolver;
 import jakarta.validation.ConstraintViolation;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.FieldError;
@@ -7,6 +8,9 @@ import org.springframework.validation.FieldError;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Resolves user-friendly validation messages from constraint violations and field errors.
+ */
 public class FriendlyMessageResolver {
 
     private static final String VALIDATION_DEFAULT = "validation.default";
@@ -14,16 +18,62 @@ public class FriendlyMessageResolver {
     private final MessageResourceResolver messageResolver;
     private final ValidationFieldDisplayNames fieldNames;
     private final ValidationMessageArgsBuilder messageArgsBuilder;
-    private final ConstraintAnnotationMessages annotationMessages;
+    private final CompositeConstraintMessageResolver annotationMessages;
 
-    public FriendlyMessageResolver(MessageResourceResolver messageResolver) {
+    /**
+     * Creates a resolver with explicit collaborators.
+     *
+     * @param messageResolver    loads localized message templates
+     * @param fieldNames         resolves display names for DTO fields
+     * @param messageArgsBuilder builds message format arguments
+     * @param annotationMessages resolves messages by annotation type
+     */
+    public FriendlyMessageResolver(
+            MessageResourceResolver messageResolver,
+            ValidationFieldDisplayNames fieldNames,
+            ValidationMessageArgsBuilder messageArgsBuilder,
+            CompositeConstraintMessageResolver annotationMessages) {
         this.messageResolver = messageResolver;
-        this.fieldNames = new ValidationFieldDisplayNames();
-        this.messageArgsBuilder = new ValidationMessageArgsBuilder(fieldNames);
-        this.annotationMessages = new ConstraintAnnotationMessages(messageResolver, fieldNames);
-        System.out.println("MessageResolver loaded from id.xtramile.validator");
+        this.fieldNames = fieldNames;
+        this.messageArgsBuilder = messageArgsBuilder;
+        this.annotationMessages = annotationMessages;
     }
 
+    /**
+     * Creates a resolver with default collaborators derived from the message resolver.
+     *
+     * @param messageResolver loads localized message templates
+     */
+    public FriendlyMessageResolver(MessageResourceResolver messageResolver) {
+        this(messageResolver, defaultCollaborators(messageResolver));
+    }
+
+    private FriendlyMessageResolver(MessageResourceResolver messageResolver, DefaultCollaborators collaborators) {
+        this(
+                messageResolver,
+                collaborators.fieldNames(),
+                collaborators.messageArgsBuilder(),
+                collaborators.annotationMessages()
+        );
+    }
+
+    private static DefaultCollaborators defaultCollaborators(MessageResourceResolver messageResolver) {
+        ValidationFieldDisplayNames fieldNames = new ValidationFieldDisplayNames();
+        return new DefaultCollaborators(
+                fieldNames,
+                new ValidationMessageArgsBuilder(fieldNames),
+                new CompositeConstraintMessageResolver(messageResolver, fieldNames)
+        );
+    }
+
+    /**
+     * Resolves a friendly message for a constraint violation.
+     *
+     * @param v         the constraint violation
+     * @param field     property path or field name
+     * @param dtoClass  the validated root bean class
+     * @return the resolved message
+     */
     public String resolve(ConstraintViolation<?> v, String field, Class<?> dtoClass) {
         String template = v.getMessageTemplate();
 
@@ -54,6 +104,13 @@ public class FriendlyMessageResolver {
         return annotationMessages.resolveFromAnnotation(displayName, type, attrs, dtoClass);
     }
 
+    /**
+     * Resolves a friendly message for a Spring {@link FieldError}.
+     *
+     * @param err       the field error from binding validation
+     * @param dtoClass  the validated DTO class
+     * @return the resolved message
+     */
     public String resolve(FieldError err, Class<?> dtoClass) {
         String field = err.getField();
         String defaultMessage = err.getDefaultMessage();
@@ -96,6 +153,12 @@ public class FriendlyMessageResolver {
     }
 
     private Class<?> resolveAnnotationType(String annotationName) {
-        return ValidationAnnotationTypeRegistry.resolve(annotationName);
+        return AnnotationRegistry.resolve(annotationName);
+    }
+
+    private record DefaultCollaborators(
+            ValidationFieldDisplayNames fieldNames,
+            ValidationMessageArgsBuilder messageArgsBuilder,
+            CompositeConstraintMessageResolver annotationMessages) {
     }
 }

@@ -11,17 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NationalIdValidatorTest {
 
-    private static class NationalIdDummy {
-        @ValidNationalID
-        String defaultNationalId;
-
-        @ValidNationalID()
-        String indonesianNationalId;
-
-        @ValidNationalID(country = "US")
-        String usNationalId;
-    }
-
     private NationalIdValidator validator;
 
     private static ValidNationalID getAnnotation(String fieldName) {
@@ -99,5 +88,16 @@ public class NationalIdValidatorTest {
         assertTrue(validator.isValid("1234567890123456", null));
         assertTrue(validator.isValid("9876543210987654", null));
         assertTrue(validator.isValid("1111111111111111", null));
+    }
+
+    private static class NationalIdDummy {
+        @ValidNationalID
+        String defaultNationalId;
+
+        @ValidNationalID()
+        String indonesianNationalId;
+
+        @ValidNationalID(country = "US")
+        String usNationalId;
     }
 }

@@ -9,106 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RequiredWithValidatorTest {
 
-    @RequiredWith(when = "hasEmail", require = {"email"})
-    private static class EmailRequiredDummy {
-        private final Boolean hasEmail;
-        private final String email;
-
-        private EmailRequiredDummy(Boolean hasEmail, String email) {
-            this.hasEmail = hasEmail;
-            this.email = email;
-        }
-
-        public Boolean hasEmail() {
-            return hasEmail;
-        }
-
-        public String email() {
-            return email;
-        }
-    }
-
-    @RequiredWith(when = "hasPhone", require = {"phone", "phoneType"})
-    private static class PhoneRequiredDummy {
-        private final Boolean hasPhone;
-        private final String phone;
-        private final String phoneType;
-
-        private PhoneRequiredDummy(Boolean hasPhone, String phone, String phoneType) {
-            this.hasPhone = hasPhone;
-            this.phone = phone;
-            this.phoneType = phoneType;
-        }
-
-        public Boolean hasPhone() {
-            return hasPhone;
-        }
-
-        public String phone() {
-            return phone;
-        }
-
-        public String phoneType() {
-            return phoneType;
-        }
-    }
-
-    @RequiredWith(when = "isActive", require = {"username", "password"})
-    private static class UserRequiredDummy {
-        private final Boolean isActive;
-        private final String username;
-        private final String password;
-
-        private UserRequiredDummy(Boolean isActive, String username, String password) {
-            this.isActive = isActive;
-            this.username = username;
-            this.password = password;
-        }
-
-        public Boolean isActive() {
-            return isActive;
-        }
-
-        public String username() {
-            return username;
-        }
-
-        public String password() {
-            return password;
-        }
-    }
-
-    @RequiredWith(when = "hasAddress", require = {"street", "city", "zipCode"})
-    private static class AddressRequiredDummy {
-        private final Boolean hasAddress;
-        private final String street;
-        private final String city;
-        private final String zipCode;
-
-        private AddressRequiredDummy(Boolean hasAddress, String street, String city, String zipCode) {
-            this.hasAddress = hasAddress;
-            this.street = street;
-            this.city = city;
-            this.zipCode = zipCode;
-        }
-
-        public Boolean hasAddress() {
-            return hasAddress;
-        }
-
-        public String street() {
-            return street;
-        }
-
-        public String city() {
-            return city;
-        }
-
-        public String zipCode() {
-            return zipCode;
-        }
-    }
-
     private RequiredWithValidator validator;
 
     @BeforeEach
@@ -212,22 +112,7 @@ public class RequiredWithValidatorTest {
     @Test
     void testStringTriggerValues() {
         @RequiredWith(when = "status", require = {"message"})
-        class StatusDummy {
-            private final String status;
-            private final String message;
-
-            public StatusDummy(String status, String message) {
-                this.status = status;
-                this.message = message;
-            }
-
-            public String status() {
-                return status;
-            }
-
-            public String message() {
-                return message;
-            }
+        record StatusDummy(String status, String message) {
         }
 
         validator.initialize(StatusDummy.class.getAnnotation(RequiredWith.class));
@@ -245,22 +130,7 @@ public class RequiredWithValidatorTest {
     @Test
     void testNumericTriggerValues() {
         @RequiredWith(when = "count", require = {"description"})
-        class CountDummy {
-            private final Integer count;
-            private final String description;
-
-            public CountDummy(Integer count, String description) {
-                this.count = count;
-                this.description = description;
-            }
-
-            public Integer count() {
-                return count;
-            }
-
-            public String description() {
-                return description;
-            }
+        record CountDummy(Integer count, String description) {
         }
 
         validator.initialize(CountDummy.class.getAnnotation(RequiredWith.class));
@@ -315,5 +185,21 @@ public class RequiredWithValidatorTest {
         assertTrue(validator.isValid(new EmailRequiredDummy(true, "Test@Example.com"), null)); // Case sensitive email
         assertTrue(validator.isValid(new EmailRequiredDummy(true, "TEST@EXAMPLE.COM"), null)); // Uppercase email
         assertTrue(validator.isValid(new EmailRequiredDummy(true, "test@example.com"), null)); // Lowercase email
+    }
+
+    @RequiredWith(when = "hasEmail", require = {"email"})
+    private record EmailRequiredDummy(Boolean hasEmail, String email) {
+    }
+
+    @RequiredWith(when = "hasPhone", require = {"phone", "phoneType"})
+    private record PhoneRequiredDummy(Boolean hasPhone, String phone, String phoneType) {
+    }
+
+    @RequiredWith(when = "isActive", require = {"username", "password"})
+    private record UserRequiredDummy(Boolean isActive, String username, String password) {
+    }
+
+    @RequiredWith(when = "hasAddress", require = {"street", "city", "zipCode"})
+    private record AddressRequiredDummy(Boolean hasAddress, String street, String city, String zipCode) {
     }
 }

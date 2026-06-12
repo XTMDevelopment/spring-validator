@@ -16,7 +16,7 @@ import static id.xtramile.validator.util.ValidatorUtils.mbToBytes;
  * Validates file size for MultipartFile and byte array objects.
  * This validator ensures the file size is within the specified range
  * with support for both byte and megabyte limits.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null values as valid</li>
@@ -25,7 +25,7 @@ import static id.xtramile.validator.util.ValidatorUtils.mbToBytes;
  * <li>Supports both byte and megabyte limits</li>
  * <li>Ignores unsupported types (returns true)</li>
  * </ul>
- * 
+ *
  * @see ValidFileSize
  */
 public class FileSizeValidator implements ConstraintValidator<ValidFileSize, Object> {
@@ -34,6 +34,7 @@ public class FileSizeValidator implements ConstraintValidator<ValidFileSize, Obj
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidFileSize annotation instance
      */
     @Override
@@ -42,7 +43,7 @@ public class FileSizeValidator implements ConstraintValidator<ValidFileSize, Obj
 
         long maxBytes = annotation.maxBytes();
         long maxFromMB = mbToBytes(annotation.maxMB());
-        
+
         // If maxBytes is -1 (no limit) but maxMB is set, use maxMB
         if (maxBytes < 0 && maxFromMB >= 0) {
             this.max = maxFromMB;
@@ -57,7 +58,8 @@ public class FileSizeValidator implements ConstraintValidator<ValidFileSize, Obj
 
     /**
      * Validates the file size against the configured constraints.
-     * @param value the file object to validate
+     *
+     * @param value   the file object to validate
      * @param context the constraint validator context
      * @return true if the file size is within limits or value is null/empty
      */
@@ -66,13 +68,11 @@ public class FileSizeValidator implements ConstraintValidator<ValidFileSize, Obj
         if (value == null) return true;
 
         long size;
-        if (value instanceof MultipartFile) {
-            MultipartFile mf = (MultipartFile) value;
+        if (value instanceof MultipartFile mf) {
             if (mf.isEmpty()) return true;
             size = mf.getSize();
 
-        } else if (value instanceof byte[]) {
-            byte[] bytes = (byte[]) value;
+        } else if (value instanceof byte[] bytes) {
             if (bytes.length == 0) return true;
             size = bytes.length;
 

@@ -12,20 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ISOCodeValidatorTest {
 
-    private static class ISOCodeDummy {
-        @ValidISOCode(value = ISOType.CURRENCY)
-        String currencyCode;
-
-        @ValidISOCode(value = ISOType.COUNTRY_ALPHA2)
-        String countryAlpha2Code;
-
-        @ValidISOCode(value = ISOType.COUNTRY_ALPHA3)
-        String countryAlpha3Code;
-
-        @ValidISOCode(value = ISOType.LANGUAGE)
-        String languageCode;
-    }
-
     private ISOCodeValidator validator;
 
     private static ValidISOCode getAnnotation(String fieldName) {
@@ -165,5 +151,19 @@ public class ISOCodeValidatorTest {
         validator.initialize(getAnnotation("languageCode"));
         assertTrue(validator.isValid("en", null));
         assertTrue(validator.isValid("id", null));
+    }
+
+    private static class ISOCodeDummy {
+        @ValidISOCode(value = ISOType.CURRENCY)
+        String currencyCode;
+
+        @ValidISOCode(value = ISOType.COUNTRY_ALPHA2)
+        String countryAlpha2Code;
+
+        @ValidISOCode(value = ISOType.COUNTRY_ALPHA3)
+        String countryAlpha3Code;
+
+        @ValidISOCode(value = ISOType.LANGUAGE)
+        String languageCode;
     }
 }

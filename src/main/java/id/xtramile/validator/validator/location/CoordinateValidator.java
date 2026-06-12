@@ -12,7 +12,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates geographic coordinate strings in "lat,lon" or "lon,lat" format.
  * This validator ensures the coordinates are within valid ranges with optional
  * coordinate order flipping for different input formats.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -21,7 +21,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Validates latitude range (-90 to 90)</li>
  * <li>Validates longitude range (-180 to 180)</li>
  * </ul>
- * 
+ *
  * @see ValidCoordinates
  */
 public class CoordinateValidator implements ConstraintValidator<ValidCoordinates, String> {
@@ -29,6 +29,7 @@ public class CoordinateValidator implements ConstraintValidator<ValidCoordinates
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidCoordinates annotation instance
      */
     @Override
@@ -38,7 +39,8 @@ public class CoordinateValidator implements ConstraintValidator<ValidCoordinates
 
     /**
      * Validates the coordinate string format and ranges.
-     * @param value the coordinate string to validate
+     *
+     * @param value   the coordinate string to validate
      * @param context the constraint validator context
      * @return true if the coordinates are valid or is null/blank
      */
@@ -56,7 +58,8 @@ public class CoordinateValidator implements ConstraintValidator<ValidCoordinates
 
     /**
      * Checks if the coordinate values are within valid ranges.
-     * @param first the first coordinate value
+     *
+     * @param first  the first coordinate value
      * @param second the second coordinate value
      * @return true if both coordinates are within valid ranges
      */

@@ -11,16 +11,16 @@ import java.lang.annotation.*;
  * <p>
  * Null/blank values are considered valid. This validator ensures domain names
  * follow the correct format and optionally supports internationalized domain names.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidDomainName
  * private String domain; // e.g., example.com
- * 
+ *
  * @ValidDomainName(allowPunycode = false)
  * private String strictDomain; // e.g., mycompany.co
  * }</pre>
- * 
+ *
  * @see DomainNameValidator
  */
 @Documented
@@ -28,12 +28,31 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = DomainNameValidator.class)
 public @interface ValidDomainName {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
+
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
+
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
      * Allow internationalized (IDN) names (punycode like xn--).
+     *
+     * @return the allow internationalized (IDN) names (punycode like xn--)
      */
     boolean allowPunycode() default true;
 }

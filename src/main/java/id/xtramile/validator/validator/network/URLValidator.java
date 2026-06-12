@@ -15,7 +15,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates URLs with optional HTTPS-only enforcement.
  * This validator ensures the URL follows proper format with valid
  * scheme, host, and optional protocol restrictions.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -24,18 +24,18 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Optionally enforces HTTPS-only protocol</li>
  * <li>Prevents invalid URL endings and formats</li>
  * </ul>
- * 
+ *
  * @see ValidURL
  */
 public class URLValidator implements ConstraintValidator<ValidURL, String> {
-    private boolean httpsOnly;
-    
     private static final Pattern URL_PATTERN = Pattern.compile(
             "^https?://\\S+$"
     );
+    private boolean httpsOnly;
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidURL annotation instance
      */
     @Override
@@ -45,7 +45,8 @@ public class URLValidator implements ConstraintValidator<ValidURL, String> {
 
     /**
      * Validates the URL format and optional HTTPS enforcement.
-     * @param value the URL string to validate
+     *
+     * @param value   the URL string to validate
      * @param context the constraint validator context
      * @return true if the URL is valid or is null/blank
      */
@@ -56,9 +57,9 @@ public class URLValidator implements ConstraintValidator<ValidURL, String> {
         String trimmed = value.trim();
         if (trimmed.isEmpty()) return true;
 
-        if (trimmed.endsWith("+") || trimmed.endsWith("-") || trimmed.endsWith("%") || 
-            trimmed.endsWith("#") || trimmed.endsWith("@") || trimmed.endsWith("&") || 
-            trimmed.endsWith("*")) {
+        if (trimmed.endsWith("+") || trimmed.endsWith("-") || trimmed.endsWith("%") ||
+                trimmed.endsWith("#") || trimmed.endsWith("@") || trimmed.endsWith("&") ||
+                trimmed.endsWith("*")) {
             return false;
         }
 

@@ -11,17 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CvvValidatorTest {
 
-    private static class CvvDummy {
-        @ValidCVV
-        String defaultCvv;
-
-        @ValidCVV()
-        String allowFourDigitsCvv;
-
-        @ValidCVV(allowFourDigits = false)
-        String threeDigitsOnlyCvv;
-    }
-
     private CvvValidator validator;
 
     private static ValidCVV getAnnotation(String fieldName) {
@@ -159,5 +148,16 @@ public class CvvValidatorTest {
         assertTrue(validator.isValid("999", null)); // Maximum 3-digit value
         assertTrue(validator.isValid("0000", null)); // Minimum 4-digit value
         assertTrue(validator.isValid("9999", null)); // Maximum 4-digit value
+    }
+
+    private static class CvvDummy {
+        @ValidCVV
+        String defaultCvv;
+
+        @ValidCVV()
+        String allowFourDigitsCvv;
+
+        @ValidCVV(allowFourDigits = false)
+        String threeDigitsOnlyCvv;
     }
 }

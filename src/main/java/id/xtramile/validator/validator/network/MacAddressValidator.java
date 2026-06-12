@@ -14,14 +14,15 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates MAC addresses in standard format with colons or hyphens.
  * This validator ensures the MAC address follows the standard format
  * with 6 pairs of hexadecimal digits separated by colons or hyphens.
- * 
+ *
  * <p>The validator performs the following operations:
+ * <ul>
  * <li>Accepts null/blank values as valid</li>
  * <li>Validates 6 pairs of hexadecimal digits</li>
  * <li>Supports colon (:) and hyphen (-) separators</li>
  * <li>Uses regex pattern matching for validation</li>
  * </ul>
- * 
+ *
  * @see ValidMacAddress
  */
 public class MacAddressValidator implements ConstraintValidator<ValidMacAddress, String> {
@@ -29,7 +30,8 @@ public class MacAddressValidator implements ConstraintValidator<ValidMacAddress,
 
     /**
      * Validates the MAC address format.
-     * @param value the MAC address string to validate
+     *
+     * @param value   the MAC address string to validate
      * @param context the constraint validator context
      * @return true if the MAC address is valid or is null/blank
      */

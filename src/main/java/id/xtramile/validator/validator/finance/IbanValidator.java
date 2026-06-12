@@ -12,7 +12,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates IBAN (International Bank Account Number) using the mod-97 algorithm.
  * This validator ensures the IBAN follows the international standard format
  * and passes the checksum validation.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -21,14 +21,15 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Validates alphanumeric format</li>
  * <li>Applies mod-97 checksum algorithm</li>
  * </ul>
- * 
+ *
  * @see ValidIBAN
  */
 public class IbanValidator implements ConstraintValidator<ValidIBAN, String> {
 
     /**
      * Validates the IBAN using mod-97 algorithm.
-     * @param value the IBAN string to validate
+     *
+     * @param value   the IBAN string to validate
      * @param context the constraint validator context
      * @return true if the IBAN is valid or is null/blank
      */

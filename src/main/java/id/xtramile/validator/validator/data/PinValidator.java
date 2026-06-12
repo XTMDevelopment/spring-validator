@@ -13,7 +13,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <p>
  * Validates that a PIN contains only digits, meets the specified length requirement,
  * and doesn't have excessive repetitive or sequential patterns for security purposes.
- * 
+ *
  * <p>The validator performs the following checks:
  * <ul>
  * <li>Ensures the PIN contains only numeric digits</li>
@@ -21,9 +21,9 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Checks for consecutive identical digits (repetitive pattern)</li>
  * <li>Checks for consecutive sequential digits (ascending or descending)</li>
  * </ul>
- * 
+ *
  * <p>Null/blank values are considered valid.
- * 
+ *
  * @see ValidPIN
  */
 public class PinValidator implements ConstraintValidator<ValidPIN, String> {
@@ -33,6 +33,7 @@ public class PinValidator implements ConstraintValidator<ValidPIN, String> {
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidPIN annotation instance
      */
     @Override
@@ -44,7 +45,8 @@ public class PinValidator implements ConstraintValidator<ValidPIN, String> {
 
     /**
      * Validates the PIN value against all configured constraints.
-     * @param value the PIN string to validate
+     *
+     * @param value   the PIN string to validate
      * @param context the constraint validator context
      * @return true if valid, false otherwise
      */
@@ -73,6 +75,7 @@ public class PinValidator implements ConstraintValidator<ValidPIN, String> {
 
     /**
      * Checks if the PIN has too many consecutive identical digits.
+     *
      * @param value the PIN string to check
      * @return true if repetitive pattern exceeds allowed limit
      */
@@ -94,6 +97,7 @@ public class PinValidator implements ConstraintValidator<ValidPIN, String> {
     /**
      * Checks if the PIN has too many consecutive sequential digits.
      * Supports both ascending (1234) and descending (4321) sequences.
+     *
      * @param value the PIN string to check
      * @return true if sequential pattern exceeds allowed limit
      */

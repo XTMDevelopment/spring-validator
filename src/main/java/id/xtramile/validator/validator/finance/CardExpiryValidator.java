@@ -19,7 +19,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates card expiry dates in MM/YY or MM/YYYY format.
  * This validator ensures the expiry date follows the correct format
  * and optionally checks if the card is not expired.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -28,7 +28,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Optionally checks if card is not expired</li>
  * <li>Uses regex pattern matching for format validation</li>
  * </ul>
- * 
+ *
  * @see ValidCardExpiry
  */
 public class CardExpiryValidator implements ConstraintValidator<ValidCardExpiry, String> {
@@ -37,6 +37,7 @@ public class CardExpiryValidator implements ConstraintValidator<ValidCardExpiry,
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidCardExpiry annotation instance
      */
     @Override
@@ -46,7 +47,8 @@ public class CardExpiryValidator implements ConstraintValidator<ValidCardExpiry,
 
     /**
      * Validates the card expiry date format and optional future check.
-     * @param value the expiry date string to validate
+     *
+     * @param value   the expiry date string to validate
      * @param context the constraint validator context
      * @return true if the expiry date is valid or is null/blank
      */
@@ -69,7 +71,7 @@ public class CardExpiryValidator implements ConstraintValidator<ValidCardExpiry,
         YearMonth exp = YearMonth.of(year, month);
         if (mustBeFuture) {
             YearMonth now = YearMonth.now(ZoneId.systemDefault());
-            
+
             if (exp.isBefore(now)) {
                 MessageUtils.buildViolation(context, Group.FINANCE, "card-expiry.future");
                 return false;

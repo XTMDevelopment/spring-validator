@@ -26,24 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ValidationAnnotationTypeRegistryTest {
 
-    @SuppressWarnings("ConstantValue")
-    @Test
-    void resolve_null_returnsNull() {
-        assertThat(ValidationAnnotationTypeRegistry.resolve(null)).isNull();
-    }
-
-    @Test
-    void resolve_unknown_returnsNull() {
-        assertThat(ValidationAnnotationTypeRegistry.resolve("NoSuchConstraint")).isNull();
-        assertThat(ValidationAnnotationTypeRegistry.resolve("")).isNull();
-    }
-
-    @ParameterizedTest
-    @MethodSource("allRegisteredCodes")
-    void resolve_mapsEveryRegisteredSpringCodeToAnnotationType(String code, Class<?> expectedType) {
-        assertThat(ValidationAnnotationTypeRegistry.resolve(code)).isEqualTo(expectedType);
-    }
-
     private static Stream<Arguments> allRegisteredCodes() {
         return Stream.of(
                 Arguments.of("NotBlank", NotBlank.class),
@@ -145,5 +127,22 @@ class ValidationAnnotationTypeRegistryTest {
                 Arguments.of("ValidURL", ValidURL.class),
                 Arguments.of("ValidDomainName", ValidDomainName.class)
         );
+    }
+
+    @Test
+    void resolve_null_returnsNull() {
+        assertThat(ValidationAnnotationTypeRegistry.resolve(null)).isNull();
+    }
+
+    @Test
+    void resolve_unknown_returnsNull() {
+        assertThat(ValidationAnnotationTypeRegistry.resolve("NoSuchConstraint")).isNull();
+        assertThat(ValidationAnnotationTypeRegistry.resolve("")).isNull();
+    }
+
+    @ParameterizedTest
+    @MethodSource("allRegisteredCodes")
+    void resolve_mapsEveryRegisteredSpringCodeToAnnotationType(String code, Class<?> expectedType) {
+        assertThat(ValidationAnnotationTypeRegistry.resolve(code)).isEqualTo(expectedType);
     }
 }

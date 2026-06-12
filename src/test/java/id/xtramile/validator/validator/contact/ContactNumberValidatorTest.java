@@ -11,11 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ContactNumberValidatorTest {
 
-    private static class ContactNumberDummy {
-        @ValidContactNumber
-        String contactNumberField;
-    }
-
     private ContactNumberValidator validator;
 
     private static ValidContactNumber getAnnotation(String fieldName) {
@@ -219,5 +214,10 @@ public class ContactNumberValidatorTest {
         assertFalse(validator.isValid("123456", null)); // too short without +
         assertFalse(validator.isValid("+0123456789", null)); // starts with 0
         assertFalse(validator.isValid("0123456789", null)); // starts with 0 without +
+    }
+
+    private static class ContactNumberDummy {
+        @ValidContactNumber
+        String contactNumberField;
     }
 }

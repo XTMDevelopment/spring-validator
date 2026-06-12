@@ -19,7 +19,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates that the first date field is after the second date field.
  * Optionally enforces a maximum distance between the two dates based on precision.
  * Both fields are parsed as date-time strings using the specified pattern.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null beans as valid</li>
@@ -29,7 +29,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Optionally validates maximum distance between dates if configured</li>
  * <li>Adds violation to the first field if validation fails</li>
  * </ul>
- * 
+ *
  * @see DateAfter
  */
 public class DateAfterValidator implements ConstraintValidator<DateAfter, Object> {
@@ -41,6 +41,7 @@ public class DateAfterValidator implements ConstraintValidator<DateAfter, Object
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the DateAfter annotation instance
      */
     @Override
@@ -54,7 +55,8 @@ public class DateAfterValidator implements ConstraintValidator<DateAfter, Object
 
     /**
      * Validates that the first date field is after the second date field.
-     * @param bean the object to validate
+     *
+     * @param bean    the object to validate
      * @param context the constraint validator context
      * @return true if the first date is after the second date, or bean/fields are null
      */
@@ -68,10 +70,7 @@ public class DateAfterValidator implements ConstraintValidator<DateAfter, Object
         Object secondValue = wrapper.getPropertyValue(second);
 
         if (firstValue == null || secondValue == null) return true;
-        if (!(firstValue instanceof String) || !(secondValue instanceof String)) return true;
-
-        String firstStr = (String) firstValue;
-        String secondStr = (String) secondValue;
+        if (!(firstValue instanceof String firstStr) || !(secondValue instanceof String secondStr)) return true;
 
         if (isBlank(firstStr) || isBlank(secondStr)) return true;
 

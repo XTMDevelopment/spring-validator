@@ -15,16 +15,16 @@ import java.util.regex.Pattern;
  * Validates that a string value is a valid UUID (java.util.UUID format).
  * This validator ensures the string follows the standard UUID format (8-4-4-4-12 hexadecimal digits)
  * and can be parsed as a valid UUID.
- * 
+ *
  * <p>The validator performs the following checks:
  * <ul>
  * <li>Validates the UUID format using regex pattern</li>
  * <li>Attempts to parse the string as a UUID using UUID.fromString()</li>
  * <li>Handles parsing exceptions gracefully</li>
  * </ul>
- * 
+ *
  * <p>Null/blank values are considered valid.
- * 
+ *
  * @see ValidUUID
  */
 public class UUIDValidator implements ConstraintValidator<ValidUUID, String> {
@@ -32,7 +32,8 @@ public class UUIDValidator implements ConstraintValidator<ValidUUID, String> {
 
     /**
      * Validates that the string is a valid UUID.
-     * @param value the string value to validate
+     *
+     * @param value   the string value to validate
      * @param context the constraint validator context
      * @return true if the string is a valid UUID or is null/blank
      */

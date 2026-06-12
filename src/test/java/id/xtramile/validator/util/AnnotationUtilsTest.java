@@ -12,33 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AnnotationUtilsTest {
 
-    private static class TestDto {
-        @ValidUsername(min = 3)
-        private String username;
-
-        @Size(min = 5, max = 10)
-        private String name;
-    }
-
-    private static class ParentDto {
-        @NotNull
-        protected String parentField;
-    }
-
-    private static class ChildDto extends ParentDto {
-        @Size(min = 1)
-        private String childField;
-    }
-
-    private static class OuterNestedDto {
-        private InnerNestedDto inner;
-    }
-
-    private static class InnerNestedDto {
-        @Size(max = 40)
-        private String email;
-    }
-
     @Test
     void testGetAnnotationAttributesWithExistingAnnotation() {
         Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(
@@ -202,6 +175,33 @@ class AnnotationUtilsTest {
         assertNotNull(attrs);
         assertEquals(40, attrs.get("max"));
         assertEquals(0, attrs.get("min"));
+    }
+
+    private static class TestDto {
+        @ValidUsername(min = 3)
+        private String username;
+
+        @Size(min = 5, max = 10)
+        private String name;
+    }
+
+    private static class ParentDto {
+        @NotNull
+        protected String parentField;
+    }
+
+    private static class ChildDto extends ParentDto {
+        @Size(min = 1)
+        private String childField;
+    }
+
+    private static class OuterNestedDto {
+        private InnerNestedDto inner;
+    }
+
+    private static class InnerNestedDto {
+        @Size(max = 40)
+        private String email;
     }
 }
 

@@ -14,7 +14,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates an OTP (One-Time Password) string with configurable length and character set.
  * This validator ensures the OTP follows the specified format with either numeric-only
  * or alphanumeric characters.
- * 
+ *
  * <p>The validator performs the following checks:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -22,7 +22,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Supports numeric-only or alphanumeric character sets</li>
  * <li>Uses regex pattern matching for validation</li>
  * </ul>
- * 
+ *
  * @see ValidOtp
  */
 public class OtpValidator implements ConstraintValidator<ValidOtp, String> {
@@ -30,6 +30,7 @@ public class OtpValidator implements ConstraintValidator<ValidOtp, String> {
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidOtp annotation instance
      */
     @Override
@@ -40,7 +41,8 @@ public class OtpValidator implements ConstraintValidator<ValidOtp, String> {
 
     /**
      * Validates the OTP string against the configured format.
-     * @param value the OTP string to validate
+     *
+     * @param value   the OTP string to validate
      * @param context the constraint validator context
      * @return true if the OTP is valid or is null/blank
      */

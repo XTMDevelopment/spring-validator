@@ -11,24 +11,41 @@ import java.lang.annotation.*;
  * <p>
  * Null/blank values are considered valid. This validator ensures the RT/RW format
  * follows Indonesian administrative structure requirements.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidRTRW
  * private String rtRw; // e.g., "001/002"
- * 
+ *
  * @ValidRTRW
  * private String address; // e.g., "RT 001 RW 002"
  * }</pre>
- * 
+ *
  * @see RtRwValidator
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = RtRwValidator.class)
 public @interface ValidRTRW {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
+
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
+
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 }

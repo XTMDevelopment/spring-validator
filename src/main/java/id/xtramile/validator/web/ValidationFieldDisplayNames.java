@@ -6,8 +6,18 @@ import id.xtramile.validator.util.AnnotationUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
+/**
+ * Resolves human-readable field display names from {@code @FieldName} annotations.
+ */
 public class ValidationFieldDisplayNames {
 
+    /**
+     * Returns the display name for a DTO field, honoring nested paths and {@code @FieldName}.
+     *
+     * @param dtoClass  the DTO class
+     * @param fieldName the field or property path
+     * @return the display name, or the original field name if none is defined
+     */
     public String resolve(Class<?> dtoClass, String fieldName) {
         if (dtoClass == null || fieldName == null) {
             return fieldName;

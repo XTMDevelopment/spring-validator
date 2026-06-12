@@ -11,20 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PaymentReferenceValidatorTest {
 
-    private static class PaymentReferenceDummy {
-        @ValidPaymentReference
-        String defaultReference;
-
-        @ValidPaymentReference(pattern = "^[A-Z0-9]{6,12}$")
-        String alphanumericReference;
-
-        @ValidPaymentReference(pattern = "^[0-9]{10,15}$")
-        String numericReference;
-
-        @ValidPaymentReference(pattern = "^REF-[A-Z0-9]{8}$")
-        String prefixedReference;
-    }
-
     private PaymentReferenceValidator validator;
 
     private static ValidPaymentReference getAnnotation(String fieldName) {
@@ -207,5 +193,19 @@ public class PaymentReferenceValidatorTest {
         assertTrue(validator.isValid("REF123", null)); // Uppercase
         assertTrue(validator.isValid("ref123", null)); // Lowercase
         assertTrue(validator.isValid("Ref123", null)); // Mixed case
+    }
+
+    private static class PaymentReferenceDummy {
+        @ValidPaymentReference
+        String defaultReference;
+
+        @ValidPaymentReference(pattern = "^[A-Z0-9]{6,12}$")
+        String alphanumericReference;
+
+        @ValidPaymentReference(pattern = "^[0-9]{10,15}$")
+        String numericReference;
+
+        @ValidPaymentReference(pattern = "^REF-[A-Z0-9]{8}$")
+        String prefixedReference;
     }
 }

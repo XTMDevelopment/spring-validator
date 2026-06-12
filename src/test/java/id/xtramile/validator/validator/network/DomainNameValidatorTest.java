@@ -1,6 +1,7 @@
 package id.xtramile.validator.validator.network;
 
 import id.xtramile.validator.annotation.network.ValidDomainName;
+import id.xtramile.validator.support.ValidatorTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,17 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SuppressWarnings("HttpUrlsUsage")
 public class DomainNameValidatorTest {
-
-    private static class DomainNameDummy {
-        @ValidDomainName
-        String defaultDomainName;
-
-        @ValidDomainName()
-        String punycodeAllowedDomainName;
-
-        @ValidDomainName(allowPunycode = false)
-        String punycodeNotAllowedDomainName;
-    }
 
     private DomainNameValidator validator;
 
@@ -37,6 +27,7 @@ public class DomainNameValidatorTest {
     @BeforeEach
     void setUp() {
         validator = new DomainNameValidator();
+        ValidatorTestSupport.initializeValidator(validator, DomainNameDummy.class, "defaultDomainName", ValidDomainName.class);
     }
 
     @Test
@@ -292,5 +283,16 @@ public class DomainNameValidatorTest {
         assertFalse(validator.isValid("tel:example.com", null)); // Tel protocol
         assertFalse(validator.isValid("ssh://example.com", null)); // SSH protocol
         assertFalse(validator.isValid("git://example.com", null)); // Git protocol
+    }
+
+    private static class DomainNameDummy {
+        @ValidDomainName
+        String defaultDomainName;
+
+        @ValidDomainName()
+        String punycodeAllowedDomainName;
+
+        @ValidDomainName(allowPunycode = false)
+        String punycodeNotAllowedDomainName;
     }
 }

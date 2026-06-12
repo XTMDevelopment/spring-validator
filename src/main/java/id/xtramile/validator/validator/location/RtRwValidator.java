@@ -14,7 +14,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates Indonesian RT/RW (Rukun Tetangga/Rukun Warga) address format.
  * This validator ensures the RT/RW code follows the Indonesian address
  * standard format with 3-digit numeric codes.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -22,7 +22,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Validates 3-digit numeric format</li>
  * <li>Uses regex pattern matching for validation</li>
  * </ul>
- * 
+ *
  * @see ValidRTRW
  */
 public class RtRwValidator implements ConstraintValidator<ValidRTRW, String> {
@@ -30,7 +30,8 @@ public class RtRwValidator implements ConstraintValidator<ValidRTRW, String> {
 
     /**
      * Validates the RT/RW code format.
-     * @param value the RT/RW string to validate
+     *
+     * @param value   the RT/RW string to validate
      * @param context the constraint validator context
      * @return true if the RT/RW code is valid or is null/blank
      */

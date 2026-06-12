@@ -17,20 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SelfieImageValidatorTest {
 
-    private static class SelfieImageDummy {
-        @ValidSelfieImage
-        MultipartFile defaultSelfie;
-
-        @ValidSelfieImage(maxMB = 3, minWidth = 512, minHeight = 512, maxWidth = 2048, maxHeight = 2048)
-        MultipartFile customSelfie;
-
-        @ValidSelfieImage(maxMB = 8, mimeAllowed = {"image/jpeg", "image/png", "image/webp"})
-        MultipartFile multipleMimeSelfie;
-
-        @ValidSelfieImage(maxMB = 1, aspectRatio = 0.75)
-        MultipartFile portraitSelfie;
-    }
-
     private SelfieImageValidator validator;
 
     private static ValidSelfieImage getAnnotation(String fieldName) {
@@ -254,7 +240,7 @@ public class SelfieImageValidatorTest {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);
             byte[] imageBytes = baos.toByteArray();
-            
+
             // If the requested size is larger than the actual image, pad it
             if (size > imageBytes.length) {
                 byte[] sizedBytes = new byte[(int) size];
@@ -271,5 +257,19 @@ public class SelfieImageValidatorTest {
         } catch (IOException e) {
             throw new RuntimeException("Failed to create mock image file", e);
         }
+    }
+
+    private static class SelfieImageDummy {
+        @ValidSelfieImage
+        MultipartFile defaultSelfie;
+
+        @ValidSelfieImage(maxMB = 3, minWidth = 512, minHeight = 512, maxWidth = 2048, maxHeight = 2048)
+        MultipartFile customSelfie;
+
+        @ValidSelfieImage(maxMB = 8, mimeAllowed = {"image/jpeg", "image/png", "image/webp"})
+        MultipartFile multipleMimeSelfie;
+
+        @ValidSelfieImage(maxMB = 1, aspectRatio = 0.75)
+        MultipartFile portraitSelfie;
     }
 }

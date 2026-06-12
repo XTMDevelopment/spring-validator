@@ -39,7 +39,7 @@ class MessageResourceResolverTest {
     void testGetMessageWithKeyAndArgs() {
         MessageResourceResolver resolver = new MessageResourceResolver("en");
         String message = resolver.getMessage("validation.data.test", "arg1", "arg2");
-        
+
         assertNotNull(message);
     }
 
@@ -47,7 +47,7 @@ class MessageResourceResolverTest {
     void testGetMessageWithGroup() {
         MessageResourceResolver resolver = new MessageResourceResolver("en");
         String message = resolver.getMessage(Group.DATA, "test");
-        
+
         assertNotNull(message);
     }
 
@@ -55,7 +55,7 @@ class MessageResourceResolverTest {
     void testGetMessageWithGroupAndArgs() {
         MessageResourceResolver resolver = new MessageResourceResolver("en");
         String message = resolver.getMessage(Group.DATA, "test", "arg1", "arg2");
-        
+
         assertNotNull(message);
     }
 
@@ -63,7 +63,7 @@ class MessageResourceResolverTest {
     void testGetMessageNotFound() {
         MessageResourceResolver resolver = new MessageResourceResolver("en");
         String message = resolver.getMessage("nonexistent.key.that.does.not.exist");
-        
+
         // Should return the key if not found
         assertEquals("nonexistent.key.that.does.not.exist", message);
     }
@@ -72,7 +72,7 @@ class MessageResourceResolverTest {
     void testGetMessageWithNullArgs() {
         MessageResourceResolver resolver = new MessageResourceResolver("en");
         String message = resolver.getMessage("validation.data.test", (Object[]) null);
-        
+
         assertNotNull(message);
     }
 
@@ -80,7 +80,7 @@ class MessageResourceResolverTest {
     void testGetMessageWithEmptyArgs() {
         MessageResourceResolver resolver = new MessageResourceResolver("en");
         String message = resolver.getMessage("validation.data.test");
-        
+
         assertNotNull(message);
     }
 
@@ -88,7 +88,7 @@ class MessageResourceResolverTest {
     void testGetMessageFallbackToDefaultLocale() {
         MessageResourceResolver resolver = new MessageResourceResolver("fr"); // Non-existent locale
         String message = resolver.getMessage("validation.data.test");
-        
+
         // Should fallback to default locale (id) if message not found
         assertNotNull(message);
     }
@@ -97,7 +97,7 @@ class MessageResourceResolverTest {
     void testGetMessageWithInvalidFormat() {
         MessageResourceResolver resolver = new MessageResourceResolver("en");
         String message = resolver.getMessage("validation.data.test", "arg1", "arg2", "arg3");
-        
+
         // Should handle format errors gracefully
         assertNotNull(message);
     }
@@ -106,7 +106,7 @@ class MessageResourceResolverTest {
     void testIndonesianLocale() {
         MessageResourceResolver resolver = new MessageResourceResolver("id");
         String message = resolver.getMessage("validation.data.test");
-        
+
         assertNotNull(message);
     }
 }

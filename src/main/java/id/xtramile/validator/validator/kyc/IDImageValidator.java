@@ -22,7 +22,7 @@ import static id.xtramile.validator.util.ValidatorUtils.formatFileSize;
  * Validates ID document images for KYC (Know Your Customer) processes.
  * This validator ensures uploaded ID images meet specific requirements
  * including file size, dimensions, aspect ratio, and MIME type validation.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/empty files as valid</li>
@@ -32,7 +32,7 @@ import static id.xtramile.validator.util.ValidatorUtils.formatFileSize;
  * <li>Checks optional aspect ratio requirements</li>
  * <li>Handles image parsing exceptions gracefully</li>
  * </ul>
- * 
+ *
  * @see ValidIDImage
  */
 @SuppressWarnings("DuplicatedCode")
@@ -47,6 +47,7 @@ public class IDImageValidator implements ConstraintValidator<ValidIDImage, Multi
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidIDImage annotation instance
      */
     @Override
@@ -64,7 +65,8 @@ public class IDImageValidator implements ConstraintValidator<ValidIDImage, Multi
 
     /**
      * Validates the ID image against the configured constraints.
-     * @param file the MultipartFile image to validate
+     *
+     * @param file    the MultipartFile image to validate
      * @param context the constraint validator context
      * @return true if the image meets requirements or is null/empty
      */

@@ -1,6 +1,7 @@
 package id.xtramile.validator.validator.network;
 
 import id.xtramile.validator.annotation.network.ValidURL;
+import id.xtramile.validator.support.ValidatorTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,17 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SuppressWarnings("HttpUrlsUsage")
 public class URLValidatorTest {
-
-    private static class URLDummy {
-        @ValidURL
-        String defaultURL;
-
-        @ValidURL(httpsOnly = true)
-        String httpsOnlyURL;
-
-        @ValidURL()
-        String httpAndHttpsURL;
-    }
 
     private URLValidator validator;
 
@@ -37,6 +27,7 @@ public class URLValidatorTest {
     @BeforeEach
     void setUp() {
         validator = new URLValidator();
+        ValidatorTestSupport.initializeValidator(validator, URLDummy.class, "defaultURL", ValidURL.class);
     }
 
     @Test
@@ -230,5 +221,16 @@ public class URLValidatorTest {
         assertTrue(validator.isValid("https://user@example.com", null)); // HTTPS with username only
         assertTrue(validator.isValid("http://user:pass@example.com:8080", null)); // HTTP with credentials and port
         assertTrue(validator.isValid("https://user:pass@example.com:8443", null)); // HTTPS with credentials and port
+    }
+
+    private static class URLDummy {
+        @ValidURL
+        String defaultURL;
+
+        @ValidURL(httpsOnly = true)
+        String httpsOnlyURL;
+
+        @ValidURL()
+        String httpAndHttpsURL;
     }
 }

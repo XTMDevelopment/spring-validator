@@ -14,14 +14,14 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates a national identification number for the configured country.
  * Currently supports Indonesian NIK (Nomor Induk Kependudukan) format.
  * This validator ensures the national ID follows the correct format for the specified country.
- * 
+ *
  * <p>The validator performs the following checks:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
  * <li>For Indonesia (ID): validates 16-digit NIK format</li>
  * <li>Returns false for unsupported countries</li>
  * </ul>
- * 
+ *
  * @see ValidNationalID
  */
 public class NationalIdValidator implements ConstraintValidator<ValidNationalID, String> {
@@ -29,6 +29,7 @@ public class NationalIdValidator implements ConstraintValidator<ValidNationalID,
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidNationalID annotation instance
      */
     @Override
@@ -38,14 +39,15 @@ public class NationalIdValidator implements ConstraintValidator<ValidNationalID,
 
     /**
      * Validates the national ID against the configured country format.
-     * @param value the national ID string to validate
+     *
+     * @param value   the national ID string to validate
      * @param context the constraint validator context
      * @return true if the national ID is valid or is null/blank
      */
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (isBlank(value)) return true;
-        
+
         if (!"ID".equalsIgnoreCase(country)) {
             MessageUtils.buildViolation(context, Group.DATA, "national-id");
             return false;

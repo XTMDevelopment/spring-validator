@@ -14,7 +14,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates a general E.164-style contact number with optional '+' prefix.
  * This validator ensures the contact number follows the E.164 standard format
  * with proper length and digit constraints.
- * 
+ *
  * <p>The validator performs the following checks:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -22,9 +22,9 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Ensures first digit is 1-9 (no leading zero)</li>
  * <li>Supports international format examples</li>
  * </ul>
- * 
+ *
  * <p>Examples: +6281234567890, 6281234567890, 12025550123
- * 
+ *
  * @see ValidContactNumber
  */
 public class ContactNumberValidator implements ConstraintValidator<ValidContactNumber, String> {
@@ -32,7 +32,8 @@ public class ContactNumberValidator implements ConstraintValidator<ValidContactN
 
     /**
      * Validates the contact number against E.164 format.
-     * @param value the contact number string to validate
+     *
+     * @param value   the contact number string to validate
      * @param context the constraint validator context
      * @return true if the contact number is valid or is null/blank
      */

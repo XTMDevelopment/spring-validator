@@ -12,17 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Base64ValidatorTest {
 
-    private static class Base64Dummy {
-        @ValidBase64
-        String defaultBase64;
-
-        @ValidBase64(urlSafe = true)
-        String urlSafeBase64;
-
-        @ValidBase64()
-        String standardBase64;
-    }
-
     private Base64Validator validator;
 
     private static ValidBase64 getAnnotation(String fieldName) {
@@ -154,5 +143,16 @@ public class Base64ValidatorTest {
         assertTrue(validator.isValid("SGVsbG8gV29ybGQ", null)); // "Hello World" URL-safe
         assertTrue(validator.isValid("dGVzdA", null)); // "test" URL-safe
         assertTrue(validator.isValid("aGVsbG8", null)); // "hello" URL-safe
+    }
+
+    private static class Base64Dummy {
+        @ValidBase64
+        String defaultBase64;
+
+        @ValidBase64(urlSafe = true)
+        String urlSafeBase64;
+
+        @ValidBase64()
+        String standardBase64;
     }
 }

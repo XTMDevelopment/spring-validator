@@ -11,11 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SwiftCodeValidatorTest {
 
-    private static class SwiftCodeDummy {
-        @ValidSwiftCode
-        String defaultSwift;
-    }
-
     private SwiftCodeValidator validator;
 
     private static ValidSwiftCode getAnnotation(String fieldName) {
@@ -198,5 +193,10 @@ public class SwiftCodeValidatorTest {
         assertFalse(validator.isValid("ABCDEFGH1", null)); // 9 chars
         assertFalse(validator.isValid("ABCDEFGH12", null)); // 10 chars
         assertFalse(validator.isValid("ABCDEFGH1234", null)); // 12 chars
+    }
+
+    private static class SwiftCodeDummy {
+        @ValidSwiftCode
+        String defaultSwift;
     }
 }

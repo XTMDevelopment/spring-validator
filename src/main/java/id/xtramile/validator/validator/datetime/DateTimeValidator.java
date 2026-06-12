@@ -18,7 +18,7 @@ import static id.xtramile.validator.util.ValidatorUtils.*;
  * Validates a date-time string using the provided pattern with strict and smart parsing.
  * This validator ensures the string represents a valid date-time according to the specified
  * format with comprehensive date-time component validation.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -27,7 +27,7 @@ import static id.xtramile.validator.util.ValidatorUtils.*;
  * <li>Validates whitespace formatting</li>
  * <li>Attempts strict parsing first, then smart parsing</li>
  * </ul>
- * 
+ *
  * @see ValidDateTime
  */
 public class DateTimeValidator implements ConstraintValidator<ValidDateTime, String> {
@@ -35,6 +35,7 @@ public class DateTimeValidator implements ConstraintValidator<ValidDateTime, Str
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidDateTime annotation instance
      */
     @Override
@@ -44,7 +45,8 @@ public class DateTimeValidator implements ConstraintValidator<ValidDateTime, Str
 
     /**
      * Validates the date-time string against the configured pattern.
-     * @param value the date-time string to validate
+     *
+     * @param value   the date-time string to validate
      * @param context the constraint validator context
      * @return true if the string is a valid date-time or is null/blank
      */

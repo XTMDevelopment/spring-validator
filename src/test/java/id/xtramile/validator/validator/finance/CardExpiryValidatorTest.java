@@ -11,17 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CardExpiryValidatorTest {
 
-    private static class CardExpiryDummy {
-        @ValidCardExpiry
-        String defaultExpiry;
-
-        @ValidCardExpiry()
-        String futureExpiry;
-
-        @ValidCardExpiry(mustBeFuture = false)
-        String anyExpiry;
-    }
-
     private CardExpiryValidator validator;
 
     private static ValidCardExpiry getAnnotation(String fieldName) {
@@ -70,7 +59,7 @@ public class CardExpiryValidatorTest {
         // These should be valid if they're in the future
         assertTrue(validator.isValid("12/30", null)); // Far future
         assertTrue(validator.isValid("01/2027", null)); // Far future
-        
+
         // These might be invalid if they're in the past (depending on current date)
         // Note: These tests might need adjustment based on when they're run
         assertTrue(validator.isValid("12/27", null)); // Should be valid if current date is before Dec 2027
@@ -154,5 +143,16 @@ public class CardExpiryValidatorTest {
         assertFalse(validator.isValid("12.27", null)); // Dot
         assertFalse(validator.isValid("12:27", null)); // Colon
         assertFalse(validator.isValid("12 27", null)); // Space only
+    }
+
+    private static class CardExpiryDummy {
+        @ValidCardExpiry
+        String defaultExpiry;
+
+        @ValidCardExpiry()
+        String futureExpiry;
+
+        @ValidCardExpiry(mustBeFuture = false)
+        String anyExpiry;
     }
 }

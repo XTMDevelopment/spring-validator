@@ -12,29 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NotEmptyCollectionValidatorTest {
 
-    private static class Person {
-        private final String name;
-        private final int age;
-
-        private Person(String name, int age) {
-            this.name = name;
-            this.age = age;
-        }
-
-        public String name() {
-            return name;
-        }
-
-        public int age() {
-            return age;
-        }
-    }
-
-    private static class NotEmptyCollectionDummy {
-        @NotEmptyCollection
-        Collection<String> collectionField;
-    }
-
     private NotEmptyCollectionValidator validator;
 
     private static NotEmptyCollection getAnnotation(String fieldName) {
@@ -193,5 +170,13 @@ public class NotEmptyCollectionValidatorTest {
         // Collection with only empty strings
         List<String> onlyEmptyStrings = Arrays.asList("", "", "");
         assertTrue(validator.isValid(onlyEmptyStrings, null));
+    }
+
+    private record Person(String name, int age) {
+    }
+
+    private static class NotEmptyCollectionDummy {
+        @NotEmptyCollection
+        Collection<String> collectionField;
     }
 }

@@ -12,7 +12,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates network port numbers for both numeric and string values.
  * This validator ensures the port number is within the valid range
  * of 1-65535 for network communication.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null values as valid</li>
@@ -21,14 +21,15 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Handles parsing exceptions gracefully</li>
  * <li>Ignores unsupported types (returns true)</li>
  * </ul>
- * 
+ *
  * @see ValidPort
  */
 public class PortValidator implements ConstraintValidator<ValidPort, Object> {
 
     /**
      * Validates the port number against the valid range.
-     * @param value the port number to validate
+     *
+     * @param value   the port number to validate
      * @param context the constraint validator context
      * @return true if the port number is valid or is null
      */
@@ -39,12 +40,10 @@ public class PortValidator implements ConstraintValidator<ValidPort, Object> {
         int port;
 
         try {
-            if (value instanceof Number) {
-                Number n = (Number) value;
+            if (value instanceof Number n) {
                 port = n.intValue();
 
-            } else if (value instanceof CharSequence) {
-                CharSequence cs = (CharSequence) value;
+            } else if (value instanceof CharSequence cs) {
                 String str = cs.toString().trim();
                 if (isBlank(str)) return true;
 

@@ -75,15 +75,15 @@ class ApiExceptionHandlerTest {
 
         ConstraintDescriptor descriptor = mock(ConstraintDescriptor.class);
         when(violation.getConstraintDescriptor()).thenReturn(descriptor);
-        
+
         Annotation annotation = mock(Annotation.class);
         when(descriptor.getAnnotation()).thenReturn(annotation);
         when(annotation.annotationType()).thenReturn((Class) NotNull.class);
         when(descriptor.getAttributes()).thenReturn(Map.of());
-        
+
         ConstraintViolationException exception = mock(ConstraintViolationException.class);
         when(exception.getConstraintViolations()).thenReturn(Set.of(violation));
-        
+
         when(mockMessageResolver.resolve(any(), eq("email"), eq(Object.class))).thenReturn("email is required");
         when(mockBuilder.validation(List.of("email is required"))).thenReturn(Map.of("test", "response"));
 
@@ -201,6 +201,29 @@ class ApiExceptionHandlerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
         verify(mockBuilder).validation(expectedErrors);
+    }
+
+    @Test
+    void shouldHandleMethodArgumentNotValidExceptionWithNullTarget() {
+        FieldError fieldError = mock(FieldError.class);
+        when(fieldError.getField()).thenReturn("email");
+        when(fieldError.getDefaultMessage()).thenReturn("Email is required");
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.getFieldErrors()).thenReturn(List.of(fieldError));
+        when(bindingResult.getTarget()).thenReturn(null);
+
+        MethodArgumentNotValidException exception = mock(MethodArgumentNotValidException.class);
+        when(exception.getBindingResult()).thenReturn(bindingResult);
+
+        when(mockMessageResolver.resolve(fieldError, Object.class)).thenReturn("Email is required");
+        when(mockBuilder.validation(List.of("Email is required"))).thenReturn(Map.of("test", "response"));
+
+        ResponseEntity<Object> response = handler.onValidationException(exception);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        verify(mockMessageResolver).resolve(fieldError, Object.class);
+        verify(mockBuilder).validation(List.of("Email is required"));
     }
 
     @Test
@@ -382,15 +405,15 @@ class ApiExceptionHandlerTest {
 
         ConstraintDescriptor descriptor = mock(ConstraintDescriptor.class);
         when(violation.getConstraintDescriptor()).thenReturn(descriptor);
-        
+
         Annotation annotation = mock(Annotation.class);
         when(descriptor.getAnnotation()).thenReturn(annotation);
         when(annotation.annotationType()).thenReturn((Class) NotNull.class);
         when(descriptor.getAttributes()).thenReturn(Map.of());
-        
+
         ConstraintViolationException exception = mock(ConstraintViolationException.class);
         when(exception.getConstraintViolations()).thenReturn(Set.of(violation));
-        
+
         when(mockMessageResolver.resolve(any(), eq("request"), eq(Object.class))).thenReturn("request is required");
         when(mockBuilder.validation(List.of("request is required"))).thenReturn(Map.of("test", "response"));
 

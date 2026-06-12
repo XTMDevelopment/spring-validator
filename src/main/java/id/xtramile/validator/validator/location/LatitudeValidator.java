@@ -12,7 +12,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates latitude values within the valid range of -90 to 90 degrees.
  * This validator ensures the latitude is within the standard geographic
  * coordinate system bounds.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -20,14 +20,15 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Validates latitude range (-90.0 to 90.0)</li>
  * <li>Handles parsing exceptions gracefully</li>
  * </ul>
- * 
+ *
  * @see ValidLatitude
  */
 public class LatitudeValidator implements ConstraintValidator<ValidLatitude, String> {
 
     /**
      * Validates the latitude value against the valid range.
-     * @param value the latitude string to validate
+     *
+     * @param value   the latitude string to validate
      * @param context the constraint validator context
      * @return true if the latitude is valid or is null/blank
      */

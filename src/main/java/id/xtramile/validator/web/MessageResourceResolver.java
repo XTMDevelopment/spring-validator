@@ -10,25 +10,41 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Properties;
 
+/**
+ * Loads and formats validation messages from classpath {@code messages_&lt;locale&gt;.properties} files.
+ */
 public class MessageResourceResolver {
 
     private static final String MESSAGES_BASE = "messages_";
     private static final String DEFAULT_LOCALE = "id";
 
     private final Properties properties;
-    private final String locale;
+    private final Properties fallbackProperties;
 
+    /**
+     * Creates a resolver for the given locale, falling back to Indonesian if needed.
+     *
+     * @param locale the locale code (e.g. {@code "en"}), or {@code null} for default
+     */
     public MessageResourceResolver(String locale) {
-        this.locale = locale != null ? locale.toLowerCase() : DEFAULT_LOCALE;
-        this.properties = loadProperties(this.locale);
+        String loc = locale != null ? locale.toLowerCase() : DEFAULT_LOCALE;
+
+        this.properties = loadProperties(loc);
+        this.fallbackProperties = loc.equals(DEFAULT_LOCALE) ? null : loadProperties(DEFAULT_LOCALE);
     }
 
+    /**
+     * Returns a formatted message for the given key.
+     *
+     * @param key  the message key
+     * @param args optional {@link java.text.MessageFormat} arguments
+     * @return the formatted message, or the key itself if not found
+     */
     public String getMessage(String key, Object... args) {
         String message = properties.getProperty(key);
         if (message == null) {
-            if (!locale.equals(DEFAULT_LOCALE)) {
-                Properties defaultProps = loadProperties(DEFAULT_LOCALE);
-                message = defaultProps.getProperty(key);
+            if (fallbackProperties != null) {
+                message = fallbackProperties.getProperty(key);
             }
 
             if (message == null) {
@@ -48,6 +64,14 @@ public class MessageResourceResolver {
         return message;
     }
 
+    /**
+     * Returns a formatted message for a validation group and sub-key.
+     *
+     * @param group the validation message group
+     * @param key   the sub-key within the group
+     * @param args  optional format arguments
+     * @return the formatted message
+     */
     public String getMessage(Group group, String key, Object... args) {
         String fullKey = MessageUtils.buildKey(group, key);
         return getMessage(fullKey, args);
@@ -65,7 +89,8 @@ public class MessageResourceResolver {
                 }
             }
 
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
 
         return props;
     }

@@ -16,7 +16,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates a username composed only of letters, digits, dot (.), and underscore (_).
  * This validator ensures the username follows common naming conventions with
  * proper length constraints.
- * 
+ *
  * <p>The validator performs the following checks:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -24,7 +24,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Allows only letters, digits, dots, and underscores</li>
  * <li>Trims whitespace before validation</li>
  * </ul>
- * 
+ *
  * @see ValidUsername
  */
 public class UsernameValidator implements ConstraintValidator<ValidUsername, String> {
@@ -33,6 +33,7 @@ public class UsernameValidator implements ConstraintValidator<ValidUsername, Str
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidUsername annotation instance
      */
     @Override
@@ -43,7 +44,8 @@ public class UsernameValidator implements ConstraintValidator<ValidUsername, Str
 
     /**
      * Validates the username string against the configured constraints.
-     * @param value the username string to validate
+     *
+     * @param value   the username string to validate
      * @param context the constraint validator context
      * @return true if the username is valid or is null/blank
      */
@@ -58,7 +60,7 @@ public class UsernameValidator implements ConstraintValidator<ValidUsername, Str
             MessageUtils.buildViolation(context, Group.DATA, "username.min", min);
             return false;
         }
-        
+
         if (len > max) {
             MessageUtils.buildViolation(context, Group.DATA, "username.max", max);
             return false;

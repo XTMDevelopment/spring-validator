@@ -12,46 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UniqueElementsValidatorTest {
 
-    private static class Person {
-        private final String name;
-        private final int age;
-
-        private Person(String name, int age) {
-            this.name = name;
-            this.age = age;
-        }
-
-        public String name() {
-            return name;
-        }
-
-        public int age() {
-            return age;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (!(obj instanceof Person)) {
-                return false;
-            }
-            Person other = (Person) obj;
-            return age == other.age && Objects.equals(name, other.name);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(name, age);
-        }
-    }
-
-    private static class UniqueElementsDummy {
-        @UniqueElements
-        Collection<String> collectionField;
-    }
-
     private UniqueElementsValidator validator;
 
     private static UniqueElements getAnnotation(String fieldName) {
@@ -188,5 +148,25 @@ public class UniqueElementsValidatorTest {
         // Test with empty strings
         List<String> withEmptyStrings = Arrays.asList("apple", "", "banana", "");
         assertFalse(validator.isValid(withEmptyStrings, null));
+    }
+
+    private record Person(String name, int age) {
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof Person other)) {
+                return false;
+            }
+            return age == other.age && Objects.equals(name, other.name);
+        }
+
+    }
+
+    private static class UniqueElementsDummy {
+        @UniqueElements
+        Collection<String> collectionField;
     }
 }

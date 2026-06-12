@@ -11,20 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DateTimeValidatorTest {
 
-    private static class DateTimeDummy {
-        @ValidDateTime
-        String defaultDateTime;
-
-        @ValidDateTime(pattern = "dd/MM/yyyy HH:mm:ss")
-        String customPatternDateTime;
-
-        @ValidDateTime(pattern = "MM-dd-yyyy HH:mm")
-        String usPatternDateTime;
-
-        @ValidDateTime(pattern = "yyyy/MM/dd HH:mm:ss")
-        String isoPatternDateTime;
-    }
-
     private DateTimeValidator validator;
 
     private static ValidDateTime getAnnotation(String fieldName) {
@@ -148,7 +134,6 @@ public class DateTimeValidatorTest {
         assertFalse(validator.isValid("2023-12-25 25:30:00", null)); // hour > 23
     }
 
-
     @Test
     void testRealWorldExamples() {
         validator.initialize(getAnnotation("defaultDateTime"));
@@ -254,5 +239,19 @@ public class DateTimeValidatorTest {
 
         // Test exception handling
         assertFalse(validator.isValid("completely-invalid", null));
+    }
+
+    private static class DateTimeDummy {
+        @ValidDateTime
+        String defaultDateTime;
+
+        @ValidDateTime(pattern = "dd/MM/yyyy HH:mm:ss")
+        String customPatternDateTime;
+
+        @ValidDateTime(pattern = "MM-dd-yyyy HH:mm")
+        String usPatternDateTime;
+
+        @ValidDateTime(pattern = "yyyy/MM/dd HH:mm:ss")
+        String isoPatternDateTime;
     }
 }

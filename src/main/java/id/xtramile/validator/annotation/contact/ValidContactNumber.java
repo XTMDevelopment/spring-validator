@@ -11,24 +11,41 @@ import java.lang.annotation.*;
  * <p>
  * This validator supports international phone number formats following E.164 standard.
  * Null/blank values are considered valid.
- * 
+ *
  * <p>Example usage:
  * <pre>{@code
  * @ValidContactNumber
  * private String contact; // e.g., +6281234567890 or 12025550123
- * 
+ *
  * @ValidContactNumber
  * private String phoneNumber; // e.g., +1234567890
  * }</pre>
- * 
+ *
  * @see ContactNumberValidator
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = ContactNumberValidator.class)
 public @interface ValidContactNumber {
+    /**
+     * Default violation message template.
+     *
+     * @return the message template
+     */
     String message() default "{friendly.default}";
+
+    /**
+     * Validation groups for conditional validation.
+     *
+     * @return the validation groups
+     */
     Class<?>[] groups() default {};
+
+    /**
+     * Payload types for extensibility metadata.
+     *
+     * @return the payload types
+     */
     Class<? extends Payload>[] payload() default {};
 }

@@ -17,7 +17,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates file extensions for both String filenames and MultipartFile objects.
  * This validator ensures the file extension is in the allowed list with optional
  * case-insensitive comparison.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null values as valid</li>
@@ -26,7 +26,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Validates against the allowed extensions list</li>
  * <li>Supports case-insensitive comparison</li>
  * </ul>
- * 
+ *
  * @see ValidFileExtension
  */
 public class FileExtensionValidator implements ConstraintValidator<ValidFileExtension, Object> {
@@ -35,6 +35,7 @@ public class FileExtensionValidator implements ConstraintValidator<ValidFileExte
 
     /**
      * Initializes the validator with the annotation parameters.
+     *
      * @param annotation the ValidFileExtension annotation instance
      */
     @Override
@@ -47,7 +48,8 @@ public class FileExtensionValidator implements ConstraintValidator<ValidFileExte
 
     /**
      * Validates the file extension against the allowed list.
-     * @param value the file object (String or MultipartFile) to validate
+     *
+     * @param value   the file object (String or MultipartFile) to validate
      * @param context the constraint validator context
      * @return true if the file extension is allowed or value is null/empty
      */
@@ -57,13 +59,11 @@ public class FileExtensionValidator implements ConstraintValidator<ValidFileExte
 
         String fileName;
 
-        if (value instanceof String) {
-            String s = (String) value;
+        if (value instanceof String s) {
             if (isBlank(s)) return true;
             fileName = s;
 
-        } else if (value instanceof MultipartFile) {
-            MultipartFile mf = (MultipartFile) value;
+        } else if (value instanceof MultipartFile mf) {
             if (mf.isEmpty()) return true;
             fileName = mf.getOriginalFilename();
 

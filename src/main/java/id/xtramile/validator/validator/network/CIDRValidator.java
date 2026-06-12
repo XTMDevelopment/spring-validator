@@ -16,7 +16,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * Validates CIDR (Classless Inter-Domain Routing) notation for both IPv4 and IPv6.
  * This validator ensures the CIDR block follows the correct format with proper
  * IP address and prefix length validation.
- * 
+ *
  * <p>The validator performs the following operations:
  * <ul>
  * <li>Accepts null/blank values as valid</li>
@@ -25,7 +25,7 @@ import static id.xtramile.validator.util.ValidatorUtils.isBlank;
  * <li>Validates IPv6 addresses using InetAddress</li>
  * <li>Validates prefix length (0-32 for IPv4, 0-128 for IPv6)</li>
  * </ul>
- * 
+ *
  * @see ValidCIDR
  */
 public class CIDRValidator implements ConstraintValidator<ValidCIDR, String> {
@@ -34,7 +34,8 @@ public class CIDRValidator implements ConstraintValidator<ValidCIDR, String> {
 
     /**
      * Validates the CIDR notation format and components.
-     * @param value the CIDR string to validate
+     *
+     * @param value   the CIDR string to validate
      * @param context the constraint validator context
      * @return true if the CIDR notation is valid or is null/blank
      */
@@ -56,7 +57,7 @@ public class CIDRValidator implements ConstraintValidator<ValidCIDR, String> {
         if (ipPart.contains(".")) {
             String[] octets = ipPart.split("\\.");
             if (octets.length != 4) return false;
-            
+
             for (String octet : octets) {
                 if (octet.isEmpty()) return false;
                 try {
