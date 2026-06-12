@@ -1,6 +1,7 @@
 package id.xtramile.validator.validator.location;
 
 import id.xtramile.validator.annotation.location.ValidCoordinates;
+import id.xtramile.validator.support.ValidatorTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,6 +34,7 @@ public class CoordinateValidatorTest {
     @BeforeEach
     void setUp() {
         validator = new CoordinateValidator();
+        ValidatorTestSupport.initializeValidator(validator, CoordinateDummy.class, "defaultCoordinates", ValidCoordinates.class);
     }
 
     @Test

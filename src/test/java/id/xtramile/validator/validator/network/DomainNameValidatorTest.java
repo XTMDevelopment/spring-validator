@@ -1,6 +1,7 @@
 package id.xtramile.validator.validator.network;
 
 import id.xtramile.validator.annotation.network.ValidDomainName;
+import id.xtramile.validator.support.ValidatorTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,6 +38,7 @@ public class DomainNameValidatorTest {
     @BeforeEach
     void setUp() {
         validator = new DomainNameValidator();
+        ValidatorTestSupport.initializeValidator(validator, DomainNameDummy.class, "defaultDomainName", ValidDomainName.class);
     }
 
     @Test

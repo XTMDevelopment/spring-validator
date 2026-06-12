@@ -1,6 +1,7 @@
 package id.xtramile.validator.validator.network;
 
 import id.xtramile.validator.annotation.network.ValidURL;
+import id.xtramile.validator.support.ValidatorTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,6 +38,7 @@ public class URLValidatorTest {
     @BeforeEach
     void setUp() {
         validator = new URLValidator();
+        ValidatorTestSupport.initializeValidator(validator, URLDummy.class, "defaultURL", ValidURL.class);
     }
 
     @Test

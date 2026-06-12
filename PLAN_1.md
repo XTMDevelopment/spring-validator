@@ -376,9 +376,11 @@ public static void assertResolvedMessage(FriendlyMessageResolver resolver,
 
 ---
 
-## Phase 5: Additional Tests
+## Phase 5: Additional Tests ✅ COMPLETE
 
 **Objective:** Close coverage gaps; guard refactored code; prepare for Phase 6 JaCoCo thresholds.
+
+**Completed:** 2026-06-12 — all 5a tests added; 5b quality improvements applied; `mvn test` passes (1479 tests).
 
 ### 5a. High-value new tests
 
@@ -416,10 +418,10 @@ mvn clean test
 
 ### Success criteria
 
-- [ ] All new tests in 5a pass
-- [ ] Locale key parity test passes
-- [ ] Method-level validation E2E exists
-- [ ] `AnnotationRegistryCompletenessTest` in Phase 5 only
+- [x] All new tests in 5a pass
+- [x] Locale key parity test passes
+- [x] Method-level validation E2E exists
+- [x] `AnnotationRegistryCompletenessTest` in Phase 5 only
 
 ---
 
@@ -579,7 +581,7 @@ No major version bump required for PLAN 1 deliverables.
 - [x] **P2e** SLF4J optional / remove println
 - [x] **P3** Test support + dedupe + extend assertions
 - [x] **P4-late** Medium/Low bugs
-- [ ] **P5** New tests (parity, method validation, Group, resolver fallback, registry completeness)
+- [x] **P5** New tests (parity, method validation, Group, resolver fallback, registry completeness)
 - [ ] **P6** Checkstyle, SpotBugs exclude, Javadoc, JaCoCo, `-Pquick`, CONTRIBUTING, CHANGELOG, CI verify
 
 ---

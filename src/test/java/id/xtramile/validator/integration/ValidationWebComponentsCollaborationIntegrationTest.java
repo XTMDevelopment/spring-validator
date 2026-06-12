@@ -2,12 +2,16 @@ package id.xtramile.validator.integration;
 
 import id.xtramile.validator.annotation.common.FieldName;
 import id.xtramile.validator.annotation.common.InWhitelist;
-import id.xtramile.validator.support.ValidationMessageTestSupport;
 import id.xtramile.validator.web.FriendlyMessageResolver;
+import id.xtramile.validator.web.MessageResourceResolver;
 import id.xtramile.validator.web.ValidationAnnotationTypeRegistry;
 import id.xtramile.validator.web.ValidationFieldDisplayNames;
+import id.xtramile.validator.web.ValidationMessageArgsBuilder;
+import id.xtramile.validator.web.messages.CompositeConstraintMessageResolver;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import jakarta.validation.constraints.NotBlank;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,28 +25,39 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Integration tests for {@link FriendlyMessageResolver} and the extracted helpers
  * ({@link ValidationFieldDisplayNames}, message-args building, {@link ValidationAnnotationTypeRegistry})
- * using a real Jakarta {@link Validator} and Spring
- * {@link FieldError} binding.
+ * using a real Jakarta {@link Validator} and Spring {@link FieldError} binding.
  */
 class ValidationWebComponentsCollaborationIntegrationTest {
 
-    private static ValidationMessageTestSupport SUPPORT;
+    private static Validator VALIDATOR;
+    private static MessageResourceResolver MESSAGES;
+    private static ValidationFieldDisplayNames FIELD_NAMES;
+    private static ValidationMessageArgsBuilder MESSAGE_ARGS_BUILDER;
+    private static CompositeConstraintMessageResolver ANNOTATION_MESSAGES;
+    private static FriendlyMessageResolver RESOLVER;
 
     @BeforeAll
-    static void initValidator() {
-        SUPPORT = ValidationMessageTestSupport.EN;
+    static void initCollaborators() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        VALIDATOR = factory.getValidator();
+
+        MESSAGES = new MessageResourceResolver("en");
+        FIELD_NAMES = new ValidationFieldDisplayNames();
+        MESSAGE_ARGS_BUILDER = new ValidationMessageArgsBuilder(FIELD_NAMES);
+        ANNOTATION_MESSAGES = new CompositeConstraintMessageResolver(MESSAGES, FIELD_NAMES);
+        RESOLVER = new FriendlyMessageResolver(MESSAGES, FIELD_NAMES, MESSAGE_ARGS_BUILDER, ANNOTATION_MESSAGES);
     }
 
     @Test
     void constraintViolation_resolvesValidationTemplateWithFieldName() {
         MultiViolationDto dto = new MultiViolationDto("", "bad");
 
-        Set<ConstraintViolation<MultiViolationDto>> violations = SUPPORT.validator().validate(dto);
+        Set<ConstraintViolation<MultiViolationDto>> violations = VALIDATOR.validate(dto);
         assertThat(violations).isNotEmpty();
 
         for (ConstraintViolation<MultiViolationDto> v : violations) {
             String path = v.getPropertyPath() == null ? "request" : v.getPropertyPath().toString();
-            String resolved = SUPPORT.resolver().resolve(v, path, MultiViolationDto.class);
+            String resolved = RESOLVER.resolve(v, path, MultiViolationDto.class);
 
             String template = v.getMessageTemplate();
             if (template != null && template.startsWith("validation.")) {
@@ -61,18 +76,41 @@ class ValidationWebComponentsCollaborationIntegrationTest {
         FieldError fe = errors.getFieldError("channel");
         assertThat(fe).isNotNull();
 
-        String fromFieldError = SUPPORT.resolver().resolve(fe, MapLikeDto.class);
+        String fromFieldError = RESOLVER.resolve(fe, MapLikeDto.class);
 
-        ConstraintViolation<MapLikeDto> cv = SUPPORT.validator().validate(MapLikeDto.withInvalidChannel()).iterator().next();
-        String fromConstraint = SUPPORT.resolver().resolve(cv, "channel", MapLikeDto.class);
+        ConstraintViolation<MapLikeDto> cv = VALIDATOR.validate(MapLikeDto.withInvalidChannel()).iterator().next();
+        String fromConstraint = RESOLVER.resolve(cv, "channel", MapLikeDto.class);
 
         assertThat(fromFieldError).isEqualTo(fromConstraint);
     }
 
     @Test
+    void compositeResolver_resolvesFriendlyDefaultTemplateForNotBlank() {
+        NotBlankOnlyDto dto = new NotBlankOnlyDto("");
+        ConstraintViolation<NotBlankOnlyDto> violation = VALIDATOR.validate(dto).stream()
+                .filter(v -> v.getConstraintDescriptor().getAnnotation().annotationType() == NotBlank.class)
+                .findFirst()
+                .orElseThrow();
+
+        String field = violation.getPropertyPath().toString();
+        String displayName = FIELD_NAMES.resolve(NotBlankOnlyDto.class, field);
+        String fromComposite = ANNOTATION_MESSAGES.resolveFromAnnotation(
+                displayName,
+                NotBlank.class,
+                violation.getConstraintDescriptor().getAttributes(),
+                NotBlankOnlyDto.class
+        );
+        String fromFriendlyResolver = RESOLVER.resolve(violation, field, NotBlankOnlyDto.class);
+
+        assertThat(fromComposite).isEqualTo(fromFriendlyResolver);
+        assertThat(fromComposite).doesNotStartWith("validation.");
+        assertThat(fromComposite).isNotBlank();
+    }
+
+    @Test
     void validationAnnotationTypeRegistry_matchesValidatorConstraintCodes() {
         MultiViolationDto dto = new MultiViolationDto("", "bad");
-        for (ConstraintViolation<MultiViolationDto> v : SUPPORT.validator().validate(dto)) {
+        for (ConstraintViolation<MultiViolationDto> v : VALIDATOR.validate(dto)) {
             String code = v.getConstraintDescriptor().getAnnotation().annotationType().getSimpleName();
             assertThat(ValidationAnnotationTypeRegistry.resolve(code))
                     .isEqualTo(v.getConstraintDescriptor().getAnnotation().annotationType());
@@ -81,8 +119,7 @@ class ValidationWebComponentsCollaborationIntegrationTest {
 
     @Test
     void fieldDisplayNames_component_matchesFriendlyResolverBehaviour() {
-        ValidationFieldDisplayNames names = new ValidationFieldDisplayNames();
-        assertThat(names.resolve(MultiViolationDto.class, "channel"))
+        assertThat(FIELD_NAMES.resolve(MultiViolationDto.class, "channel"))
                 .isEqualTo("Channel label");
     }
 
@@ -107,6 +144,20 @@ class ValidationWebComponentsCollaborationIntegrationTest {
 
         public String code() {
             return code;
+        }
+    }
+
+    static class NotBlankOnlyDto {
+        @FieldName("Email")
+        @NotBlank
+        private final String email;
+
+        NotBlankOnlyDto(String email) {
+            this.email = email;
+        }
+
+        public String email() {
+            return email;
         }
     }
 

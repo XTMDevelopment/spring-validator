@@ -10,7 +10,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class MessageUtilTest {
+class MessageUtilsTest {
 
     @AfterEach
     void tearDown() {
@@ -46,7 +46,6 @@ class MessageUtilTest {
         verify(context).buildConstraintViolationWithTemplate("validation.contact.email.invalid");
         verify(builder).addConstraintViolation();
         
-        // Check that args were stored
         Object[] args = MessageUtils.getStoredArgs("validation.contact.email.invalid");
         assertNotNull(args);
         assertEquals(2, args.length);
@@ -56,7 +55,6 @@ class MessageUtilTest {
 
     @Test
     void testBuildViolationWithNullContext() {
-        // Should not throw exception
         assertDoesNotThrow(() -> MessageUtils.buildViolation(null, Group.DATA, "test.key"));
         assertDoesNotThrow(() -> MessageUtils.buildViolation(null, Group.DATA, "test.key", "arg1", "arg2"));
     }
@@ -73,7 +71,6 @@ class MessageUtilTest {
         
         verify(context).buildConstraintViolationWithTemplate("validation.data.test.key");
         
-        // No args should be stored
         Object[] args = MessageUtils.getStoredArgs("validation.data.test.key");
         assertNull(args);
     }
@@ -95,7 +92,6 @@ class MessageUtilTest {
         assertEquals("arg1", args[0]);
         assertEquals("arg2", args[1]);
         
-        // Args should be removed after retrieval
         Object[] argsAgain = MessageUtils.getStoredArgs(key);
         assertNull(argsAgain);
     }

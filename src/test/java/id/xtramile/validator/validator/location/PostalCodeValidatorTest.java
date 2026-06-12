@@ -1,6 +1,7 @@
 package id.xtramile.validator.validator.location;
 
 import id.xtramile.validator.annotation.location.ValidPostalCode;
+import id.xtramile.validator.support.ValidatorTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,6 +43,7 @@ public class PostalCodeValidatorTest {
     @BeforeEach
     void setUp() {
         validator = new PostalCodeValidator();
+        ValidatorTestSupport.initializeValidator(validator, PostalCodeDummy.class, "defaultPostalCode", ValidPostalCode.class);
     }
 
     @Test

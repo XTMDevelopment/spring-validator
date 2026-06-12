@@ -2,22 +2,34 @@ package id.xtramile.validator.support;
 
 import id.xtramile.validator.web.MessageResourceResolver;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class LocaleMessageCodesTestSupport {
+
+    public static record FormattedMessageCase(String key, Object[] args, String expected) {}
 
     protected abstract String locale();
 
     protected abstract String resourceName();
 
-    protected abstract void assertFormattedMessages(MessageResourceResolver resolver);
+    protected abstract List<FormattedMessageCase> formattedMessageCases();
+
+    Stream<FormattedMessageCase> formattedMessageCasesStream() {
+        return formattedMessageCases().stream();
+    }
 
     @Test
     void shouldLoadAllMessages() throws IOException {
@@ -96,9 +108,12 @@ public abstract class LocaleMessageCodesTestSupport {
         assertThat(keys).anyMatch(k -> k.startsWith("validation.spring."));
     }
 
-    @Test
-    void shouldFormatMessagesCorrectly() {
-        assertFormattedMessages(new MessageResourceResolver(locale()));
+    @ParameterizedTest
+    @MethodSource("formattedMessageCasesStream")
+    void shouldFormatMessageCorrectly(LocaleMessageCodesTestSupport.FormattedMessageCase testCase) {
+        MessageResourceResolver resolver = new MessageResourceResolver(locale());
+        assertThat(resolver.getMessage(testCase.key(), testCase.args()))
+                .isEqualTo(testCase.expected());
     }
 
     private Properties loadProperties() throws IOException {
