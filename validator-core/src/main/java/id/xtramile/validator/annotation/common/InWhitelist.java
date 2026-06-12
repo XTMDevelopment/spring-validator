@@ -52,7 +52,7 @@ public @interface InWhitelist {
     /**
      * The list of allowed values to validate against.
      *
-     * @return the list of allowed values to validate against
+     * @return the array of allowed values to validate against
      */
     String[] values();
 

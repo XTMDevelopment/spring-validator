@@ -52,7 +52,7 @@ public @interface OnlyOneOf {
     /**
      * The list of fields to check - exactly one must be present.
      *
-     * @return the list of fields to check - exactly one must be present
+     * @return the array of fields to check - exactly one must be present
      */
     String[] fields();
 }

@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ValidatorUtilsTest {
 
+    @SuppressWarnings("ConstantValue")
     @Test
     void testIsBlank() {
         assertTrue(ValidatorUtils.isBlank(null));

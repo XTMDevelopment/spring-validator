@@ -52,7 +52,7 @@ public @interface ValidEmailDomain {
     /**
      * The list of allowed email domains.
      *
-     * @return the list of allowed email domains
+     * @return the array of allowed email domains
      */
     String[] allowed();
 

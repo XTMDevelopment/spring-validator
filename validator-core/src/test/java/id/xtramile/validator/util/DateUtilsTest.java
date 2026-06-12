@@ -38,6 +38,7 @@ class DateUtilsTest {
         assertNotNull(leapResult);
     }
 
+    @SuppressWarnings("ConstantValue")
     @Test
     void testParseDateTimeWithStrictAndSmartParsing() {
         // Test strict parsing first

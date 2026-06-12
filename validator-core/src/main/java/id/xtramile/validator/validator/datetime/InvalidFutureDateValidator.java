@@ -62,7 +62,6 @@ public class InvalidFutureDateValidator implements ConstraintValidator<InvalidFu
      * @param context the constraint validator context
      * @return true if the date is not in the future (within tolerance) or is null/blank
      */
-    @SuppressWarnings("DuplicatedCode")
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (isBlank(value)) return true;

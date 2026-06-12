@@ -54,7 +54,7 @@ public @interface ValidFileExtension {
     /**
      * The list of allowed file extensions.
      *
-     * @return the list of allowed file extensions
+     * @return the array of allowed file extensions
      */
     String[] allowed();
 

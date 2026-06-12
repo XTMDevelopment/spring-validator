@@ -54,7 +54,7 @@ public @interface ValidFileMimeType {
     /**
      * The list of allowed MIME types (supports wildcards like "image/*").
      *
-     * @return the list of allowed MIME types (supports wildcards like "image/*")
+     * @return the array of allowed MIME types (supports wildcards like "image/*")
      */
     String[] allowed();
 

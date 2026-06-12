@@ -52,7 +52,7 @@ public @interface NotInBlacklist {
     /**
      * The list of forbidden values to validate against.
      *
-     * @return the list of forbidden values to validate against
+     * @return the array of forbidden values to validate against
      */
     String[] values();
 
