@@ -115,9 +115,9 @@ public final class DateToleranceEvaluator {
     /**
      * Returns whether the parsed value is older than the allowed past tolerance.
      *
-     * @param parsed             parsed temporal value
-     * @param toleranceDays      allowed days in the past
-     * @param truncateToSeconds  whether to truncate current time to seconds
+     * @param parsed            parsed temporal value
+     * @param toleranceDays     allowed days in the past
+     * @param truncateToSeconds whether to truncate current time to seconds
      * @return {@code true} when the value is too far in the past
      */
     public static boolean isTooFarInPast(ParsedTemporal parsed, int toleranceDays, boolean truncateToSeconds) {
@@ -161,8 +161,8 @@ public final class DateToleranceEvaluator {
     /**
      * Returns whether a parsed temporal falls outside the past tolerance window up to now.
      *
-     * @param parsed          parsed temporal value
-     * @param toleranceHours  allowed hours in the past
+     * @param parsed         parsed temporal value
+     * @param toleranceHours allowed hours in the past
      * @return {@code true} when outside the allowed window
      */
     public static boolean isOutsidePastFutureWindow(ParsedTemporal parsed, int toleranceHours) {
@@ -187,8 +187,8 @@ public final class DateToleranceEvaluator {
     /**
      * Returns whether a {@link LocalDateTime} falls outside the past tolerance window up to now.
      *
-     * @param dateTime         value to check
-     * @param toleranceHours   allowed hours in the past
+     * @param dateTime       value to check
+     * @param toleranceHours allowed hours in the past
      * @return {@code true} when outside the allowed window
      */
     public static boolean isOutsidePastFutureWindow(LocalDateTime dateTime, int toleranceHours) {
@@ -200,8 +200,8 @@ public final class DateToleranceEvaluator {
     /**
      * Returns whether a {@link LocalDate} falls outside the past tolerance window up to today.
      *
-     * @param date             value to check
-     * @param toleranceHours   allowed hours in the past (converted to whole days)
+     * @param date           value to check
+     * @param toleranceHours allowed hours in the past (converted to whole days)
      * @return {@code true} when outside the allowed window
      */
     public static boolean isOutsidePastFutureWindow(LocalDate date, int toleranceHours) {
@@ -241,17 +241,27 @@ public final class DateToleranceEvaluator {
         return ParseResult.SUCCESS;
     }
 
-    /** Outcome of a parse attempt. */
+    /**
+     * Outcome of a parse attempt.
+     */
     public enum ParseResult {
-        /** Parsing succeeded. */
+        /**
+         * Parsing succeeded.
+         */
         SUCCESS,
-        /** The value does not match the pattern. */
+        /**
+         * The value does not match the pattern.
+         */
         PATTERN_ERROR,
-        /** February 29 is not valid for the parsed year. */
+        /**
+         * February 29 is not valid for the parsed year.
+         */
         LEAP_YEAR_ERROR
     }
 
-    /** Holder for one of the supported parsed temporal types. */
+    /**
+     * Holder for one of the supported parsed temporal types.
+     */
     public static final class ParsedTemporal {
         private final ZonedDateTime zonedDateTime;
         private final LocalDateTime localDateTime;

@@ -17,15 +17,6 @@ public class SampleApplication {
         SpringApplication.run(SampleApplication.class, args);
     }
 
-    @RestController
-    static class RegistrationController {
-
-        @PostMapping("/register")
-        RegistrationResponse register(@Valid @RequestBody RegistrationRequest request) {
-            return new RegistrationResponse(request.email(), "ok");
-        }
-    }
-
     record RegistrationRequest(
             @NotBlank String name,
             @ValidEmail String email,
@@ -33,5 +24,14 @@ public class SampleApplication {
     }
 
     record RegistrationResponse(String email, String status) {
+    }
+
+    @RestController
+    static class RegistrationController {
+
+        @PostMapping("/register")
+        RegistrationResponse register(@Valid @RequestBody RegistrationRequest request) {
+            return new RegistrationResponse(request.email(), "ok");
+        }
     }
 }

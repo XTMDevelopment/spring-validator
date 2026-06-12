@@ -4,26 +4,48 @@ package id.xtramile.validator.enums;
  * Validation message groups used to namespace localized error messages.
  */
 public enum Group {
-    /** Common constraint messages. */
+    /**
+     * Common constraint messages.
+     */
     COMMON,
-    /** Contact-related constraint messages. */
+    /**
+     * Contact-related constraint messages.
+     */
     CONTACT,
-    /** Cross-field constraint messages. */
+    /**
+     * Cross-field constraint messages.
+     */
     CROSS,
-    /** Data-format constraint messages. */
+    /**
+     * Data-format constraint messages.
+     */
     DATA,
-    /** Date and time constraint messages. */
+    /**
+     * Date and time constraint messages.
+     */
     DATETIME,
-    /** File constraint messages. */
+    /**
+     * File constraint messages.
+     */
     FILE,
-    /** Finance constraint messages. */
+    /**
+     * Finance constraint messages.
+     */
     FINANCE,
-    /** KYC constraint messages. */
+    /**
+     * KYC constraint messages.
+     */
     KYC,
-    /** Location constraint messages. */
+    /**
+     * Location constraint messages.
+     */
     LOCATION,
-    /** Network constraint messages. */
+    /**
+     * Network constraint messages.
+     */
     NETWORK,
-    /** Jakarta Bean Validation built-in constraint messages. */
+    /**
+     * Jakarta Bean Validation built-in constraint messages.
+     */
     SPRING
 }

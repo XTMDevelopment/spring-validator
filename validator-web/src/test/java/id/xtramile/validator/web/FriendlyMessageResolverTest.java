@@ -831,7 +831,7 @@ class FriendlyMessageResolverTest {
     }
 
     private static class WhitelistChannelForm {
-        @FieldName("Channel")
+        @id.xtramile.validator.annotation.common.FieldName("Channel")
         @InWhitelist(values = {"sms", "wa"})
         String channel;
     }

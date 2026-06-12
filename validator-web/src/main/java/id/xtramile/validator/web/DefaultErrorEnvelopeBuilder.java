@@ -11,7 +11,9 @@ import java.util.Map;
  */
 public class DefaultErrorEnvelopeBuilder implements ErrorEnvelopeBuilder {
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<String, Object> validation(List<String> errors) {
         ResponseType validationError = ResponseType.VALIDATION_FAILED;
@@ -23,7 +25,9 @@ public class DefaultErrorEnvelopeBuilder implements ErrorEnvelopeBuilder {
         return body;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<String, Object> unknown(String cause, String error) {
         ResponseType unknownError = ResponseType.UNKNOWN_ERROR;

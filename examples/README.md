@@ -39,6 +39,7 @@ Expected: HTTP 400 with Indonesian validation messages in the error envelope.
 ### Dependency used
 
 ```xml
+
 <dependency>
     <groupId>id.xtramile.validator</groupId>
     <artifactId>validator-spring-boot-starter</artifactId>

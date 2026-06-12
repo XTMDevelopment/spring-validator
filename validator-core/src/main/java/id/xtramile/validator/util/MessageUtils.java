@@ -59,7 +59,9 @@ public class MessageUtils {
         return storage.remove(template);
     }
 
-    /** Clears all thread-local stored message arguments. */
+    /**
+     * Clears all thread-local stored message arguments.
+     */
     public static void clearStoredArgs() {
         ARG_STORAGE.get().clear();
         ARG_STORAGE.remove();

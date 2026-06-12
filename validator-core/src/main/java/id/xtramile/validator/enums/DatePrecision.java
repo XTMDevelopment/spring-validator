@@ -4,12 +4,20 @@ package id.xtramile.validator.enums;
  * Units for measuring distance between two date-times.
  */
 public enum DatePrecision {
-    /** Whole days. */
+    /**
+     * Whole days.
+     */
     DAYS,
-    /** Whole hours. */
+    /**
+     * Whole hours.
+     */
     HOURS,
-    /** Whole minutes. */
+    /**
+     * Whole minutes.
+     */
     MINUTES,
-    /** Whole seconds. */
+    /**
+     * Whole seconds.
+     */
     SECONDS
 }

@@ -86,9 +86,9 @@ public class ValidationAutoConfiguration {
     /**
      * Provides the friendly validation message resolver.
      *
-     * @param messageResourceResolver          the message resource resolver
-     * @param fieldNames                       the field display name resolver
-     * @param messageArgsBuilder               the message argument builder
+     * @param messageResourceResolver            the message resource resolver
+     * @param fieldNames                         the field display name resolver
+     * @param messageArgsBuilder                 the message argument builder
      * @param compositeConstraintMessageResolver the composite constraint message resolver
      * @return the friendly message resolver bean
      */
@@ -110,8 +110,8 @@ public class ValidationAutoConfiguration {
     /**
      * Provides the global API exception handler.
      *
-     * @param builder          the error envelope builder
-     * @param messageResolver  the friendly message resolver
+     * @param builder         the error envelope builder
+     * @param messageResolver the friendly message resolver
      * @return the API exception handler bean
      */
     @Bean

@@ -26,8 +26,8 @@ public class ApiExceptionHandler {
     /**
      * Creates a handler with the given envelope builder and message resolver.
      *
-     * @param builder          builds standardized error response bodies
-     * @param messageResolver  resolves user-friendly validation messages
+     * @param builder         builds standardized error response bodies
+     * @param messageResolver resolves user-friendly validation messages
      */
     public ApiExceptionHandler(ErrorEnvelopeBuilder builder, FriendlyMessageResolver messageResolver) {
         this.builder = builder;

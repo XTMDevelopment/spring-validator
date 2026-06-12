@@ -69,9 +69,9 @@ public class FriendlyMessageResolver {
     /**
      * Resolves a friendly message for a constraint violation.
      *
-     * @param v         the constraint violation
-     * @param field     property path or field name
-     * @param dtoClass  the validated root bean class
+     * @param v        the constraint violation
+     * @param field    property path or field name
+     * @param dtoClass the validated root bean class
      * @return the resolved message
      */
     public String resolve(ConstraintViolation<?> v, String field, Class<?> dtoClass) {
@@ -107,8 +107,8 @@ public class FriendlyMessageResolver {
     /**
      * Resolves a friendly message for a Spring {@link FieldError}.
      *
-     * @param err       the field error from binding validation
-     * @param dtoClass  the validated DTO class
+     * @param err      the field error from binding validation
+     * @param dtoClass the validated DTO class
      * @return the resolved message
      */
     public String resolve(FieldError err, Class<?> dtoClass) {

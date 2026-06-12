@@ -173,9 +173,9 @@ public class ValidatorUtils {
     /**
      * Validates that an ISO-8601 date-time is not beyond now plus the tolerance.
      *
-     * @param value           the date-time string
-     * @param pattern         optional parse pattern
-     * @param toleranceHours  allowed hours into the future
+     * @param value          the date-time string
+     * @param pattern        optional parse pattern
+     * @param toleranceHours allowed hours into the future
      * @return {@code true} if within the allowed window
      */
     @SuppressWarnings("DuplicatedCode")
@@ -205,9 +205,9 @@ public class ValidatorUtils {
     /**
      * Validates that an ISO-8601 date-time falls within the past tolerance window up to now.
      *
-     * @param value           the date-time string
-     * @param pattern         optional parse pattern
-     * @param toleranceHours  allowed hours into the past
+     * @param value          the date-time string
+     * @param pattern        optional parse pattern
+     * @param toleranceHours allowed hours into the past
      * @return {@code true} if within the allowed window
      */
     @SuppressWarnings("DuplicatedCode")
