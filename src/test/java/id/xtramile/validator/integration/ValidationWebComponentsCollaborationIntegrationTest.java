@@ -2,12 +2,11 @@ package id.xtramile.validator.integration;
 
 import id.xtramile.validator.annotation.common.FieldName;
 import id.xtramile.validator.annotation.common.InWhitelist;
+import id.xtramile.validator.support.ValidationMessageTestSupport;
 import id.xtramile.validator.web.FriendlyMessageResolver;
-import id.xtramile.validator.web.MessageResourceResolver;
 import id.xtramile.validator.web.ValidationAnnotationTypeRegistry;
 import id.xtramile.validator.web.ValidationFieldDisplayNames;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotBlank;
 import org.junit.jupiter.api.BeforeAll;
@@ -27,27 +26,23 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class ValidationWebComponentsCollaborationIntegrationTest {
 
-    private static Validator validator;
-    private static FriendlyMessageResolver friendlyResolver;
+    private static ValidationMessageTestSupport SUPPORT;
 
     @BeforeAll
     static void initValidator() {
-        validator = Validation.buildDefaultValidatorFactory().getValidator();
-
-        MessageResourceResolver enMessages = new MessageResourceResolver("en");
-        friendlyResolver = new FriendlyMessageResolver(enMessages);
+        SUPPORT = ValidationMessageTestSupport.EN;
     }
 
     @Test
     void constraintViolation_resolvesValidationTemplateWithFieldName() {
         MultiViolationDto dto = new MultiViolationDto("", "bad");
 
-        Set<ConstraintViolation<MultiViolationDto>> violations = validator.validate(dto);
+        Set<ConstraintViolation<MultiViolationDto>> violations = SUPPORT.validator().validate(dto);
         assertThat(violations).isNotEmpty();
 
         for (ConstraintViolation<MultiViolationDto> v : violations) {
             String path = v.getPropertyPath() == null ? "request" : v.getPropertyPath().toString();
-            String resolved = friendlyResolver.resolve(v, path, MultiViolationDto.class);
+            String resolved = SUPPORT.resolver().resolve(v, path, MultiViolationDto.class);
 
             String template = v.getMessageTemplate();
             if (template != null && template.startsWith("validation.")) {
@@ -66,10 +61,10 @@ class ValidationWebComponentsCollaborationIntegrationTest {
         FieldError fe = errors.getFieldError("channel");
         assertThat(fe).isNotNull();
 
-        String fromFieldError = friendlyResolver.resolve(fe, MapLikeDto.class);
+        String fromFieldError = SUPPORT.resolver().resolve(fe, MapLikeDto.class);
 
-        ConstraintViolation<MapLikeDto> cv = validator.validate(MapLikeDto.withInvalidChannel()).iterator().next();
-        String fromConstraint = friendlyResolver.resolve(cv, "channel", MapLikeDto.class);
+        ConstraintViolation<MapLikeDto> cv = SUPPORT.validator().validate(MapLikeDto.withInvalidChannel()).iterator().next();
+        String fromConstraint = SUPPORT.resolver().resolve(cv, "channel", MapLikeDto.class);
 
         assertThat(fromFieldError).isEqualTo(fromConstraint);
     }
@@ -77,7 +72,7 @@ class ValidationWebComponentsCollaborationIntegrationTest {
     @Test
     void validationAnnotationTypeRegistry_matchesValidatorConstraintCodes() {
         MultiViolationDto dto = new MultiViolationDto("", "bad");
-        for (ConstraintViolation<MultiViolationDto> v : validator.validate(dto)) {
+        for (ConstraintViolation<MultiViolationDto> v : SUPPORT.validator().validate(dto)) {
             String code = v.getConstraintDescriptor().getAnnotation().annotationType().getSimpleName();
             assertThat(ValidationAnnotationTypeRegistry.resolve(code))
                     .isEqualTo(v.getConstraintDescriptor().getAnnotation().annotationType());

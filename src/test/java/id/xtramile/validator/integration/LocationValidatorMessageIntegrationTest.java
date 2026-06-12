@@ -1,15 +1,9 @@
 package id.xtramile.validator.integration;
 
 import id.xtramile.validator.annotation.location.*;
-import id.xtramile.validator.web.FriendlyMessageResolver;
-import id.xtramile.validator.web.MessageResourceResolver;
+import id.xtramile.validator.support.ValidationMessageTestSupport;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 import static id.xtramile.validator.integration.ValidationMessageAssertions.assertNoRawValidationKey;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,16 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class LocationValidatorMessageIntegrationTest {
 
-    private static final Validator VALIDATOR;
-    private static final FriendlyMessageResolver RESOLVER;
-
-    static {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        VALIDATOR = factory.getValidator();
-
-        MessageResourceResolver messageResourceResolver = new MessageResourceResolver("en");
-        RESOLVER = new FriendlyMessageResolver(messageResourceResolver);
-    }
+    private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
     public static class CoordinatesDto {
         @ValidCoordinates
@@ -119,22 +104,14 @@ class LocationValidatorMessageIntegrationTest {
         }
     }
 
-    private <T> ConstraintViolation<T> firstViolation(T dto) {
-        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(dto);
-
-        assertFalse(violations.isEmpty(), "Expected at least one violation but got none");
-
-        return violations.iterator().next();
-    }
-
     @Test
     void coordinates_defaultOrder() {
         CoordinatesDto dto = new CoordinatesDto("91,0");
-        ConstraintViolation<CoordinatesDto> v = firstViolation(dto);
+        ConstraintViolation<CoordinatesDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", CoordinatesDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", CoordinatesDto.class);
 
         assertEquals(
                 "value must be valid coordinates in format: longitude, latitude",
@@ -145,11 +122,11 @@ class LocationValidatorMessageIntegrationTest {
     @Test
     void coordinates_flippedOrder() {
         CoordinatesFlipDto dto = new CoordinatesFlipDto("0,91");
-        ConstraintViolation<CoordinatesFlipDto> v = firstViolation(dto);
+        ConstraintViolation<CoordinatesFlipDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", CoordinatesFlipDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", CoordinatesFlipDto.class);
 
         assertEquals(
                 "value must be valid coordinates in format: latitude, longitude",
@@ -160,11 +137,11 @@ class LocationValidatorMessageIntegrationTest {
     @Test
     void latitude_pathB() {
         LatitudeDto dto = new LatitudeDto("91");
-        ConstraintViolation<LatitudeDto> v = firstViolation(dto);
+        ConstraintViolation<LatitudeDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", LatitudeDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", LatitudeDto.class);
 
         assertEquals("value must be a valid latitude", resolved);
         assertNoRawValidationKey(resolved);
@@ -173,11 +150,11 @@ class LocationValidatorMessageIntegrationTest {
     @Test
     void longitude_pathB() {
         LongitudeDto dto = new LongitudeDto("181");
-        ConstraintViolation<LongitudeDto> v = firstViolation(dto);
+        ConstraintViolation<LongitudeDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", LongitudeDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", LongitudeDto.class);
 
         assertEquals("value must be a valid longitude", resolved);
         assertNoRawValidationKey(resolved);
@@ -186,11 +163,11 @@ class LocationValidatorMessageIntegrationTest {
     @Test
     void postalCode_unsupportedCountry() {
         PostalCodeUnsupportedDto dto = new PostalCodeUnsupportedDto("12345");
-        ConstraintViolation<PostalCodeUnsupportedDto> v = firstViolation(dto);
+        ConstraintViolation<PostalCodeUnsupportedDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", PostalCodeUnsupportedDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", PostalCodeUnsupportedDto.class);
 
         assertEquals("value must be a valid postal code", resolved);
         assertNoRawValidationKey(resolved);
@@ -199,11 +176,11 @@ class LocationValidatorMessageIntegrationTest {
     @Test
     void postalCode_badFormat() {
         PostalCodeBadFormatDto dto = new PostalCodeBadFormatDto("1234");
-        ConstraintViolation<PostalCodeBadFormatDto> v = firstViolation(dto);
+        ConstraintViolation<PostalCodeBadFormatDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", PostalCodeBadFormatDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", PostalCodeBadFormatDto.class);
 
         assertEquals("value must be a valid postal code", resolved);
         assertNoRawValidationKey(resolved);
@@ -212,11 +189,11 @@ class LocationValidatorMessageIntegrationTest {
     @Test
     void rtRw_pathB() {
         RtRwDto dto = new RtRwDto("12");
-        ConstraintViolation<RtRwDto> v = firstViolation(dto);
+        ConstraintViolation<RtRwDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", RtRwDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", RtRwDto.class);
 
         assertEquals("value must be a valid RT/RW number", resolved);
         assertNoRawValidationKey(resolved);

@@ -1,15 +1,9 @@
 package id.xtramile.validator.integration;
 
 import id.xtramile.validator.annotation.network.*;
-import id.xtramile.validator.web.FriendlyMessageResolver;
-import id.xtramile.validator.web.MessageResourceResolver;
+import id.xtramile.validator.support.ValidationMessageTestSupport;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 import static id.xtramile.validator.integration.ValidationMessageAssertions.assertNoRawValidationKey;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,16 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class NetworkValidatorMessageIntegrationTest {
 
-    private static final Validator VALIDATOR;
-    private static final FriendlyMessageResolver RESOLVER;
-
-    static {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        VALIDATOR = factory.getValidator();
-
-        MessageResourceResolver messageResourceResolver = new MessageResourceResolver("en");
-        RESOLVER = new FriendlyMessageResolver(messageResourceResolver);
-    }
+    private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
     public static class CidrDto {
         @ValidCIDR
@@ -145,22 +130,14 @@ class NetworkValidatorMessageIntegrationTest {
         }
     }
 
-    private <T> ConstraintViolation<T> firstViolation(T dto) {
-        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(dto);
-
-        assertFalse(violations.isEmpty(), "Expected at least one violation but got none");
-
-        return violations.iterator().next();
-    }
-
     @Test
     void cidr_pathB() {
         CidrDto dto = new CidrDto("192.168.0.0/33");
-        ConstraintViolation<CidrDto> v = firstViolation(dto);
+        ConstraintViolation<CidrDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", CidrDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", CidrDto.class);
 
         assertEquals("value must be a valid CIDR notation", resolved);
         assertNoRawValidationKey(resolved);
@@ -169,11 +146,11 @@ class NetworkValidatorMessageIntegrationTest {
     @Test
     void ipAddress_pathB() {
         IpAddressDto dto = new IpAddressDto("not-an-ip-address");
-        ConstraintViolation<IpAddressDto> v = firstViolation(dto);
+        ConstraintViolation<IpAddressDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", IpAddressDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", IpAddressDto.class);
 
         assertEquals("value must be a valid IP address", resolved);
         assertNoRawValidationKey(resolved);
@@ -182,11 +159,11 @@ class NetworkValidatorMessageIntegrationTest {
     @Test
     void ipv4_pathB() {
         Ipv4Dto dto = new Ipv4Dto("256.1.1.1");
-        ConstraintViolation<Ipv4Dto> v = firstViolation(dto);
+        ConstraintViolation<Ipv4Dto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", Ipv4Dto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", Ipv4Dto.class);
 
         assertEquals("value must be a valid IPv4 address", resolved);
         assertNoRawValidationKey(resolved);
@@ -195,11 +172,11 @@ class NetworkValidatorMessageIntegrationTest {
     @Test
     void ipv6_pathB() {
         Ipv6Dto dto = new Ipv6Dto("zzzz::1");
-        ConstraintViolation<Ipv6Dto> v = firstViolation(dto);
+        ConstraintViolation<Ipv6Dto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", Ipv6Dto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", Ipv6Dto.class);
 
         assertEquals("value must be a valid IPv6 address", resolved);
         assertNoRawValidationKey(resolved);
@@ -208,11 +185,11 @@ class NetworkValidatorMessageIntegrationTest {
     @Test
     void macAddress_pathB() {
         MacAddressDto dto = new MacAddressDto("00:00:00:00:00");
-        ConstraintViolation<MacAddressDto> v = firstViolation(dto);
+        ConstraintViolation<MacAddressDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", MacAddressDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", MacAddressDto.class);
 
         assertEquals("value must be a valid MAC address", resolved);
         assertNoRawValidationKey(resolved);
@@ -221,11 +198,11 @@ class NetworkValidatorMessageIntegrationTest {
     @Test
     void port_intOutOfRange() {
         PortIntDto dto = new PortIntDto(0);
-        ConstraintViolation<PortIntDto> v = firstViolation(dto);
+        ConstraintViolation<PortIntDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", PortIntDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", PortIntDto.class);
 
         assertEquals("value must be a valid port", resolved);
         assertNoRawValidationKey(resolved);
@@ -234,11 +211,11 @@ class NetworkValidatorMessageIntegrationTest {
     @Test
     void port_stringNotNumeric() {
         PortStringDto dto = new PortStringDto("not-a-port");
-        ConstraintViolation<PortStringDto> v = firstViolation(dto);
+        ConstraintViolation<PortStringDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", PortStringDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", PortStringDto.class);
 
         assertEquals("value must be a valid port", resolved);
         assertNoRawValidationKey(resolved);
@@ -247,11 +224,11 @@ class NetworkValidatorMessageIntegrationTest {
     @Test
     void url_pathB() {
         UrlDto dto = new UrlDto("http://");
-        ConstraintViolation<UrlDto> v = firstViolation(dto);
+        ConstraintViolation<UrlDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", UrlDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", UrlDto.class);
 
         assertEquals("value must be a valid URL", resolved);
         assertNoRawValidationKey(resolved);
@@ -260,11 +237,11 @@ class NetworkValidatorMessageIntegrationTest {
     @Test
     void domainName_pathB() {
         DomainNameDto dto = new DomainNameDto("nodots");
-        ConstraintViolation<DomainNameDto> v = firstViolation(dto);
+        ConstraintViolation<DomainNameDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", DomainNameDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", DomainNameDto.class);
 
         assertEquals("value must be a valid domain name", resolved);
         assertNoRawValidationKey(resolved);

@@ -1,14 +1,18 @@
 package id.xtramile.validator.autoconfigure;
 
-import id.xtramile.validator.web.*;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.BothCustomBeansConfig;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomApiExceptionHandler;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomApiExceptionHandlerConfig;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomErrorEnvelopeBuilder;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomErrorEnvelopeBuilderConfig;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.MultipleApiExceptionHandlersConfig;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.MultipleErrorEnvelopeBuildersConfig;
+import id.xtramile.validator.web.ApiExceptionHandler;
+import id.xtramile.validator.web.DefaultErrorEnvelopeBuilder;
+import id.xtramile.validator.web.ErrorEnvelopeBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -152,77 +156,4 @@ class ValidationAutoConfigurationMissingBeanTest {
                 });
     }
 
-    @Configuration
-    static class CustomErrorEnvelopeBuilderConfig {
-        @Bean
-        public ErrorEnvelopeBuilder customErrorEnvelopeBuilder() {
-            return new CustomErrorEnvelopeBuilder();
-        }
-    }
-
-    @Configuration
-    static class CustomApiExceptionHandlerConfig {
-        @Bean
-        public ApiExceptionHandler customApiExceptionHandler() {
-            return new CustomApiExceptionHandler();
-        }
-    }
-
-    @Configuration
-    static class BothCustomBeansConfig {
-        @Bean
-        public ErrorEnvelopeBuilder customErrorEnvelopeBuilder() {
-            return new CustomErrorEnvelopeBuilder();
-        }
-        
-        @Bean
-        public ApiExceptionHandler customApiExceptionHandler() {
-            return new CustomApiExceptionHandler();
-        }
-    }
-
-    @Configuration
-    static class MultipleErrorEnvelopeBuildersConfig {
-        @Bean
-        public ErrorEnvelopeBuilder customErrorEnvelopeBuilder1() {
-            return new CustomErrorEnvelopeBuilder();
-        }
-        
-        @Bean
-        public ErrorEnvelopeBuilder customErrorEnvelopeBuilder2() {
-            return new CustomErrorEnvelopeBuilder();
-        }
-    }
-
-    @Configuration
-    static class MultipleApiExceptionHandlersConfig {
-        @Bean
-        public ApiExceptionHandler customApiExceptionHandler1() {
-            return new CustomApiExceptionHandler();
-        }
-        
-        @Bean
-        public ApiExceptionHandler customApiExceptionHandler2() {
-            return new CustomApiExceptionHandler();
-        }
-    }
-
-    static class CustomErrorEnvelopeBuilder implements ErrorEnvelopeBuilder {
-        @Override
-        public Map<String, Object> validation(List<String> errors) {
-            return Map.of("custom", "validation", "source", "CustomErrorEnvelopeBuilder");
-        }
-
-        @Override
-        public Map<String, Object> unknown(String cause, String error) {
-            return Map.of("custom", "unknown", "source", "CustomErrorEnvelopeBuilder");
-        }
-    }
-
-    static class CustomApiExceptionHandler extends ApiExceptionHandler {
-        public CustomApiExceptionHandler() {
-            super(new CustomErrorEnvelopeBuilder(), new FriendlyMessageResolver(
-                    new MessageResourceResolver("id")));
-        }
-    }
 }

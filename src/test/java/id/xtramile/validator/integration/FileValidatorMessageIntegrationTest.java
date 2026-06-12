@@ -4,33 +4,18 @@ import id.xtramile.validator.annotation.file.ValidFileExtension;
 import id.xtramile.validator.annotation.file.ValidFileMimeType;
 import id.xtramile.validator.annotation.file.ValidFileSize;
 import id.xtramile.validator.annotation.file.ValidImageDimensions;
+import id.xtramile.validator.support.ValidationMessageTestSupport;
 import id.xtramile.validator.validator.file.MockMultipartFile;
-import id.xtramile.validator.web.FriendlyMessageResolver;
-import id.xtramile.validator.web.MessageResourceResolver;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Set;
 
 import static id.xtramile.validator.integration.ValidationMessageAssertions.assertNoRawValidationKey;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileValidatorMessageIntegrationTest {
 
-    private static final Validator VALIDATOR;
-    private static final FriendlyMessageResolver RESOLVER;
-
-    static {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        VALIDATOR = factory.getValidator();
-
-        MessageResourceResolver messageResourceResolver = new MessageResourceResolver("en");
-        RESOLVER = new FriendlyMessageResolver(messageResourceResolver);
-    }
+    private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
     public static class FileExtensionDto {
         @ValidFileExtension(allowed = {"jpg", "png"})
@@ -97,14 +82,6 @@ class FileValidatorMessageIntegrationTest {
         }
     }
 
-    private <T> ConstraintViolation<T> firstViolation(T dto) {
-        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(dto);
-
-        assertFalse(violations.isEmpty(), "Expected at least one violation but got none");
-
-        return violations.iterator().next();
-    }
-
     private static MultipartFile mockFile(String name, String contentType, byte[] bytes) {
         return new MockMultipartFile(name, name, contentType, bytes);
     }
@@ -112,11 +89,11 @@ class FileValidatorMessageIntegrationTest {
     @Test
     void fileExtension_pathB() {
         FileExtensionDto dto = new FileExtensionDto(mockFile("document.pdf", "application/pdf", new byte[]{1, 2, 3}));
-        ConstraintViolation<FileExtensionDto> v = firstViolation(dto);
+        ConstraintViolation<FileExtensionDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", FileExtensionDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", FileExtensionDto.class);
 
         assertTrue(resolved.contains("jpg") || resolved.contains("png"),
                 "Extensions not in message: " + resolved);
@@ -125,11 +102,11 @@ class FileValidatorMessageIntegrationTest {
     @Test
     void mimeType_pathB() {
         FileMimeTypeDto dto = new FileMimeTypeDto(mockFile("file.pdf", "application/pdf", new byte[]{1, 2, 3}));
-        ConstraintViolation<FileMimeTypeDto> v = firstViolation(dto);
+        ConstraintViolation<FileMimeTypeDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", FileMimeTypeDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", FileMimeTypeDto.class);
 
         assertTrue(resolved.contains("image/jpeg") || resolved.contains("image/png"),
                 "MIME types not in message: " + resolved);
@@ -138,11 +115,11 @@ class FileValidatorMessageIntegrationTest {
     @Test
     void imageDimensions_pathB() {
         ImageDimensionsDto dto = new ImageDimensionsDto(mockFile("img.jpg", "image/jpeg", new byte[]{0, 0, 0, 0}));
-        ConstraintViolation<ImageDimensionsDto> v = firstViolation(dto);
+        ConstraintViolation<ImageDimensionsDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", ImageDimensionsDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", ImageDimensionsDto.class);
 
         assertTrue(resolved.contains("100"), "expected min dimension in message: " + resolved);
         assertTrue(resolved.contains("4096") || resolved.contains("4,096"),
@@ -154,11 +131,11 @@ class FileValidatorMessageIntegrationTest {
     void fileSize_tooSmall() {
         byte[] smallBytes = new byte[10];
         FileSizeMinDto dto = new FileSizeMinDto(smallBytes);
-        ConstraintViolation<FileSizeMinDto> v = firstViolation(dto);
+        ConstraintViolation<FileSizeMinDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.file.file-size.min", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", FileSizeMinDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", FileSizeMinDto.class);
 
         assertTrue(resolved.startsWith("value must have minimal"),
                 "Unexpected message: " + resolved);
@@ -168,11 +145,11 @@ class FileValidatorMessageIntegrationTest {
     void fileSize_tooLarge() {
         byte[] largeBytes = new byte[200];
         FileSizeMaxDto dto = new FileSizeMaxDto(largeBytes);
-        ConstraintViolation<FileSizeMaxDto> v = firstViolation(dto);
+        ConstraintViolation<FileSizeMaxDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.file.file-size.max", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", FileSizeMaxDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", FileSizeMaxDto.class);
 
         assertTrue(resolved.startsWith("value must have maximal"),
                 "Unexpected message: " + resolved);

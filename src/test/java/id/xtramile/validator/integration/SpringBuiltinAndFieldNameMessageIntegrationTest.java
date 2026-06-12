@@ -1,20 +1,15 @@
 package id.xtramile.validator.integration;
 
 import id.xtramile.validator.annotation.common.FieldName;
+import id.xtramile.validator.support.ValidationMessageTestSupport;
 import id.xtramile.validator.web.BeanValidationMessageDescriptors;
-import id.xtramile.validator.web.FriendlyMessageResolver;
-import id.xtramile.validator.web.MessageResourceResolver;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import jakarta.validation.constraints.*;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static id.xtramile.validator.integration.ValidationMessageAssertions.assertNoRawValidationKey;
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,16 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class SpringBuiltinAndFieldNameMessageIntegrationTest {
 
-    private static final Validator VALIDATOR;
-    private static final FriendlyMessageResolver RESOLVER;
-    private static final MessageResourceResolver MESSAGES;
-
-    static {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        VALIDATOR = factory.getValidator();
-        MESSAGES = new MessageResourceResolver("en");
-        RESOLVER = new FriendlyMessageResolver(MESSAGES);
-    }
+    private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
     public static class NotBlankDto {
         @FieldName("Borrower ID")
@@ -194,152 +180,144 @@ class SpringBuiltinAndFieldNameMessageIntegrationTest {
     @Test
     void notBlank_withFieldName() {
         NotBlankDto dto = new NotBlankDto("");
-        ConstraintViolation<NotBlankDto> v = firstViolation(dto);
+        ConstraintViolation<NotBlankDto> v = SUPPORT.firstViolation(dto);
 
         assertDescriptorIsDefaultStockKey(v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "borrowerId", NotBlankDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "borrowerId", NotBlankDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.spring.not-blank", "Borrower ID"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.spring.not-blank", "Borrower ID"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void notNull_withFieldName() {
         NotNullDto dto = new NotNullDto(null);
-        ConstraintViolation<NotNullDto> v = firstViolation(dto);
+        ConstraintViolation<NotNullDto> v = SUPPORT.firstViolation(dto);
 
         assertDescriptorIsDefaultStockKey(v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "accountId", NotNullDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "accountId", NotNullDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.spring.not-null", "Account ID"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.spring.not-null", "Account ID"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void min_withFieldName() {
         MinDto dto = new MinDto(5);
-        ConstraintViolation<MinDto> v = firstViolation(dto);
+        ConstraintViolation<MinDto> v = SUPPORT.firstViolation(dto);
 
         assertDescriptorIsDefaultStockKey(v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "qty", MinDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "qty", MinDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.spring.min", "Quantity", 10L), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.spring.min", "Quantity", 10L), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void max_withFieldName() {
         MaxDto dto = new MaxDto(150);
-        ConstraintViolation<MaxDto> v = firstViolation(dto);
+        ConstraintViolation<MaxDto> v = SUPPORT.firstViolation(dto);
 
         assertDescriptorIsDefaultStockKey(v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "age", MaxDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "age", MaxDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.spring.max", "Age", 100L), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.spring.max", "Age", 100L), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void size_withFieldName() {
         SizeDto dto = new SizeDto("X");
-        ConstraintViolation<SizeDto> v = firstViolation(dto);
+        ConstraintViolation<SizeDto> v = SUPPORT.firstViolation(dto);
 
         assertDescriptorIsDefaultStockKey(v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "code", SizeDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "code", SizeDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.spring.size", "Code", 2, 5), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.spring.size", "Code", 2, 5), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void email_withFieldName() {
         EmailDto dto = new EmailDto("not-an-email");
-        ConstraintViolation<EmailDto> v = firstViolation(dto);
+        ConstraintViolation<EmailDto> v = SUPPORT.firstViolation(dto);
 
         assertDescriptorIsDefaultStockKey(v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "email", EmailDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "email", EmailDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.spring.email", "Work Email"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.spring.email", "Work Email"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void pattern_withFieldName() {
         PatternDto dto = new PatternDto("abc");
-        ConstraintViolation<PatternDto> v = firstViolation(dto);
+        ConstraintViolation<PatternDto> v = SUPPORT.firstViolation(dto);
 
         assertDescriptorIsDefaultStockKey(v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "pin", PatternDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "pin", PatternDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.spring.pattern", "PIN"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.spring.pattern", "PIN"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void decimalMin_withFieldName() {
         DecimalMinDto dto = new DecimalMinDto(new BigDecimal("1.0"));
-        ConstraintViolation<DecimalMinDto> v = firstViolation(dto);
+        ConstraintViolation<DecimalMinDto> v = SUPPORT.firstViolation(dto);
 
         assertDescriptorIsDefaultStockKey(v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "amount", DecimalMinDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "amount", DecimalMinDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.spring.decimal-min", "Amount", "10.0"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.spring.decimal-min", "Amount", "10.0"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void positive_withFieldName() {
         PositiveDto dto = new PositiveDto(-1);
-        ConstraintViolation<PositiveDto> v = firstViolation(dto);
+        ConstraintViolation<PositiveDto> v = SUPPORT.firstViolation(dto);
 
         assertDescriptorIsDefaultStockKey(v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "score", PositiveDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "score", PositiveDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.spring.positive", "Score"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.spring.positive", "Score"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void notEmpty_withFieldName() {
         NotEmptyDto dto = new NotEmptyDto(Collections.emptyList());
-        ConstraintViolation<NotEmptyDto> v = firstViolation(dto);
+        ConstraintViolation<NotEmptyDto> v = SUPPORT.firstViolation(dto);
 
         assertDescriptorIsDefaultStockKey(v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "tags", NotEmptyDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "tags", NotEmptyDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.spring.not-empty", "Tags"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.spring.not-empty", "Tags"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void digits_withFieldName() {
         DigitsDto dto = new DigitsDto(new BigDecimal("123.45"));
-        ConstraintViolation<DigitsDto> v = firstViolation(dto);
+        ConstraintViolation<DigitsDto> v = SUPPORT.firstViolation(dto);
 
         assertDescriptorIsDefaultStockKey(v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "price", DigitsDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "price", DigitsDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.spring.digits", "Price", 2, 1), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.spring.digits", "Price", 2, 1), resolved);
         assertNoRawValidationKey(resolved);
-    }
-
-    private static <T> ConstraintViolation<T> firstViolation(T dto) {
-        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(dto);
-
-        assertFalse(violations.isEmpty(), "Expected at least one violation");
-
-        return violations.iterator().next();
     }
 
     private static void assertDescriptorIsDefaultStockKey(String template) {

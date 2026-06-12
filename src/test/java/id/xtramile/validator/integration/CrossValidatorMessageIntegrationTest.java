@@ -1,30 +1,15 @@
 package id.xtramile.validator.integration;
 
 import id.xtramile.validator.annotation.cross.*;
-import id.xtramile.validator.web.FriendlyMessageResolver;
-import id.xtramile.validator.web.MessageResourceResolver;
+import id.xtramile.validator.support.ValidationMessageTestSupport;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CrossValidatorMessageIntegrationTest {
 
-    private static final Validator VALIDATOR;
-    private static final FriendlyMessageResolver RESOLVER;
-
-    static {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        VALIDATOR = factory.getValidator();
-
-        MessageResourceResolver messageResourceResolver = new MessageResourceResolver("en");
-        RESOLVER = new FriendlyMessageResolver(messageResourceResolver);
-    }
+    private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
     @FieldMatch(first = "password", second = "confirmPassword")
     public static class FieldMatchDto {
@@ -121,22 +106,14 @@ class CrossValidatorMessageIntegrationTest {
         }
     }
 
-    private <T> ConstraintViolation<T> firstViolation(T dto) {
-        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(dto);
-
-        assertFalse(violations.isEmpty(), "Expected at least one violation but got none");
-
-        return violations.iterator().next();
-    }
-
     @Test
     void fieldMatch_mismatch() {
         FieldMatchDto dto = new FieldMatchDto("secret123", "different456");
-        ConstraintViolation<FieldMatchDto> v = firstViolation(dto);
+        ConstraintViolation<FieldMatchDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.cross.field-match", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "password", FieldMatchDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "password", FieldMatchDto.class);
 
         assertEquals("password and confirmPassword must match", resolved);
     }
@@ -144,11 +121,11 @@ class CrossValidatorMessageIntegrationTest {
     @Test
     void atLeastOne_nonePresent() {
         AtLeastOneDto dto = new AtLeastOneDto(null, null);
-        ConstraintViolation<AtLeastOneDto> v = firstViolation(dto);
+        ConstraintViolation<AtLeastOneDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.cross.at-least-one", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "email", AtLeastOneDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "email", AtLeastOneDto.class);
 
         assertNotNull(resolved);
         assertTrue(resolved.contains("At least one"), "Unexpected message: " + resolved);
@@ -157,11 +134,11 @@ class CrossValidatorMessageIntegrationTest {
     @Test
     void differentFrom_sameValue() {
         DifferentFromDto dto = new DifferentFromDto("user@example.com", "user@example.com");
-        ConstraintViolation<DifferentFromDto> v = firstViolation(dto);
+        ConstraintViolation<DifferentFromDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.cross.different-from", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "newEmail", DifferentFromDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "newEmail", DifferentFromDto.class);
 
         assertEquals("newEmail must be different from currentEmail", resolved);
     }
@@ -169,11 +146,11 @@ class CrossValidatorMessageIntegrationTest {
     @Test
     void onlyOne_bothPresent() {
         OnlyOneDto dto = new OnlyOneDto("user@example.com", "6281234567890");
-        ConstraintViolation<OnlyOneDto> v = firstViolation(dto);
+        ConstraintViolation<OnlyOneDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.cross.only-one", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "email", OnlyOneDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "email", OnlyOneDto.class);
 
         assertNotNull(resolved);
         assertTrue(resolved.contains("Only one"), "Unexpected message: " + resolved);
@@ -182,11 +159,11 @@ class CrossValidatorMessageIntegrationTest {
     @Test
     void onlyOne_nonePresent() {
         OnlyOneDto dto = new OnlyOneDto(null, null);
-        ConstraintViolation<OnlyOneDto> v = firstViolation(dto);
+        ConstraintViolation<OnlyOneDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.cross.only-one", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "email", OnlyOneDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "email", OnlyOneDto.class);
 
         assertNotNull(resolved);
         assertTrue(resolved.contains("Only one"), "Unexpected message: " + resolved);
@@ -195,11 +172,11 @@ class CrossValidatorMessageIntegrationTest {
     @Test
     void requiredWith_missingRequiredField() {
         RequiredWithDto dto = new RequiredWithDto("my-token", null);
-        ConstraintViolation<RequiredWithDto> v = firstViolation(dto);
+        ConstraintViolation<RequiredWithDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.cross.required-with", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "token", RequiredWithDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "token", RequiredWithDto.class);
 
         assertEquals("If token is provided, the following fields must also be provided: email", resolved);
     }

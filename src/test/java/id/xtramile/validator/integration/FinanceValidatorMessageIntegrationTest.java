@@ -1,31 +1,16 @@
 package id.xtramile.validator.integration;
 
 import id.xtramile.validator.annotation.finance.*;
-import id.xtramile.validator.web.FriendlyMessageResolver;
-import id.xtramile.validator.web.MessageResourceResolver;
+import id.xtramile.validator.support.ValidationMessageTestSupport;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 import static id.xtramile.validator.integration.ValidationMessageAssertions.assertNoRawValidationKey;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FinanceValidatorMessageIntegrationTest {
 
-    private static final Validator VALIDATOR;
-    private static final FriendlyMessageResolver RESOLVER;
-    private static final MessageResourceResolver MESSAGES;
-
-    static {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        VALIDATOR = factory.getValidator();
-        MESSAGES = new MessageResourceResolver("en");
-        RESOLVER = new FriendlyMessageResolver(MESSAGES);
-    }
+    private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
     public static class CardExpiryDto {
         @ValidCardExpiry
@@ -196,126 +181,118 @@ class FinanceValidatorMessageIntegrationTest {
         }
     }
 
-    private <T> ConstraintViolation<T> firstViolation(T dto) {
-        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(dto);
-
-        assertFalse(violations.isEmpty(), "Expected at least one violation but got none");
-
-        return violations.iterator().next();
-    }
-
     @Test
     void cardExpiry_invalidFormat() {
         CardExpiryDto dto = new CardExpiryDto("not-expiry");
-        ConstraintViolation<CardExpiryDto> v = firstViolation(dto);
+        ConstraintViolation<CardExpiryDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.finance.card-expiry", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", CardExpiryDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", CardExpiryDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.card-expiry", "value"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.card-expiry", "value"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void cardExpiry_expired() {
         CardExpiryFutureDto dto = new CardExpiryFutureDto("01/20");
-        ConstraintViolation<CardExpiryFutureDto> v = firstViolation(dto);
+        ConstraintViolation<CardExpiryFutureDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.finance.card-expiry.future", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", CardExpiryFutureDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", CardExpiryFutureDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.card-expiry.future", "value"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.card-expiry.future", "value"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void cardNumber_invalid() {
         CardNumberDto dto = new CardNumberDto("123456789012");
-        ConstraintViolation<CardNumberDto> v = firstViolation(dto);
+        ConstraintViolation<CardNumberDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.finance.card-number", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", CardNumberDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", CardNumberDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.card-number", "value"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.card-number", "value"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void cardNumber_strip() {
         CardNumberStripDto dto = new CardNumberStripDto("4111 1111 1111 1111");
-        ConstraintViolation<CardNumberStripDto> v = firstViolation(dto);
+        ConstraintViolation<CardNumberStripDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.finance.card-number.strip", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", CardNumberStripDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", CardNumberStripDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.card-number.strip", "value"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.card-number.strip", "value"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void currencyCode_pathB() {
         CurrencyCodeDto dto = new CurrencyCodeDto("INVALID");
-        ConstraintViolation<CurrencyCodeDto> v = firstViolation(dto);
+        ConstraintViolation<CurrencyCodeDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", CurrencyCodeDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", CurrencyCodeDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.currency-code", "value"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.currency-code", "value"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void cvv_invalid() {
         CvvDto dto = new CvvDto("12");
-        ConstraintViolation<CvvDto> v = firstViolation(dto);
+        ConstraintViolation<CvvDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.finance.cvv", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", CvvDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", CvvDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.cvv", "value"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.cvv", "value"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void cvv_fourDigitsNotAllowed() {
         CvvFourDto dto = new CvvFourDto("1234");
-        ConstraintViolation<CvvFourDto> v = firstViolation(dto);
+        ConstraintViolation<CvvFourDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.finance.cvv.four", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", CvvFourDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", CvvFourDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.cvv.four", "value"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.cvv.four", "value"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void iban_pathB() {
         IBANDto dto = new IBANDto("NOTANIBAN");
-        ConstraintViolation<IBANDto> v = firstViolation(dto);
+        ConstraintViolation<IBANDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", IBANDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", IBANDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.iban", "value"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.iban", "value"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void paymentReference_patternMismatch() {
         PaymentReferenceDto dto = new PaymentReferenceDto("invalid");
-        ConstraintViolation<PaymentReferenceDto> v = firstViolation(dto);
+        ConstraintViolation<PaymentReferenceDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.finance.payment-reference.pattern", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", PaymentReferenceDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", PaymentReferenceDto.class);
 
         assertTrue(resolved.contains("pattern"), "Expected 'pattern' in message: " + resolved);
         assertNoRawValidationKey(resolved);
@@ -324,52 +301,52 @@ class FinanceValidatorMessageIntegrationTest {
     @Test
     void swiftCode_pathB() {
         SwiftCodeDto dto = new SwiftCodeDto("12345678");
-        ConstraintViolation<SwiftCodeDto> v = firstViolation(dto);
+        ConstraintViolation<SwiftCodeDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", SwiftCodeDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", SwiftCodeDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.swift-code", "value"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.swift-code", "value"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void transactionAmount_belowMin() {
         TransactionAmountMinDto dto = new TransactionAmountMinDto(500L);
-        ConstraintViolation<TransactionAmountMinDto> v = firstViolation(dto);
+        ConstraintViolation<TransactionAmountMinDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.finance.transaction-amount.min", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", TransactionAmountMinDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", TransactionAmountMinDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.transaction-amount.min", "value", "1000"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.transaction-amount.min", "value", "1000"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void transactionAmount_aboveMax() {
         TransactionAmountMaxDto dto = new TransactionAmountMaxDto(2000000L);
-        ConstraintViolation<TransactionAmountMaxDto> v = firstViolation(dto);
+        ConstraintViolation<TransactionAmountMaxDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.finance.transaction-amount.max", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", TransactionAmountMaxDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", TransactionAmountMaxDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.transaction-amount.max", "value", "1000000"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.transaction-amount.max", "value", "1000000"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void transactionAmount_zero() {
         TransactionAmountZeroDto dto = new TransactionAmountZeroDto(0L);
-        ConstraintViolation<TransactionAmountZeroDto> v = firstViolation(dto);
+        ConstraintViolation<TransactionAmountZeroDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.finance.transaction-amount.zero", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", TransactionAmountZeroDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", TransactionAmountZeroDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.finance.transaction-amount.zero", "value"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.finance.transaction-amount.zero", "value"), resolved);
         assertNoRawValidationKey(resolved);
     }
 }

@@ -297,9 +297,11 @@ mvn clean test
 
 ---
 
-## Phase 3: Separate Test Infrastructure from Test Cases
+## Phase 3: Separate Test Infrastructure from Test Cases ✅ COMPLETE
 
 **Objective:** Eliminate duplicated setup across ~12 integration tests and 3 autoconfigure test files.
+
+**Completed:** 2026-06-12 — `support/` fixtures created; integration and autoconfigure tests refactored; duplicate web component tests removed.
 
 ### Create `src/test/java/id/xtramile/validator/support/`
 
@@ -335,9 +337,9 @@ public static void assertResolvedMessage(FriendlyMessageResolver resolver,
 
 ### Success criteria
 
-- [ ] `support/` package with 4+ fixture classes
-- [ ] No duplicated static `ValidatorFactory` blocks in integration tests
-- [ ] `ValidationMessageAssertions` extended with `assertResolvedMessage`
+- [x] `support/` package with 4+ fixture classes
+- [x] No duplicated static `ValidatorFactory` blocks in integration tests
+- [x] `ValidationMessageAssertions` extended with `assertResolvedMessage`
 
 ---
 
@@ -573,7 +575,7 @@ No major version bump required for PLAN 1 deliverables.
 - [x] **P2b** Split ConstraintAnnotationMessages (after P4-early)
 - [ ] **P2d** Datetime DRY (scoped — deferred)
 - [x] **P2e** SLF4J optional / remove println
-- [ ] **P3** Test support + dedupe + extend assertions
+- [x] **P3** Test support + dedupe + extend assertions
 - [ ] **P4-late** Medium/Low bugs
 - [ ] **P5** New tests (parity, method validation, Group, resolver fallback, registry completeness)
 - [ ] **P6** Checkstyle, SpotBugs exclude, Javadoc, JaCoCo, `-Pquick`, CONTRIBUTING, CHANGELOG, CI verify

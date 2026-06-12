@@ -1,30 +1,15 @@
 package id.xtramile.validator.integration;
 
 import id.xtramile.validator.annotation.contact.*;
-import id.xtramile.validator.web.FriendlyMessageResolver;
-import id.xtramile.validator.web.MessageResourceResolver;
+import id.xtramile.validator.support.ValidationMessageTestSupport;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ContactValidatorMessageIntegrationTest {
 
-    private static final Validator VALIDATOR;
-    private static final FriendlyMessageResolver RESOLVER;
-
-    static {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        VALIDATOR = factory.getValidator();
-
-        MessageResourceResolver messageResourceResolver = new MessageResourceResolver("en");
-        RESOLVER = new FriendlyMessageResolver(messageResourceResolver);
-    }
+    private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
     public static class PhoneNumberDto {
         @ValidPhoneNumber
@@ -104,58 +89,50 @@ class ContactValidatorMessageIntegrationTest {
         }
     }
 
-    private <T> ConstraintViolation<T> firstViolation(T dto) {
-        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(dto);
-
-        assertFalse(violations.isEmpty(), "Expected at least one violation but got none");
-
-        return violations.iterator().next();
-    }
-
     @Test
     void phoneNumber_pathB() {
         PhoneNumberDto dto = new PhoneNumberDto("12345");
-        ConstraintViolation<PhoneNumberDto> v = firstViolation(dto);
+        ConstraintViolation<PhoneNumberDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
-        assertEquals("value must be a valid phone number", RESOLVER.resolve(v, "value", PhoneNumberDto.class));
+        assertEquals("value must be a valid phone number", SUPPORT.resolver().resolve(v, "value", PhoneNumberDto.class));
     }
 
     @Test
     void contactNumber_pathB() {
         ContactNumberDto dto = new ContactNumberDto("!!!invalid!!!");
-        ConstraintViolation<ContactNumberDto> v = firstViolation(dto);
+        ConstraintViolation<ContactNumberDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
-        assertEquals("value must be a valid contact number", RESOLVER.resolve(v, "value", ContactNumberDto.class));
+        assertEquals("value must be a valid contact number", SUPPORT.resolver().resolve(v, "value", ContactNumberDto.class));
     }
 
     @Test
     void email_pathB() {
         EmailDto dto = new EmailDto("not-an-email");
-        ConstraintViolation<EmailDto> v = firstViolation(dto);
+        ConstraintViolation<EmailDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
-        assertEquals("value must be a valid email address", RESOLVER.resolve(v, "value", EmailDto.class));
+        assertEquals("value must be a valid email address", SUPPORT.resolver().resolve(v, "value", EmailDto.class));
     }
 
     @Test
     void otp_pathB() {
         OtpDto dto = new OtpDto("ABCDEF");
-        ConstraintViolation<OtpDto> v = firstViolation(dto);
+        ConstraintViolation<OtpDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
-        assertEquals("value must be a valid OTP code", RESOLVER.resolve(v, "value", OtpDto.class));
+        assertEquals("value must be a valid OTP code", SUPPORT.resolver().resolve(v, "value", OtpDto.class));
     }
 
     @Test
     void emailDomain_domainNotAllowed() {
         EmailDomainDto dto = new EmailDomainDto("user@hotmail.com");
-        ConstraintViolation<EmailDomainDto> v = firstViolation(dto);
+        ConstraintViolation<EmailDomainDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.contact.email-domain", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", EmailDomainDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", EmailDomainDto.class);
 
         assertTrue(resolved.startsWith("value must be a valid email address with domain(s):"),
                 "Unexpected message: " + resolved);
@@ -166,11 +143,11 @@ class ContactValidatorMessageIntegrationTest {
     @Test
     void emailDomain_sensitive_domainCaseMismatch() {
         EmailDomainSensitiveDto dto = new EmailDomainSensitiveDto("user@gmail.com");
-        ConstraintViolation<EmailDomainSensitiveDto> v = firstViolation(dto);
+        ConstraintViolation<EmailDomainSensitiveDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.contact.email-domain.sensitive", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", EmailDomainSensitiveDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", EmailDomainSensitiveDto.class);
 
         assertTrue(resolved.contains("case-sensitive"), "Expected case-sensitive in message: " + resolved);
     }

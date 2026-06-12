@@ -1,14 +1,14 @@
 package id.xtramile.validator.autoconfigure;
 
-import id.xtramile.validator.web.*;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomApiExceptionHandler;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomApiExceptionHandlerConfiguration;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomErrorEnvelopeBuilder;
+import id.xtramile.validator.support.AutoConfigurationTestFixtures.CustomErrorEnvelopeBuilderConfiguration;
+import id.xtramile.validator.web.ApiExceptionHandler;
+import id.xtramile.validator.web.DefaultErrorEnvelopeBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -142,38 +142,4 @@ class ValidationAutoConfigurationConditionalTest {
                 });
     }
 
-    @Configuration
-    static class CustomErrorEnvelopeBuilderConfiguration {
-        @Bean
-        public ErrorEnvelopeBuilder errorEnvelopeBuilder() {
-            return new CustomErrorEnvelopeBuilder();
-        }
-    }
-
-    @Configuration
-    static class CustomApiExceptionHandlerConfiguration {
-        @Bean
-        public ApiExceptionHandler apiExceptionHandler() {
-            return new CustomApiExceptionHandler();
-        }
-    }
-
-    static class CustomErrorEnvelopeBuilder implements ErrorEnvelopeBuilder {
-        @Override
-        public Map<String, Object> validation(List<String> errors) {
-            return Map.of("custom", "validation");
-        }
-
-        @Override
-        public Map<String, Object> unknown(String cause, String error) {
-            return Map.of("custom", "unknown");
-        }
-    }
-
-    static class CustomApiExceptionHandler extends ApiExceptionHandler {
-        public CustomApiExceptionHandler() {
-            super(new CustomErrorEnvelopeBuilder(), new FriendlyMessageResolver(
-                    new MessageResourceResolver("id")));
-        }
-    }
 }

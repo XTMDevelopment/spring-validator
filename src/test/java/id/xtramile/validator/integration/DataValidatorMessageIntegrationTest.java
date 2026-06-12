@@ -4,12 +4,8 @@ import id.xtramile.validator.annotation.data.*;
 import id.xtramile.validator.enums.ISOType;
 import id.xtramile.validator.enums.PasswordType;
 import id.xtramile.validator.util.MessageUtils;
-import id.xtramile.validator.web.FriendlyMessageResolver;
-import id.xtramile.validator.web.MessageResourceResolver;
+import id.xtramile.validator.support.ValidationMessageTestSupport;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -20,16 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class DataValidatorMessageIntegrationTest {
 
-    private static final Validator VALIDATOR;
-    private static final FriendlyMessageResolver RESOLVER;
-    private static final MessageResourceResolver MESSAGES;
-
-    static {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        VALIDATOR = factory.getValidator();
-        MESSAGES = new MessageResourceResolver("en");
-        RESOLVER = new FriendlyMessageResolver(MESSAGES);
-    }
+    private static final ValidationMessageTestSupport SUPPORT = ValidationMessageTestSupport.EN;
 
     public static class AccountNumberNumbersDto {
         @ValidAccountNumber()
@@ -499,154 +486,146 @@ class DataValidatorMessageIntegrationTest {
         }
     }
 
-    private <T> ConstraintViolation<T> firstViolation(T dto) {
-        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(dto);
-
-        assertFalse(violations.isEmpty(), "Expected at least one violation but got none");
-
-        return violations.iterator().next();
-    }
-
     @Test
     void accountNumber_numbers() {
         AccountNumberNumbersDto dto = new AccountNumberNumbersDto("abc12345");
-        ConstraintViolation<AccountNumberNumbersDto> v = firstViolation(dto);
+        ConstraintViolation<AccountNumberNumbersDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.account-number.numbers", v.getMessageTemplate());
-        assertEquals("value must be numbers", RESOLVER.resolve(v, "value", AccountNumberNumbersDto.class));
+        assertEquals("value must be numbers", SUPPORT.resolver().resolve(v, "value", AccountNumberNumbersDto.class));
     }
 
     @Test
     void accountNumber_min() {
         AccountNumberMinDto dto = new AccountNumberMinDto("12345");
-        ConstraintViolation<AccountNumberMinDto> v = firstViolation(dto);
+        ConstraintViolation<AccountNumberMinDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.account-number.min", v.getMessageTemplate());
-        assertEquals("value must have minimal 10 characters", RESOLVER.resolve(v, "value", AccountNumberMinDto.class));
+        assertEquals("value must have minimal 10 characters", SUPPORT.resolver().resolve(v, "value", AccountNumberMinDto.class));
     }
 
     @Test
     void accountNumber_max() {
         AccountNumberMaxDto dto = new AccountNumberMaxDto("123456789012");
-        ConstraintViolation<AccountNumberMaxDto> v = firstViolation(dto);
+        ConstraintViolation<AccountNumberMaxDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.account-number.max", v.getMessageTemplate());
-        assertEquals("value must have maximal 10 characters", RESOLVER.resolve(v, "value", AccountNumberMaxDto.class));
+        assertEquals("value must have maximal 10 characters", SUPPORT.resolver().resolve(v, "value", AccountNumberMaxDto.class));
     }
 
     @Test
     void base64_pathB() {
         Base64Dto dto = new Base64Dto("not valid base64!!!");
-        ConstraintViolation<Base64Dto> v = firstViolation(dto);
+        ConstraintViolation<Base64Dto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
-        assertEquals("value must be a valid Base64 encoded string", RESOLVER.resolve(v, "value", Base64Dto.class));
+        assertEquals("value must be a valid Base64 encoded string", SUPPORT.resolver().resolve(v, "value", Base64Dto.class));
     }
 
     @Test
     void hexColor_short() {
         HexColorShortDto dto = new HexColorShortDto("#XYZ");
-        ConstraintViolation<HexColorShortDto> v = firstViolation(dto);
+        ConstraintViolation<HexColorShortDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.hex-color.short", v.getMessageTemplate());
-        assertEquals("value has invalid short hex color", RESOLVER.resolve(v, "value", HexColorShortDto.class));
+        assertEquals("value has invalid short hex color", SUPPORT.resolver().resolve(v, "value", HexColorShortDto.class));
     }
 
     @Test
     void hexColor_long() {
         HexColorLongDto dto = new HexColorLongDto("#XYZABC");
-        ConstraintViolation<HexColorLongDto> v = firstViolation(dto);
+        ConstraintViolation<HexColorLongDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.hex-color.long", v.getMessageTemplate());
-        assertEquals("value has invalid long hex color", RESOLVER.resolve(v, "value", HexColorLongDto.class));
+        assertEquals("value has invalid long hex color", SUPPORT.resolver().resolve(v, "value", HexColorLongDto.class));
     }
 
     @Test
     void hexColor_base() {
         HexColorBaseDto dto = new HexColorBaseDto("ZZZZZ");
-        ConstraintViolation<HexColorBaseDto> v = firstViolation(dto);
+        ConstraintViolation<HexColorBaseDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.hex-color", v.getMessageTemplate());
-        assertEquals("value must be a valid hex color code", RESOLVER.resolve(v, "value", HexColorBaseDto.class));
+        assertEquals("value must be a valid hex color code", SUPPORT.resolver().resolve(v, "value", HexColorBaseDto.class));
     }
 
     @Test
     void isoCode_currency() {
         ISOCodeCurrencyDto dto = new ISOCodeCurrencyDto("ZZZ");
-        ConstraintViolation<ISOCodeCurrencyDto> v = firstViolation(dto);
+        ConstraintViolation<ISOCodeCurrencyDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.iso-code.currency", v.getMessageTemplate());
-        assertEquals("value must be a valid currency ISO code", RESOLVER.resolve(v, "value", ISOCodeCurrencyDto.class));
+        assertEquals("value must be a valid currency ISO code", SUPPORT.resolver().resolve(v, "value", ISOCodeCurrencyDto.class));
     }
 
     @Test
     void isoCode_country() {
         ISOCodeCountryDto dto = new ISOCodeCountryDto("QQ");
-        ConstraintViolation<ISOCodeCountryDto> v = firstViolation(dto);
+        ConstraintViolation<ISOCodeCountryDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.iso-code.country", v.getMessageTemplate());
-        assertEquals("value must be a valid country ISO code", RESOLVER.resolve(v, "value", ISOCodeCountryDto.class));
+        assertEquals("value must be a valid country ISO code", SUPPORT.resolver().resolve(v, "value", ISOCodeCountryDto.class));
     }
 
     @Test
     void isoCode_language() {
         ISOCodeLanguageDto dto = new ISOCodeLanguageDto("qq");
-        ConstraintViolation<ISOCodeLanguageDto> v = firstViolation(dto);
+        ConstraintViolation<ISOCodeLanguageDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.iso-code.language", v.getMessageTemplate());
-        assertEquals("value must be a valid language ISO code", RESOLVER.resolve(v, "value", ISOCodeLanguageDto.class));
+        assertEquals("value must be a valid language ISO code", SUPPORT.resolver().resolve(v, "value", ISOCodeLanguageDto.class));
     }
 
     @Test
     void json_pathB() {
         JsonDto dto = new JsonDto("not json");
-        ConstraintViolation<JsonDto> v = firstViolation(dto);
+        ConstraintViolation<JsonDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("{friendly.default}", v.getMessageTemplate());
-        assertEquals("value must be a valid JSON object", RESOLVER.resolve(v, "value", JsonDto.class));
+        assertEquals("value must be a valid JSON object", SUPPORT.resolver().resolve(v, "value", JsonDto.class));
     }
 
     @Test
     void name_min() {
         NameMinDto dto = new NameMinDto("Jo");
-        ConstraintViolation<NameMinDto> v = firstViolation(dto);
+        ConstraintViolation<NameMinDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.name.min", v.getMessageTemplate());
-        assertEquals("value must have minimal 5 characters", RESOLVER.resolve(v, "value", NameMinDto.class));
+        assertEquals("value must have minimal 5 characters", SUPPORT.resolver().resolve(v, "value", NameMinDto.class));
     }
 
     @Test
     void name_max() {
         NameMaxDto dto = new NameMaxDto("Alexander");
-        ConstraintViolation<NameMaxDto> v = firstViolation(dto);
+        ConstraintViolation<NameMaxDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.name.max", v.getMessageTemplate());
-        assertEquals("value must have maximal 5 characters", RESOLVER.resolve(v, "value", NameMaxDto.class));
+        assertEquals("value must have maximal 5 characters", SUPPORT.resolver().resolve(v, "value", NameMaxDto.class));
     }
 
     @Test
     void name_digits() {
         NameDigitsDto dto = new NameDigitsDto("John123");
-        ConstraintViolation<NameDigitsDto> v = firstViolation(dto);
+        ConstraintViolation<NameDigitsDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.name.digits", v.getMessageTemplate());
 
-        String resolved = RESOLVER.resolve(v, "value", NameDigitsDto.class);
+        String resolved = SUPPORT.resolver().resolve(v, "value", NameDigitsDto.class);
 
-        assertEquals(MESSAGES.getMessage("validation.data.name.digits", "value"), resolved);
+        assertEquals(SUPPORT.messages().getMessage("validation.data.name.digits", "value"), resolved);
         assertNoRawValidationKey(resolved);
     }
 
     @Test
     void name_symbol() {
         NameSymbolDto dto = new NameSymbolDto("John#Doe");
-        ConstraintViolation<NameSymbolDto> v = firstViolation(dto);
+        ConstraintViolation<NameSymbolDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.name.symbol", v.getMessageTemplate());
 
         String symbolsJoined = MessageUtils.join(Set.of("'", " ", "."));
-        String expected = MESSAGES.getMessage("validation.data.name.symbol", "value", symbolsJoined);
-        String resolved = RESOLVER.resolve(v, "value", NameSymbolDto.class);
+        String expected = SUPPORT.messages().getMessage("validation.data.name.symbol", "value", symbolsJoined);
+        String resolved = SUPPORT.resolver().resolve(v, "value", NameSymbolDto.class);
 
         assertEquals(expected, resolved);
         assertNoRawValidationKey(resolved);
@@ -655,189 +634,189 @@ class DataValidatorMessageIntegrationTest {
     @Test
     void nationalId_base() {
         NationalIdBaseDto dto = new NationalIdBaseDto("1234567890123456");
-        ConstraintViolation<NationalIdBaseDto> v = firstViolation(dto);
+        ConstraintViolation<NationalIdBaseDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.national-id", v.getMessageTemplate());
-        assertEquals("value must be a valid National ID", RESOLVER.resolve(v, "value", NationalIdBaseDto.class));
+        assertEquals("value must be a valid National ID", SUPPORT.resolver().resolve(v, "value", NationalIdBaseDto.class));
     }
 
     @Test
     void nationalId_numbers() {
         NationalIdNumbersDto dto = new NationalIdNumbersDto("123456789012345X");
-        ConstraintViolation<NationalIdNumbersDto> v = firstViolation(dto);
+        ConstraintViolation<NationalIdNumbersDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.national-id.numbers", v.getMessageTemplate());
-        assertEquals("value must be numbers", RESOLVER.resolve(v, "value", NationalIdNumbersDto.class));
+        assertEquals("value must be numbers", SUPPORT.resolver().resolve(v, "value", NationalIdNumbersDto.class));
     }
 
     @Test
     void nationalId_length() {
         NationalIdLengthDto dto = new NationalIdLengthDto("12345");
-        ConstraintViolation<NationalIdLengthDto> v = firstViolation(dto);
+        ConstraintViolation<NationalIdLengthDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.national-id.length", v.getMessageTemplate());
-        assertEquals("value must have 16 digits", RESOLVER.resolve(v, "value", NationalIdLengthDto.class));
+        assertEquals("value must have 16 digits", SUPPORT.resolver().resolve(v, "value", NationalIdLengthDto.class));
     }
 
     @Test
     void password_whitespace() {
         PasswordWhitespaceDto dto = new PasswordWhitespaceDto("hello world");
-        ConstraintViolation<PasswordWhitespaceDto> v = firstViolation(dto);
+        ConstraintViolation<PasswordWhitespaceDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.password", v.getMessageTemplate());
-        assertEquals("value must be a valid password", RESOLVER.resolve(v, "value", PasswordWhitespaceDto.class));
+        assertEquals("value must be a valid password", SUPPORT.resolver().resolve(v, "value", PasswordWhitespaceDto.class));
     }
 
     @Test
     void password_minLength() {
         PasswordMinLengthDto dto = new PasswordMinLengthDto("Ab1!");
-        ConstraintViolation<PasswordMinLengthDto> v = firstViolation(dto);
+        ConstraintViolation<PasswordMinLengthDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.password", v.getMessageTemplate());
-        assertEquals("value must be a valid password", RESOLVER.resolve(v, "value", PasswordMinLengthDto.class));
+        assertEquals("value must be a valid password", SUPPORT.resolver().resolve(v, "value", PasswordMinLengthDto.class));
     }
 
     @Test
     void password_alphanumeric() {
         PasswordAlphanumericDto dto = new PasswordAlphanumericDto("Hello@World");
-        ConstraintViolation<PasswordAlphanumericDto> v = firstViolation(dto);
+        ConstraintViolation<PasswordAlphanumericDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.password.alphanumeric", v.getMessageTemplate());
-        assertEquals("value must contain only letters and digits", RESOLVER.resolve(v, "value", PasswordAlphanumericDto.class));
+        assertEquals("value must contain only letters and digits", SUPPORT.resolver().resolve(v, "value", PasswordAlphanumericDto.class));
     }
 
     @Test
     void password_letterDigit() {
         PasswordLetterDigitDto dto = new PasswordLetterDigitDto("HelloWorld");
-        ConstraintViolation<PasswordLetterDigitDto> v = firstViolation(dto);
+        ConstraintViolation<PasswordLetterDigitDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.password.letter-digit", v.getMessageTemplate());
-        assertEquals("value must contain at least one letter and one digit", RESOLVER.resolve(v, "value", PasswordLetterDigitDto.class));
+        assertEquals("value must contain at least one letter and one digit", SUPPORT.resolver().resolve(v, "value", PasswordLetterDigitDto.class));
     }
 
     @Test
     void password_letterMixed() {
         PasswordLetterMixedDto dto = new PasswordLetterMixedDto("HELLOWORLD1!");
-        ConstraintViolation<PasswordLetterMixedDto> v = firstViolation(dto);
+        ConstraintViolation<PasswordLetterMixedDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.password.letter-mixed", v.getMessageTemplate());
-        assertEquals("value must contain at least one lowercase and one uppercase letter", RESOLVER.resolve(v, "value", PasswordLetterMixedDto.class));
+        assertEquals("value must contain at least one lowercase and one uppercase letter", SUPPORT.resolver().resolve(v, "value", PasswordLetterMixedDto.class));
     }
 
     @Test
     void password_full() {
         PasswordFullDto dto = new PasswordFullDto("helloworld123");
-        ConstraintViolation<PasswordFullDto> v = firstViolation(dto);
+        ConstraintViolation<PasswordFullDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.password.full", v.getMessageTemplate());
-        assertEquals("value must contain at least one lowercase letter, one uppercase letter, one digit, and one symbol", RESOLVER.resolve(v, "value", PasswordFullDto.class));
+        assertEquals("value must contain at least one lowercase letter, one uppercase letter, one digit, and one symbol", SUPPORT.resolver().resolve(v, "value", PasswordFullDto.class));
     }
 
     @Test
     void pin_length() {
         PinLengthDto dto = new PinLengthDto("1234");
-        ConstraintViolation<PinLengthDto> v = firstViolation(dto);
+        ConstraintViolation<PinLengthDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.pin.length", v.getMessageTemplate());
-        assertEquals("value must be numeric and of length 5", RESOLVER.resolve(v, "value", PinLengthDto.class));
+        assertEquals("value must be numeric and of length 5", SUPPORT.resolver().resolve(v, "value", PinLengthDto.class));
     }
 
     @Test
     void pin_repetitive() {
         PinRepetitiveDto dto = new PinRepetitiveDto("111234");
-        ConstraintViolation<PinRepetitiveDto> v = firstViolation(dto);
+        ConstraintViolation<PinRepetitiveDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.pin.repetitive", v.getMessageTemplate());
-        assertEquals("value must not have too many repetitive digits", RESOLVER.resolve(v, "value", PinRepetitiveDto.class));
+        assertEquals("value must not have too many repetitive digits", SUPPORT.resolver().resolve(v, "value", PinRepetitiveDto.class));
     }
 
     @Test
     void pin_sequential() {
         PinSequentialDto dto = new PinSequentialDto("123456");
-        ConstraintViolation<PinSequentialDto> v = firstViolation(dto);
+        ConstraintViolation<PinSequentialDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.pin.sequential", v.getMessageTemplate());
-        assertEquals("value must not have sequential digits", RESOLVER.resolve(v, "value", PinSequentialDto.class));
+        assertEquals("value must not have sequential digits", SUPPORT.resolver().resolve(v, "value", PinSequentialDto.class));
     }
 
     @Test
     void slug_base() {
         SlugBaseDto dto = new SlugBaseDto("Invalid Slug!");
-        ConstraintViolation<SlugBaseDto> v = firstViolation(dto);
+        ConstraintViolation<SlugBaseDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.slug", v.getMessageTemplate());
-        assertEquals("value must be a valid slug", RESOLVER.resolve(v, "value", SlugBaseDto.class));
+        assertEquals("value must be a valid slug", SUPPORT.resolver().resolve(v, "value", SlugBaseDto.class));
     }
 
     @Test
     void slug_min() {
         SlugMinDto dto = new SlugMinDto("ab");
-        ConstraintViolation<SlugMinDto> v = firstViolation(dto);
+        ConstraintViolation<SlugMinDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.slug.min", v.getMessageTemplate());
-        assertEquals("value must have minimal 3 characters", RESOLVER.resolve(v, "value", SlugMinDto.class));
+        assertEquals("value must have minimal 3 characters", SUPPORT.resolver().resolve(v, "value", SlugMinDto.class));
     }
 
     @Test
     void slug_max() {
         SlugMaxDto dto = new SlugMaxDto("abcdef");
-        ConstraintViolation<SlugMaxDto> v = firstViolation(dto);
+        ConstraintViolation<SlugMaxDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.slug.max", v.getMessageTemplate());
-        assertEquals("value must have maximal 5 characters", RESOLVER.resolve(v, "value", SlugMaxDto.class));
+        assertEquals("value must have maximal 5 characters", SUPPORT.resolver().resolve(v, "value", SlugMaxDto.class));
     }
 
     @Test
     void taxId_base() {
         TaxIdBaseDto dto = new TaxIdBaseDto("123456789012345");
-        ConstraintViolation<TaxIdBaseDto> v = firstViolation(dto);
+        ConstraintViolation<TaxIdBaseDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.tax-id", v.getMessageTemplate());
-        assertEquals("value must be a valid tax ID", RESOLVER.resolve(v, "value", TaxIdBaseDto.class));
+        assertEquals("value must be a valid tax ID", SUPPORT.resolver().resolve(v, "value", TaxIdBaseDto.class));
     }
 
     @Test
     void taxId_numbers() {
         TaxIdNumbersDto dto = new TaxIdNumbersDto("abcdefghijklmno");
-        ConstraintViolation<TaxIdNumbersDto> v = firstViolation(dto);
+        ConstraintViolation<TaxIdNumbersDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.tax-id.numbers", v.getMessageTemplate());
-        assertEquals("value must be numbers", RESOLVER.resolve(v, "value", TaxIdNumbersDto.class));
+        assertEquals("value must be numbers", SUPPORT.resolver().resolve(v, "value", TaxIdNumbersDto.class));
     }
 
     @Test
     void taxId_length() {
         TaxIdLengthDto dto = new TaxIdLengthDto("12345");
-        ConstraintViolation<TaxIdLengthDto> v = firstViolation(dto);
+        ConstraintViolation<TaxIdLengthDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.tax-id.length", v.getMessageTemplate());
-        assertEquals("value must have 15-16 digits", RESOLVER.resolve(v, "value", TaxIdLengthDto.class));
+        assertEquals("value must have 15-16 digits", SUPPORT.resolver().resolve(v, "value", TaxIdLengthDto.class));
     }
 
     @Test
     void username_base() {
         UsernameBaseDto dto = new UsernameBaseDto("invalid user!");
-        ConstraintViolation<UsernameBaseDto> v = firstViolation(dto);
+        ConstraintViolation<UsernameBaseDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.username", v.getMessageTemplate());
-        assertEquals("value must be a valid username", RESOLVER.resolve(v, "value", UsernameBaseDto.class));
+        assertEquals("value must be a valid username", SUPPORT.resolver().resolve(v, "value", UsernameBaseDto.class));
     }
 
     @Test
     void username_min() {
         UsernameMinDto dto = new UsernameMinDto("abc");
-        ConstraintViolation<UsernameMinDto> v = firstViolation(dto);
+        ConstraintViolation<UsernameMinDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.username.min", v.getMessageTemplate());
-        assertEquals("value must have minimal 8 characters", RESOLVER.resolve(v, "value", UsernameMinDto.class));
+        assertEquals("value must have minimal 8 characters", SUPPORT.resolver().resolve(v, "value", UsernameMinDto.class));
     }
 
     @Test
     void username_max() {
         UsernameMaxDto dto = new UsernameMaxDto("abcdefg");
-        ConstraintViolation<UsernameMaxDto> v = firstViolation(dto);
+        ConstraintViolation<UsernameMaxDto> v = SUPPORT.firstViolation(dto);
 
         assertEquals("validation.data.username.max", v.getMessageTemplate());
-        assertEquals("value must have maximal 6 characters", RESOLVER.resolve(v, "value", UsernameMaxDto.class));
+        assertEquals("value must have maximal 6 characters", SUPPORT.resolver().resolve(v, "value", UsernameMaxDto.class));
     }
 }
