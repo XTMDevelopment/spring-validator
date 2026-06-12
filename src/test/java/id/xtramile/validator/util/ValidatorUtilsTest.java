@@ -104,6 +104,7 @@ class ValidatorUtilsTest {
         // Invalid format
         assertTrue(ValidatorUtils.validateLeapYear("invalid"));
         assertTrue(ValidatorUtils.validateLeapYear("2023"));
+        assertTrue(ValidatorUtils.validateLeapYear(null));
     }
 
     @Test

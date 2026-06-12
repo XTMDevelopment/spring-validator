@@ -47,6 +47,10 @@ public class ValidatorUtils {
     }
 
     public static boolean validateLeapYear(String date) {
+        if (date == null) {
+            return true;
+        }
+
         if (date.contains("-02-29")) {
             String[] parts = date.split("-");
 

@@ -36,6 +36,7 @@ public class MessageUtils {
 
     public static void clearStoredArgs() {
         ARG_STORAGE.get().clear();
+        ARG_STORAGE.remove();
     }
 
     public static String join(Set<String> set) {

@@ -357,20 +357,22 @@ public static void assertResolvedMessage(FriendlyMessageResolver resolver,
 | **High**     | `ConstraintAnnotationMessages` `Min`/`Max`/`DecimalMin`/etc. | NPE when `attrs == null`                     | `Map<String,Object> a = attrs != null ? attrs : Map.of()` | ✅     |
 | **High**     | `ApiExceptionHandler.resolveDtoClassFromBinding`             | NPE when `bindingResult.getTarget()` is null | Guard: use `Object.class` when target is null             | ✅     |
 
-### 4b. Medium + Low (execute after Phase 3)
+### 4b. Medium + Low (execute after Phase 3) ✅ COMPLETE
 
-| Priority   | Location                             | Issue                                                   | Fix                                                                         |
-|------------|--------------------------------------|---------------------------------------------------------|-----------------------------------------------------------------------------|
-| **Medium** | `MessageResourceResolver.getMessage` | Reloads default locale `Properties` on every cache miss | Cache fallback `Properties` in instance field                               |
-| **Medium** | `MessageUtils.clearStoredArgs`       | `ThreadLocal` not removed — thread-pool leak            | `ARG_STORAGE.remove()` after `clear()`                                      |
-| **Medium** | `AnnotationUtils`                    | Swallows all exceptions silently                        | Narrow to `ReflectiveOperationException`; SLF4J debug                       |
-| **Low**    | `ValidatorUtils.validateLeapYear`    | No null guard on `date`                                 | `if (date == null) return true;` (non-leap invalid date rejected elsewhere) |
-| **Low**    | `NotEmptyMapValidator`               | Uses `not-empty-collection` key for maps                | Defer unless breaking change acceptable in 1.x                              |
+**Completed:** 2026-06-12 — fallback locale cached; ThreadLocal removed on clear; `AnnotationUtils` narrowed exception handling; `validateLeapYear` null guard; `NotEmptyMapValidator` deferred.
+
+| Priority   | Location                             | Issue                                                   | Fix                                                                         | Status |
+|------------|--------------------------------------|---------------------------------------------------------|-----------------------------------------------------------------------------|--------|
+| **Medium** | `MessageResourceResolver.getMessage` | Reloads default locale `Properties` on every cache miss | Cache fallback `Properties` in instance field                               | ✅     |
+| **Medium** | `MessageUtils.clearStoredArgs`       | `ThreadLocal` not removed — thread-pool leak            | `ARG_STORAGE.remove()` after `clear()`                                      | ✅     |
+| **Medium** | `AnnotationUtils`                    | Swallows all exceptions silently                        | Narrow to `ReflectiveOperationException`; SLF4J debug; explicit null guards | ✅     |
+| **Low**    | `ValidatorUtils.validateLeapYear`    | No null guard on `date`                                 | `if (date == null) return true;` (non-leap invalid date rejected elsewhere) | ✅     |
+| **Low**    | `NotEmptyMapValidator`               | Uses `not-empty-collection` key for maps                | Defer unless breaking change acceptable in 1.x                              | ⏸️     |
 
 ### Success criteria
 
 - [x] All Critical/High fixes verified before Phase 2b
-- [ ] Medium/Low fixes complete before Phase 6
+- [x] Medium/Low fixes complete before Phase 6
 
 ---
 
@@ -576,7 +578,7 @@ No major version bump required for PLAN 1 deliverables.
 - [x] **P2d** Datetime DRY (`DateToleranceEvaluator` in `validator/datetime/support/`)
 - [x] **P2e** SLF4J optional / remove println
 - [x] **P3** Test support + dedupe + extend assertions
-- [ ] **P4-late** Medium/Low bugs
+- [x] **P4-late** Medium/Low bugs
 - [ ] **P5** New tests (parity, method validation, Group, resolver fallback, registry completeness)
 - [ ] **P6** Checkstyle, SpotBugs exclude, Javadoc, JaCoCo, `-Pquick`, CONTRIBUTING, CHANGELOG, CI verify
 

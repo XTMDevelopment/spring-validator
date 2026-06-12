@@ -1,5 +1,8 @@
 package id.xtramile.validator.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -7,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AnnotationUtils {
+    private static final Logger log = LoggerFactory.getLogger(AnnotationUtils.class);
+
     private AnnotationUtils() {}
 
     public static Map<String, Object> getAnnotationAttributes(Class<?> dtoClass, String fieldName, Class<?> annotationType) {
@@ -24,17 +29,16 @@ public class AnnotationUtils {
 
     @SuppressWarnings("unchecked")
     public static Annotation findFieldAnnotation(Class<?> dtoClass, String fieldName, Class<?> annotationType) {
-        try {
-            Field field = resolveLeafField(dtoClass, fieldName);
-            if (field == null) {
-                return null;
-            }
-
-            return field.getAnnotation((Class<? extends Annotation>) annotationType);
-
-        } catch (Exception e) {
+        if (dtoClass == null || fieldName == null || annotationType == null) {
             return null;
         }
+
+        Field field = resolveLeafField(dtoClass, fieldName);
+        if (field == null) {
+            return null;
+        }
+
+        return field.getAnnotation((Class<? extends Annotation>) annotationType);
     }
 
     public static Map<String, Object> extractAnnotationValues(Annotation annotation) {
@@ -51,7 +55,9 @@ public class AnnotationUtils {
                 map.put(method.getName(), value);
             }
 
-        } catch (Exception ignored) {}
+        } catch (ReflectiveOperationException e) {
+            log.debug("Failed to extract values from annotation {}", annotation.annotationType().getName(), e);
+        }
 
         return map;
     }
@@ -79,11 +85,9 @@ public class AnnotationUtils {
             return map;
         }
 
-        try {
-            for (Method method : annotationType.getDeclaredMethods()) {
-                map.put(method.getName(), method.getDefaultValue());
-            }
-        } catch (Exception ignored) {}
+        for (Method method : annotationType.getDeclaredMethods()) {
+            map.put(method.getName(), method.getDefaultValue());
+        }
 
         return map;
     }

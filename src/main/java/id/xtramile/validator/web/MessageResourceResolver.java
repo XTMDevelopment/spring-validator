@@ -16,19 +16,20 @@ public class MessageResourceResolver {
     private static final String DEFAULT_LOCALE = "id";
 
     private final Properties properties;
+    private final Properties fallbackProperties;
     private final String locale;
 
     public MessageResourceResolver(String locale) {
         this.locale = locale != null ? locale.toLowerCase() : DEFAULT_LOCALE;
         this.properties = loadProperties(this.locale);
+        this.fallbackProperties = this.locale.equals(DEFAULT_LOCALE) ? null : loadProperties(DEFAULT_LOCALE);
     }
 
     public String getMessage(String key, Object... args) {
         String message = properties.getProperty(key);
         if (message == null) {
-            if (!locale.equals(DEFAULT_LOCALE)) {
-                Properties defaultProps = loadProperties(DEFAULT_LOCALE);
-                message = defaultProps.getProperty(key);
+            if (fallbackProperties != null) {
+                message = fallbackProperties.getProperty(key);
             }
 
             if (message == null) {
